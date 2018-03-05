@@ -13,7 +13,7 @@
         /// <summary>
         /// Structure used for LogOn
         /// </summary>
-        public class AccountLogOn
+        public class LogOn
         {
             public string UserIdOrEmail { get; set; }
             public string Password { get; set; }
@@ -22,7 +22,7 @@
         /// <summary>
         /// Structure used for changing user password
         /// </summary>
-        public class AccountChangePassword
+        public class ChangePassword
         {
             public string OldPassword { get; set; }
             public string NewPassword { get; set; }

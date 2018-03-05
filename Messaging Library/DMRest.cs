@@ -17,16 +17,15 @@ namespace DMWeb_REST
     public class DMWeb
     { 
         public static string _baseUrl = "";
-        public static string sessionKey = "";
+        public static string _sessionKey = "";
         
 
-        public MessagingModels.GetSendMessage sendMessagePayload = new MessagingModels.GetSendMessage();
-        public List<string> base64 = new List<string>();
+        public MessagingModels.SendMessage sendMessagePayload = new MessagingModels.SendMessage();
+        public List<string> _base64 = new List<string>();
 
         public DMAccount Account = new DMAccount();
         public DMFolders Folders = new DMFolders();
         public DMMessage Message = new DMMessage();
-        public DMMessage.MID MID = new DMMessage.MID();
 
 
         /// <summary>
@@ -52,7 +51,7 @@ namespace DMWeb_REST
             /// </summary>
             /// <param name="model">Model of type AccountLogOn contains string UserIdOrEmail and string Password</param>
             /// <returns>HttpResponseMessage deserialized into AccountSessionKey object</returns>
-            public async Task<string> LogOn(AccountModels.AccountLogOn model)
+            public async Task<string> LogOn(AccountModels.LogOn model)
             {
                 HttpClient client = new HttpClient();
 
@@ -60,20 +59,19 @@ namespace DMWeb_REST
                 {
                     HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Account/Logon", model);
                     response.EnsureSuccessStatusCode();
-                    sessionKey = await response.Content.ReadAsStringAsync();
+                    _sessionKey = await response.Content.ReadAsStringAsync();
+
+                    AccountModels.AccountSessionKey temp = JsonConvert.DeserializeObject<AccountModels.AccountSessionKey>(_sessionKey);
+                    _sessionKey = temp.SessionKey;
+
+                    client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
+
+                    return temp.SessionKey;
                 }
                 catch (HttpRequestException ex)
                 {
                     throw ex;
                 }
-
-                AccountModels.AccountSessionKey temp = JsonConvert.DeserializeObject<AccountModels.AccountSessionKey>(sessionKey);
-                sessionKey = temp.SessionKey;
-
-                client.DefaultRequestHeaders.Add("X-Session-Key", sessionKey);
-
-                return temp.SessionKey;
-
             }
 
             /// <summary>
@@ -84,7 +82,7 @@ namespace DMWeb_REST
             {
                 HttpClient client = new HttpClient();
                 
-                client.DefaultRequestHeaders.Add("X-Session-Key", sessionKey);
+                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
 
                 try
                 {
@@ -105,11 +103,11 @@ namespace DMWeb_REST
             /// </summary>
             /// <param name="model">Model of type AccountChangePassword contains string OldPassword and string NewPassword</param>
             /// <returns>HttpResponseMessage</returns>
-            public async Task<string> ChangePassword(AccountModels.AccountChangePassword model)
+            public async Task<string> ChangePassword(AccountModels.ChangePassword model)
             {
                 HttpClient client = new HttpClient();
                 
-                client.DefaultRequestHeaders.Add("X-Session-Key", sessionKey);
+                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
 
                 try
                 {
@@ -124,21 +122,21 @@ namespace DMWeb_REST
             }
 
             /// <summary>
-            /// Removes the Session Key when the user chooses to log out
+            /// Removes the Session Key when the user chooses to log out and invalidates the supplied SessionKey on our Saas
             /// </summary>
             /// <returns>HttpResponseMessage</returns>
             public async Task<string> LogOut()
             {
                 HttpClient client = new HttpClient();
                 
-                client.DefaultRequestHeaders.Add("X-Session-Key", sessionKey);
+                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
 
                 try
                 {
                     HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Account/Logout", "");
                     response.EnsureSuccessStatusCode();
                     client.DefaultRequestHeaders.Remove("X-Session-Key");
-                    sessionKey = "";
+                    _sessionKey = "";
 
                     return await response.Content.ReadAsStringAsync();
                 }
@@ -159,7 +157,7 @@ namespace DMWeb_REST
             {
                 HttpClient client = new HttpClient();
                 
-                client.DefaultRequestHeaders.Add("X-Session-Key", sessionKey);
+                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
 
                 try
                 {
@@ -182,11 +180,11 @@ namespace DMWeb_REST
             /// </summary>
             /// <param name="model">Model of type Folder contains string FolderName and int FolderType</param>
             /// <returns>FolderID as a string</returns>
-            public async Task<string> Create(FolderModels.FolderRequest model)
+            public async Task<string> Create(FolderModels.Create model)
             {
                 HttpClient client = new HttpClient();
                 
-                client.DefaultRequestHeaders.Add("X-Session-Key", sessionKey);
+                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
 
                 try
                 {
@@ -215,7 +213,7 @@ namespace DMWeb_REST
             {
                 HttpClient client = new HttpClient();
                 
-                client.DefaultRequestHeaders.Add("X-Session-Key", sessionKey);
+                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
 
                 try
                 {
@@ -241,7 +239,7 @@ namespace DMWeb_REST
             public async Task<MessagingModels.GetInboxMIDResponse> GetInboxMessageIds(MessagingModels.GetInboxMIDRequest model)
             {
                 HttpClient client = new HttpClient();
-                client.DefaultRequestHeaders.Add("X-Session-Key", sessionKey);
+                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
                 try
                 {
                     HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Message/GetInboxMessageIds", model);
@@ -263,11 +261,11 @@ namespace DMWeb_REST
             /// </summary>
             /// <param name="model">Model of type GetMessageSummariesRequest contains int FolderId and int LastMessageIDReceived</param>
             /// <returns>HttpResponseMessage deserialized into SummariesResponseBody object</returns>
-            public async Task<MessagingModels.GetMessageSummariesAndUnreadMessages> GetMessageSummaries(MessagingModels.GetMessageSummariesRequest model)
+            public async Task<MessagingModels.GetMessageSummaries> GetMessageSummaries(MessagingModels.GetMessageSummariesRequest model)
             {
                 HttpClient client = new HttpClient();
                 
-                client.DefaultRequestHeaders.Add("X-Session-Key", sessionKey);
+                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
 
                 try
                 {
@@ -275,7 +273,7 @@ namespace DMWeb_REST
                     response.EnsureSuccessStatusCode();
                     string summariesString = await response.Content.ReadAsStringAsync();
 
-                    MessagingModels.GetMessageSummariesAndUnreadMessages summariesResponse = JsonConvert.DeserializeObject<MessagingModels.GetMessageSummariesAndUnreadMessages>(summariesString);
+                    MessagingModels.GetMessageSummaries summariesResponse = JsonConvert.DeserializeObject<MessagingModels.GetMessageSummaries>(summariesString);
 
                     return summariesResponse;
                 }
@@ -291,10 +289,10 @@ namespace DMWeb_REST
             /// <param name="LastMIDReceived">Receive only messages created since the ID reference</param>
             /// <param name="MID">MessageID</param>
             /// <returns>GetMessageSummariesResponse object</returns>
-            public async Task<MessagingModels.GetMessageSummariesAndUnreadMessages> GetUnreadMessages(bool LastMIDReceived, string MID)
+            public async Task<MessagingModels.GetUnreadMessages> GetUnreadMessages(bool LastMIDReceived, string MID)
             {
                 HttpClient client = new HttpClient();
-                client.DefaultRequestHeaders.Add("X-Session-Key", sessionKey);
+                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
 
                 if (LastMIDReceived == false)
                 {
@@ -304,7 +302,7 @@ namespace DMWeb_REST
                         string unreadResponseString = await response.Content.ReadAsStringAsync();
                         response.EnsureSuccessStatusCode();
 
-                        MessagingModels.GetMessageSummariesAndUnreadMessages unreadResponse = JsonConvert.DeserializeObject<MessagingModels.GetMessageSummariesAndUnreadMessages>(unreadResponseString);
+                        MessagingModels.GetUnreadMessages unreadResponse = JsonConvert.DeserializeObject<MessagingModels.GetUnreadMessages>(unreadResponseString);
 
                         return unreadResponse;
                     }
@@ -321,7 +319,7 @@ namespace DMWeb_REST
                         string unreadResponseString = await response.Content.ReadAsStringAsync();
                         response.EnsureSuccessStatusCode();
 
-                        MessagingModels.GetMessageSummariesAndUnreadMessages unreadResponse = JsonConvert.DeserializeObject<MessagingModels.GetMessageSummariesAndUnreadMessages>(unreadResponseString);
+                        MessagingModels.GetUnreadMessages unreadResponse = JsonConvert.DeserializeObject<MessagingModels.GetUnreadMessages>(unreadResponseString);
                         return unreadResponse;
                     }
                     catch(HttpRequestException ex)
@@ -338,7 +336,7 @@ namespace DMWeb_REST
             public async Task<MessagingModels.SearchInboxResponse> SearchInbox(MessagingModels.SearchInbox model)
             {
                 HttpClient client = new HttpClient();
-                client.DefaultRequestHeaders.Add("X-Session-Key", sessionKey);
+                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
 
                 try
                 {
@@ -364,7 +362,7 @@ namespace DMWeb_REST
             public async Task<MessagingModels.MetadataResponse> GetMessageMetadata(string MessageId)
             {
                 HttpClient client = new HttpClient();
-                client.DefaultRequestHeaders.Add("X-Session-Key", sessionKey);
+                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
                 
                 try
                 {
@@ -382,60 +380,53 @@ namespace DMWeb_REST
                 }
             }
 
-            public class MID
+            /// <summary>
+            /// Used to retract a message
+            /// </summary>
+            /// <param name="model">Model contains string messageId</param>
+            /// <returns>HttpResponseMessage(null if successful) </returns>
+            public async Task<string> Retract(MessagingModels.MessageOperations model)
             {
-                /// <summary>
-                /// Used to retract a message
-                /// </summary>
-                /// <param name="model">Model contains string messageId</param>
-                /// <returns>HttpResponseMessage(null if successful) </returns>
-                public async Task<string> Retract(MessagingModels.MessageOperations model)
-                {
-                    HttpClient client = new HttpClient();
+                HttpClient client = new HttpClient();
                     
-                    client.DefaultRequestHeaders.Add("X-Session-Key", sessionKey);
+                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
 
-                    try
-                    {
-                        string messageId = model.MessageId.ToString();
-                        HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Message/" + messageId + "/Retract", model);
-                        response.EnsureSuccessStatusCode();
-
-                        return await response.Content.ReadAsStringAsync();
-                    }
-                    catch (HttpRequestException ex)
-                    {
-                        throw ex;
-                    }
-                } 
-
-                /// <summary>
-                /// Used to move a message
-                /// </summary>
-                /// <param name="model">Model contains string messageId</param>
-                /// <returns>HttpResponseMessage(null if successful)</returns>
-                public async Task<string> Move(MessagingModels.MessageOperations model)
+                try
                 {
-                    HttpClient client = new HttpClient();
+                    string messageId = model.MessageId.ToString();
+                    HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Message/" + messageId + "/Retract", model);
+                    response.EnsureSuccessStatusCode();
+
+                    return await response.Content.ReadAsStringAsync();
+                }
+                catch (HttpRequestException ex)
+                {
+                    throw ex;
+                }
+            } 
+
+            /// <summary>
+            /// Used to move a message
+            /// </summary>
+            /// <param name="model">Model contains string messageId</param>
+            /// <returns>HttpResponseMessage(null if successful)</returns>
+            public async Task<string> Move(MessagingModels.MessageOperations model)
+            {
+                HttpClient client = new HttpClient();
                     
-                    client.DefaultRequestHeaders.Add("X-Session-Key", sessionKey);
-                    client.DefaultRequestHeaders.Add("Accept", "*/*");
-                    client.DefaultRequestHeaders.Add("Connection", "close");
-                    client.DefaultRequestHeaders.Add("cache-control", "no-cache");
-                    client.DefaultRequestHeaders.Add("accept-encoding", "gzip, deflate");
+                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
 
-                    try
-                    {
-                        string messageId = model.MessageId.ToString();
-                        HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Message/" + messageId + "/Move/", model);
-                        response.EnsureSuccessStatusCode();
+                try
+                {
+                    string messageId = model.MessageId.ToString();
+                    HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Message/" + messageId + "/Move/", model);
+                    response.EnsureSuccessStatusCode();
 
-                        return await response.Content.ReadAsStringAsync();
-                    }
-                    catch (HttpRequestException ex)
-                    {
-                        throw ex;
-                    }
+                    return await response.Content.ReadAsStringAsync();
+                }
+                catch (HttpRequestException ex)
+                {
+                    throw ex;
                 }
             }
 
@@ -444,11 +435,11 @@ namespace DMWeb_REST
             /// </summary>
             /// <param name="model">Model contains multiple parameters</param>
             /// <returns>MessageID as an integer</returns>
-            public async Task<int> Send(MessagingModels.GetSendMessage model)
+            public async Task<int> Send(MessagingModels.SendMessage model)
             {
                 HttpClient client = new HttpClient();
                 
-                client.DefaultRequestHeaders.Add("X-Session-Key", sessionKey);
+                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
 
                 try
                 {
@@ -478,12 +469,8 @@ namespace DMWeb_REST
                 //MessagingModels.MessageOperations model
                 HttpClient client = new HttpClient();
                 
-                client.DefaultRequestHeaders.Add("X-Session-Key", sessionKey);
-                client.DefaultRequestHeaders.Add("Accept", "*/*");
-                client.DefaultRequestHeaders.Add("Connection", "close");
-                client.DefaultRequestHeaders.Add("cache-control", "no-cache");
-                client.DefaultRequestHeaders.Add("accept-encoding", "gzip, deflate");
-                client.BaseAddress = new Uri("https://ssl.datamotion.com/SecureMessagingApi/");
+                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
+
                 string messageId = mid;
                 if (permanentlyDeleteCheck == true)
                 {
@@ -519,12 +506,12 @@ namespace DMWeb_REST
             /// Used to display a specific message
             /// </summary>
             /// <param name="messageID">string messageID of selected message</param>
-            /// <returns>GetSendMessage object</returns>
-            public async Task<MessagingModels.GetSendMessage> Get(string messageID)
+            /// <returns>GetMessage object</returns>
+            public async Task<MessagingModels.GetMessage> Get(string messageID)
             {
                 HttpClient client = new HttpClient();
                 
-                client.DefaultRequestHeaders.Add("X-Session-Key", sessionKey);
+                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
 
                 try
                 {
@@ -532,7 +519,7 @@ namespace DMWeb_REST
                     response.EnsureSuccessStatusCode();
                     string messageString = await response.Content.ReadAsStringAsync();
 
-                    MessagingModels.GetSendMessage messageResponse = JsonConvert.DeserializeObject<MessagingModels.GetSendMessage>(messageString);
+                    MessagingModels.GetMessage messageResponse = JsonConvert.DeserializeObject<MessagingModels.GetMessage>(messageString);
 
                     return messageResponse;
                 }
@@ -550,7 +537,7 @@ namespace DMWeb_REST
             public async Task<MessagingModels.MimeMessageRequestandResponse> GetaMimeMessage(string messageId)
             {
                 HttpClient client = new HttpClient();
-                client.DefaultRequestHeaders.Add("X-Session-Key", sessionKey);
+                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
                 try
                 {
                     HttpResponseMessage response = await client.GetAsync(_baseUrl + "/Message/" + messageId + "/Mime");
@@ -573,10 +560,10 @@ namespace DMWeb_REST
             /// <param name="model"></param>
             /// <param name="location"></param>
             /// <returns>Mime MessageID as a string</returns>
-            public async Task<string> SendMimeMessage(MessagingModels.GetSendMessage model, string location)
+            public async Task<string> SendMimeMessage(MessagingModels.SendMessage model, string location)
             {
                 HttpClient client = new HttpClient();
-                client.DefaultRequestHeaders.Add("X-Session-Key", sessionKey);
+                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
 
                 var message = new MimeMessage();
 
@@ -643,18 +630,18 @@ namespace DMWeb_REST
         public string ConvertToBase64(string location)
         {
             byte[] imageArray = System.IO.File.ReadAllBytes(location);
-            string base64 = Convert.ToBase64String(imageArray);
-            return base64;
+            string _base64 = Convert.ToBase64String(imageArray);
+            return _base64;
         }
 
         /// <summary>
         /// Used to convert base64 string into original file with choice of save location
         /// </summary>
-        /// <param name="base64">string base64</param>
+        /// <param name="_base64">string base64</param>
         /// <param name="FileName">string file name</param>
-        public void ConvertFromBase64(string base64, string FileName)
+        public void ConvertFromBase64(string _base64, string FileName)
         {
-            byte[] imageBytes = Convert.FromBase64String(base64);
+            byte[] imageBytes = Convert.FromBase64String(_base64);
 
             SaveFileDialog dlg = new SaveFileDialog();
             //string type = Path.GetExtension(dlg.FileName);

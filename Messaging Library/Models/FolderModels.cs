@@ -5,7 +5,7 @@
         /// <summary>
         /// Structure for Folder object
         /// </summary>
-        public class FolderRequest
+        public class Create
         {
             public int FolderId { get; set; }
             public string FolderName { get; set; }
@@ -24,7 +24,7 @@
             /// <summary>
             /// Create an array (Folders) of type Folder which has the data types of the payload being received
             /// </summary>
-            public FolderRequest[] Folders { get; set; }
+            public Create[] Folders { get; set; }
         }
 
         public class FolderResponse

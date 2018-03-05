@@ -48,14 +48,22 @@ namespace Messaging_Library.Models
         }
 
         /// <summary>
-        /// Structure for the MessageSummariesAndUnreadMessages response body
+        /// Structure for the MessageSummariesresponse body
         /// </summary>
-        public class GetMessageSummariesAndUnreadMessages
+        public class GetMessageSummaries
         {
             public bool MoreMessagesAvailable { get; set; }
             public SummariesAndUnreadMessage[] Summaries { get; set; }
         }
 
+        /// <summary>
+        /// Structure for the UnreadMessages response body
+        /// </summary>
+        public class GetUnreadMessages
+        {
+            public bool MoreMessagesAvailable { get; set; }
+            public SummariesAndUnreadMessage[] Summaries { get; set; }
+        }
         /// <summary>
         /// Structure for payload to search inbox
         /// </summary>
@@ -177,9 +185,9 @@ namespace Messaging_Library.Models
         }
 
         /// <summary>
-        /// Structure to create a message payload to send
+        /// Structure to create a message payload to get a message
         /// </summary>
-        public class GetSendMessage
+        public class GetMessage
         {
             public List<string> To = new List<string>();
             public string From { get; set; }
@@ -201,6 +209,25 @@ namespace Messaging_Library.Models
             public int MessageId { get; set; }
         }
 
+        /// <summary>
+        /// Structure to create a message payload to send
+        /// </summary>
+        public class SendMessage
+        {
+            public List<string> To = new List<string>();
+            public string From { get; set; }
+
+            public List<string> Cc = new List<string>();
+
+            public List<string> Bcc = new List<string>();
+            public string Subject { get; set; }
+            public string CreateTime { get; set; }
+
+            public List<AttachmentsBody> Attachments = new List<AttachmentsBody>();
+
+            public string HtmlBody { get; set; }
+            public string TextBody { get; set; }
+        }
         /// <summary>
         /// Structure for moving, deleting, and retracting a message
         /// </summary>

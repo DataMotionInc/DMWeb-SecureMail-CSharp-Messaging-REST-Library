@@ -33,7 +33,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Account.LogOn(new AccountModels.AccountLogOn { }).GetAwaiter().GetResult();
+                Context.dmWeb.Account.LogOn(new AccountModels.LogOn { }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -49,7 +49,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                Context.dmWeb.Account.LogOn(new AccountModels.AccountLogOn { UserIdOrEmail = Context.userName, Password = "" }).GetAwaiter().GetResult();
+                Context.dmWeb.Account.LogOn(new AccountModels.LogOn { UserIdOrEmail = Context.userName, Password = "" }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -66,7 +66,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                Context.dmWeb.Account.LogOn(new AccountModels.AccountLogOn { UserIdOrEmail = "", Password = Context.password }).GetAwaiter().GetResult();
+                Context.dmWeb.Account.LogOn(new AccountModels.LogOn { UserIdOrEmail = "", Password = Context.password }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -81,7 +81,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Account.LogOn(new AccountModels.AccountLogOn { UserIdOrEmail = Context.userName + "0", Password = Context.password + "0" }).GetAwaiter().GetResult();
+                Context.dmWeb.Account.LogOn(new AccountModels.LogOn { UserIdOrEmail = Context.userName + "0", Password = Context.password + "0" }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -96,7 +96,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Account.LogOn(new AccountModels.AccountLogOn { UserIdOrEmail = Context.userName + "0", Password = Context.password }).GetAwaiter().GetResult();
+                Context.dmWeb.Account.LogOn(new AccountModels.LogOn { UserIdOrEmail = Context.userName + "0", Password = Context.password }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -112,7 +112,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Account.LogOn(new AccountModels.AccountLogOn { UserIdOrEmail = Context.userName, Password = Context.password + "0" }).GetAwaiter().GetResult();
+                Context.dmWeb.Account.LogOn(new AccountModels.LogOn { UserIdOrEmail = Context.userName, Password = Context.password + "0" }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -143,7 +143,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Account.ChangePassword(new AccountModels.AccountChangePassword { OldPassword = "test#password", NewPassword = "test#password2" }).GetAwaiter().GetResult();
+                Context.dmWeb.Account.ChangePassword(new AccountModels.ChangePassword { OldPassword = "test#password", NewPassword = "test#password2" }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -174,7 +174,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Folders.Create(new FolderModels.FolderRequest { FolderName = "UnitTest2", FolderId = 0 }).GetAwaiter().GetResult();
+                Context.dmWeb.Folders.Create(new FolderModels.Create { FolderName = "UnitTest2", FolderId = 0 }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -320,7 +320,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                Context.dmWeb.MID.Move(new MessagingModels.MessageOperations { MessageId = MID, DestinationFolderId = DFID }).GetAwaiter().GetResult();
+                Context.dmWeb.Message.Move(new MessagingModels.MessageOperations { MessageId = MID, DestinationFolderId = DFID }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -337,7 +337,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                Context.dmWeb.MID.Retract(new MessagingModels.MessageOperations { MessageId = MID }).GetAwaiter().GetResult();
+                Context.dmWeb.Message.Retract(new MessagingModels.MessageOperations { MessageId = MID }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -369,7 +369,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
             string toAddress = "";
             try
             {
-                Context.dmWeb.Message.Send(new MessagingModels.GetSendMessage { To = { toAddress } }).GetAwaiter().GetResult();
+                Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress } }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -395,7 +395,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
             try
             {
                 string location = Path.Combine(TestContext.CurrentContext.TestDirectory, @"Test Documents\test.txt");
-                Context.dmWeb.Message.SendMimeMessage(new MessagingModels.GetSendMessage { To = { toAddress }, From = fromAddress, Subject = "Mime Test Spam", TextBody = "Mime Message Test" }, location).GetAwaiter().GetResult();
+                Context.dmWeb.Message.SendMimeMessage(new MessagingModels.SendMessage { To = { toAddress }, From = fromAddress, Subject = "Mime Test Spam", TextBody = "Mime Message Test" }, location).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -430,7 +430,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
             string str2 = lines[1];
             string[] linesplit2 = str2.Split(':');
             Context.password = linesplit2[1];
-            string sessionKey = Context.dmWeb.Account.LogOn(new AccountModels.AccountLogOn { UserIdOrEmail = Context.userName, Password = Context.password }).GetAwaiter().GetResult();
+            string sessionKey = Context.dmWeb.Account.LogOn(new AccountModels.LogOn { UserIdOrEmail = Context.userName, Password = Context.password }).GetAwaiter().GetResult();
             Assert.AreNotEqual(string.Empty, sessionKey);
         }
 
@@ -438,7 +438,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Category("Create Folder")]
         public void CreateFolderPositiveTest()
         {
-            Context.folderId = Context.dmWeb.Folders.Create(new FolderModels.FolderRequest { FolderName = "Unit Test 2", FolderType = 0 }).GetAwaiter().GetResult();
+            Context.folderId = Context.dmWeb.Folders.Create(new FolderModels.Create { FolderName = "Unit Test 2", FolderType = 0 }).GetAwaiter().GetResult();
         }
 
         [Test, Order(27)]
@@ -459,7 +459,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
             string[] linesplit3 = str3.Split(':');
             string toAddress = linesplit3[1];
 
-            Context.sendDeleteMID = Context.dmWeb.Message.Send(new MessagingModels.GetSendMessage { To = { toAddress }, Subject = "Positive test"}).GetAwaiter().GetResult();
+            Context.sendDeleteMID = Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress }, Subject = "Positive test"}).GetAwaiter().GetResult();
             Thread.Sleep(5000);
         }
 
@@ -482,12 +482,12 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
             string[] linesplit3 = str3.Split(':');
             string toAddress = linesplit3[1];
 
-            Context.moveMID = Context.dmWeb.Message.Send(new MessagingModels.GetSendMessage { To = { toAddress }, Subject = "Move message test" }).GetAwaiter().GetResult();
+            Context.moveMID = Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress }, Subject = "Move message test" }).GetAwaiter().GetResult();
             Thread.Sleep(5000);
 
             int DFID = 2;
 
-            Context.dmWeb.MID.Move(new MessagingModels.MessageOperations { MessageId = Context.moveMID, DestinationFolderId = DFID }).GetAwaiter().GetResult();
+            Context.dmWeb.Message.Move(new MessagingModels.MessageOperations { MessageId = Context.moveMID, DestinationFolderId = DFID }).GetAwaiter().GetResult();
         }
 
         [Test, Order(31)]
@@ -500,7 +500,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
             string[] linesplit3 = str3.Split(':');
             string toAddress = linesplit3[1];
 
-            int getMID = Context.dmWeb.Message.Send(new MessagingModels.GetSendMessage { To = { toAddress }, Subject = "Get message test" }).GetAwaiter().GetResult();
+            int getMID = Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress }, Subject = "Get message test" }).GetAwaiter().GetResult();
             Thread.Sleep(5000);
 
             Context.dmWeb.Message.Get(getMID.ToString()).GetAwaiter().GetResult();
@@ -516,7 +516,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
             string[] linesplit3 = str3.Split(':');
             string toAddress = linesplit3[1];
 
-            int getMetadataMID = Context.dmWeb.Message.Send(new MessagingModels.GetSendMessage { To = { toAddress }, Subject = "Get message test" }).GetAwaiter().GetResult();
+            int getMetadataMID = Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress }, Subject = "Get message test" }).GetAwaiter().GetResult();
             Thread.Sleep(5000);
 
             Context.dmWeb.Message.GetMessageMetadata(getMetadataMID.ToString()).GetAwaiter().GetResult();
@@ -538,7 +538,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
             string fromAddress = linesplit4[1];
 
             string location = Path.Combine(TestContext.CurrentContext.TestDirectory, @"Test Documents\test.txt");
-            Context.mimeMessageId = Context.dmWeb.Message.SendMimeMessage(new MessagingModels.GetSendMessage { To = { toAddress }, From = fromAddress, Subject = "Mime Test WITH SESSION KEY", TextBody = "Mime Message Test" }, location).GetAwaiter().GetResult();
+            Context.mimeMessageId = Context.dmWeb.Message.SendMimeMessage(new MessagingModels.SendMessage { To = { toAddress }, From = fromAddress, Subject = "Mime Test WITH SESSION KEY", TextBody = "Mime Message Test" }, location).GetAwaiter().GetResult();
         }
 
         [Test, Order(34)]
@@ -560,7 +560,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Ignore("Ignore test: Avoid changing password")]
         public void ChangePasswordPositiveTest()
         {
-            Context.dmWeb.Account.ChangePassword(new AccountModels.AccountChangePassword { OldPassword = Context.password, NewPassword = "temp#pass" }).GetAwaiter().GetResult();
+            Context.dmWeb.Account.ChangePassword(new AccountModels.ChangePassword { OldPassword = Context.password, NewPassword = "temp#pass" }).GetAwaiter().GetResult();
         }
 
         [Test]
@@ -569,7 +569,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Account.ChangePassword(new AccountModels.AccountChangePassword { OldPassword = "", NewPassword = "" }).GetAwaiter().GetResult();
+                Context.dmWeb.Account.ChangePassword(new AccountModels.ChangePassword { OldPassword = "", NewPassword = "" }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -583,7 +583,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Account.ChangePassword(new AccountModels.AccountChangePassword { OldPassword = Context.password, NewPassword = "" }).GetAwaiter().GetResult();
+                Context.dmWeb.Account.ChangePassword(new AccountModels.ChangePassword { OldPassword = Context.password, NewPassword = "" }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -597,7 +597,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Account.ChangePassword(new AccountModels.AccountChangePassword { OldPassword = "", NewPassword = "newtest#password" }).GetAwaiter().GetResult();
+                Context.dmWeb.Account.ChangePassword(new AccountModels.ChangePassword { OldPassword = "", NewPassword = "newtest#password" }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -611,7 +611,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Account.ChangePassword(new AccountModels.AccountChangePassword { OldPassword = Context.password, NewPassword = Context.password }).GetAwaiter().GetResult();
+                Context.dmWeb.Account.ChangePassword(new AccountModels.ChangePassword { OldPassword = Context.password, NewPassword = Context.password }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -626,7 +626,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Account.ChangePassword(new AccountModels.AccountChangePassword { OldPassword = "false1", NewPassword = "false2" }).GetAwaiter().GetResult();
+                Context.dmWeb.Account.ChangePassword(new AccountModels.ChangePassword { OldPassword = "false1", NewPassword = "false2" }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -640,7 +640,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Account.ChangePassword(new AccountModels.AccountChangePassword { OldPassword = "false", NewPassword = "" }).GetAwaiter().GetResult();
+                Context.dmWeb.Account.ChangePassword(new AccountModels.ChangePassword { OldPassword = "false", NewPassword = "" }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -655,7 +655,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Account.ChangePassword(new AccountModels.AccountChangePassword { OldPassword = "", NewPassword = "false" }).GetAwaiter().GetResult();
+                Context.dmWeb.Account.ChangePassword(new AccountModels.ChangePassword { OldPassword = "", NewPassword = "false" }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -669,7 +669,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Folders.Create(new FolderModels.FolderRequest { }).GetAwaiter().GetResult();
+                Context.dmWeb.Folders.Create(new FolderModels.Create { }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -683,7 +683,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Folders.Create(new FolderModels.FolderRequest { FolderName = "Unit Test" }).GetAwaiter().GetResult();
+                Context.dmWeb.Folders.Create(new FolderModels.Create { FolderName = "Unit Test" }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -697,7 +697,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Folders.Create(new FolderModels.FolderRequest { FolderType = 0 }).GetAwaiter().GetResult();
+                Context.dmWeb.Folders.Create(new FolderModels.Create { FolderType = 0 }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -711,7 +711,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Folders.Create(new FolderModels.FolderRequest { FolderName = "UnitTest", FolderType = 15 }).GetAwaiter().GetResult();
+                Context.dmWeb.Folders.Create(new FolderModels.Create { FolderName = "UnitTest", FolderType = 15 }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -751,7 +751,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
             string[] linesplit3 = str3.Split(':');
             string toAddress = linesplit3[1];
 
-            int mid = Context.dmWeb.Message.Send(new MessagingModels.GetSendMessage { To = { toAddress }, Subject = "True bool: Delete Message" }).GetAwaiter().GetResult();
+            int mid = Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress }, Subject = "True bool: Delete Message" }).GetAwaiter().GetResult();
             Thread.Sleep(5000);
 
             Context.dmWeb.Message.Delete(mid.ToString(), permanentlyDeleteCheck: true).GetAwaiter().GetResult();
@@ -947,7 +947,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                Context.dmWeb.MID.Move(new MessagingModels.MessageOperations { MessageId = MID }).GetAwaiter().GetResult();
+                Context.dmWeb.Message.Move(new MessagingModels.MessageOperations { MessageId = MID }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -963,7 +963,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                Context.dmWeb.MID.Move(new MessagingModels.MessageOperations { DestinationFolderId = DFID }).GetAwaiter().GetResult();
+                Context.dmWeb.Message.Move(new MessagingModels.MessageOperations { DestinationFolderId = DFID }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -980,7 +980,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                Context.dmWeb.MID.Move(new MessagingModels.MessageOperations { MessageId = MID, DestinationFolderId = 15143 }).GetAwaiter().GetResult();
+                Context.dmWeb.Message.Move(new MessagingModels.MessageOperations { MessageId = MID, DestinationFolderId = 15143 }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -997,7 +997,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                Context.dmWeb.MID.Move(new MessagingModels.MessageOperations { MessageId = MID, DestinationFolderId = DFID }).GetAwaiter().GetResult();
+                Context.dmWeb.Message.Move(new MessagingModels.MessageOperations { MessageId = MID, DestinationFolderId = DFID }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -1014,7 +1014,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                Context.dmWeb.MID.Move(new MessagingModels.MessageOperations { MessageId = MID, DestinationFolderId = DFID }).GetAwaiter().GetResult();
+                Context.dmWeb.Message.Move(new MessagingModels.MessageOperations { MessageId = MID, DestinationFolderId = DFID }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -1033,9 +1033,9 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
             string toAddress = linesplit3[1];
 
 
-            int MID = Context.dmWeb.Message.Send(new MessagingModels.GetSendMessage { To = { toAddress }, Subject = "Retract Message Test" }).GetAwaiter().GetResult();
+            int MID = Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress }, Subject = "Retract Message Test" }).GetAwaiter().GetResult();
 
-            Context.dmWeb.MID.Retract(new MessagingModels.MessageOperations { MessageId = MID }).GetAwaiter().GetResult();
+            Context.dmWeb.Message.Retract(new MessagingModels.MessageOperations { MessageId = MID }).GetAwaiter().GetResult();
         }
 
         [Test]
@@ -1046,7 +1046,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                Context.dmWeb.MID.Retract(new MessagingModels.MessageOperations { MessageId = MID }).GetAwaiter().GetResult();
+                Context.dmWeb.Message.Retract(new MessagingModels.MessageOperations { MessageId = MID }).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -1202,7 +1202,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
                 string fromAddress = linesplit4[1];
 
                 string location = Path.Combine(TestContext.CurrentContext.TestDirectory, @"Test Documents\test.txt");
-                Context.dmWeb.Message.SendMimeMessage(new MessagingModels.GetSendMessage { From = fromAddress, Subject = "No To Address", TextBody = "Mime Message Test" }, location).GetAwaiter().GetResult();
+                Context.dmWeb.Message.SendMimeMessage(new MessagingModels.SendMessage { From = fromAddress, Subject = "No To Address", TextBody = "Mime Message Test" }, location).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
