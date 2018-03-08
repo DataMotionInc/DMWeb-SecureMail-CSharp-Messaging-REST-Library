@@ -21,21 +21,21 @@ build:
     #- nuget restore
     #- cd "$base_project"
     - msbuild.exe "REST Messaging Projects.sln" /t:Clean,ReBuild /p:Configuration=Debug;Platform="Any CPU"
-    - nunit-console "Consolidated Unit Tests/Consolidated Unit Tests.csproj"
+    - nunit-console "Consolidated Unit Tests/Consolidated Unit Tests.csproj" /out:TestResult.txt
     - msbuild.exe "REST Messaging Projects.sln" /t:ReBuild /p:Configuration=Release;Platform="Any CPU"
-  #artifacts:
-  #  paths:
-  #    - 'Messaging Library/bin/Release/Messaging Library.dll'
-
-test:
-  stage: test
-  script:
-    #- nuget restore
-    #- cd "$test_project"
-    - msbuild.exe /p:Configuration=Release /p:OutputPath=..\build
-    - 'nunit-console "..\build\Consolidated Unit Tests.dll" /out:TestResult.txt'
   artifacts:
     paths:
-      - '..\build\TestResult.xml'
-  dependencies:
-    - build
+      - TestResult.txt
+
+#test:
+#  stage: test
+#  script:
+    #- nuget restore
+    #- cd "$test_project"
+#    - msbuild.exe /p:Configuration=Release /p:OutputPath=..\build
+#    - 'nunit-console "..\build\Consolidated Unit Tests.dll" /out:TestResult.txt'
+#  artifacts:
+#    paths:
+#      - '..\build\TestResult.xml'
+#  dependencies:
+#    - build
