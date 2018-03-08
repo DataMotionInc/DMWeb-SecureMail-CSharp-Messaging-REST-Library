@@ -30,7 +30,7 @@ test:
   script:
     #- nuget restore
     #- cd "$test_project"
-    #- msbuild.exe /p:Configuration=Release
+    - msbuild.exe /p:Configuration=Release /p:OutputPath=..\build
     - 'nunit-console "..\build\Consolidated Unit Tests.dll" /out:TestResult.txt'
   artifacts:
     paths:
