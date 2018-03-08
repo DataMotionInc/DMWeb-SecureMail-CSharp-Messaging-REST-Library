@@ -1,0 +1,38 @@
+image: didstopia/msbuild
+
+# place project specific paths in variables to make the rest of the script more generic
+variables:
+  DLL_RELEASE_FOLDER: 'Messaging Library\bin\Release'
+  TEST_FOLDER: 'Consolidated Unit Tests\bin\Release'
+  base_project: 'Messaging Library'
+  test_project: 'Consolidated Unit Tests'
+  
+before_script:
+  - 'apt-get install -y nunit nunit-console'
+
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  script:
+    - "cd $base_project"
+    - "nuget restore"
+    - "msbuild /p:Configuration=Release"
+  artifacts:
+    paths:
+      - '$DLL_Release_folder\Messaging Library.dll'
+
+test:
+  stage: test
+  script:
+    - "cd $test_project"
+    - "nuget restore"
+    - "msbuild /p:Configuration=Release"
+    - 'nunit-console "$TEST_FOLDER\Consolidated Unit Tests.dll" /out:TestResult.txt'
+  artifacts:
+    paths:
+      - '.\TestResult.xml'
+  dependencies:
+    - build
