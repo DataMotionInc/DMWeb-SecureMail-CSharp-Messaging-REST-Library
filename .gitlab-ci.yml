@@ -17,9 +17,8 @@ stages:
 build:
   stage: build
   script:
-    - tree
-    - cd "$base_project"
     - nuget restore
+    - cd "$base_project"
     - msbuild /p:Configuration=Release
   artifacts:
     paths:
@@ -29,7 +28,7 @@ test:
   stage: test
   script:
     - cd "$test_project"
-    - nuget restore
+    #- nuget restore
     - msbuild /p:Configuration=Release
     - 'nunit-console "$TEST_FOLDER\Consolidated Unit Tests.dll" /out:TestResult.txt'
   artifacts:
