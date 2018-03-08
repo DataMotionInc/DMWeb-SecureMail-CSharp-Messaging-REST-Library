@@ -19,7 +19,7 @@ build:
   script:
     - nuget restore
     - cd "$base_project"
-    - msbuild /p:Configuration=Release
+    - msbuild.exe /p:Configuration=Release
   artifacts:
     paths:
       - '$DLL_Release_folder\Messaging Library.dll'
@@ -29,7 +29,7 @@ test:
   script:
     - cd "$test_project"
     #- nuget restore
-    - msbuild /p:Configuration=Release
+    - msbuild.exe /p:Configuration=Release
     - 'nunit-console "$TEST_FOLDER\Consolidated Unit Tests.dll" /out:TestResult.txt'
   artifacts:
     paths:
