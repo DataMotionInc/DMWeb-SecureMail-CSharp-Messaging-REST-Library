@@ -17,6 +17,7 @@ stages:
 build:
   stage: build
   script:
+    - tree
     - cd "$base_project"
     - nuget restore
     - msbuild /p:Configuration=Release
