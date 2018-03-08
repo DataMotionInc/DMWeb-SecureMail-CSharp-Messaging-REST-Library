@@ -20,9 +20,9 @@ build:
   script:
     #- nuget restore
     #- cd "$base_project"
-    - msbuild.exe "REST Messaging Projects.sln" /t:Clean,ReBuild /p:Configuration=Debug;Platform="Any CPU"
+    - msbuild.exe "REST Messaging Projects.sln" /t:Clean,Build /p:Configuration=Debug;Platform="Any CPU"
     - nunit-console "Consolidated Unit Tests/Consolidated Unit Tests.csproj" /out:TestResult.txt
-    - msbuild.exe "REST Messaging Projects.sln" /t:ReBuild /p:Configuration=Release;Platform="Any CPU"
+    - msbuild.exe "REST Messaging Projects.sln" /t:Clean,Build /p:Configuration=Release;Platform="Any CPU"
   artifacts:
     paths:
       - TestResult.txt
