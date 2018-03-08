@@ -9,6 +9,7 @@ variables:
   
 before_script:
   - apt-get install -y nunit nunit-console
+  - nuget restore -NonInteractive
 
 stages:
   - build
@@ -17,8 +18,8 @@ stages:
 build:
   stage: build
   script:
-    - nuget restore
-    - cd "$base_project"
+    #- nuget restore
+    #- cd "$base_project"
     - msbuild.exe /p:Configuration=Release
   artifacts:
     paths:
@@ -27,9 +28,9 @@ build:
 test:
   stage: test
   script:
-    - nuget restore
+    #- nuget restore
     - cd "$test_project"
-    - msbuild.exe /p:Configuration=Release
+    #- msbuild.exe /p:Configuration=Release
     - 'nunit-console "$TEST_FOLDER\Consolidated Unit Tests.dll" /out:TestResult.txt'
   artifacts:
     paths:
