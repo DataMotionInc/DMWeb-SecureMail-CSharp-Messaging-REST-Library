@@ -27,8 +27,8 @@ build:
 test:
   stage: test
   script:
+    - nuget restore
     - cd "$test_project"
-    #- nuget restore
     - msbuild.exe /p:Configuration=Release
     - 'nunit-console "$TEST_FOLDER\Consolidated Unit Tests.dll" /out:TestResult.txt'
   artifacts:
