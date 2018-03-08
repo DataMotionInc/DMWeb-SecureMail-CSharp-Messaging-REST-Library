@@ -4,7 +4,7 @@ image: didstopia/msbuild
 variables:
   DLL_RELEASE_FOLDER: 'Messaging Library\bin\Release'
   TEST_FOLDER: 'Consolidated Unit Tests\bin\Release'
-  base_project: 'Messaging Library'
+  base_project: "Messaging Library"
   test_project: 'Consolidated Unit Tests'
   
 before_script:
