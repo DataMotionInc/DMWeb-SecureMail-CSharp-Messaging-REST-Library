@@ -20,7 +20,7 @@ build:
   script:
     #- nuget restore
     #- cd "$base_project"
-    - msbuild.exe /p:Configuration=Release,OutputPath=..\build
+    - msbuild.exe /p:Configuration=Release /p:OutputPath=..\build
   artifacts:
     paths:
       - '..\build\Messaging Library.dll'
