@@ -20,20 +20,20 @@ build:
   script:
     #- nuget restore
     #- cd "$base_project"
-    - msbuild.exe /p:Configuration=Release
+    - msbuild.exe /p:Configuration=Release,OutputPath=..\build
   artifacts:
     paths:
-      - '$DLL_Release_folder\Messaging Library.dll'
+      - '..\build\Messaging Library.dll'
 
 test:
   stage: test
   script:
     #- nuget restore
-    - cd "$test_project"
+    #- cd "$test_project"
     #- msbuild.exe /p:Configuration=Release
-    - 'nunit-console "$TEST_FOLDER\Consolidated Unit Tests.dll" /out:TestResult.txt'
+    - 'nunit-console "..\build\Consolidated Unit Tests.dll" /out:TestResult.txt'
   artifacts:
     paths:
-      - '.\TestResult.xml'
+      - '..\build\TestResult.xml'
   dependencies:
     - build
