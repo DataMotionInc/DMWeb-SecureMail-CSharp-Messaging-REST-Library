@@ -4,11 +4,11 @@ image: didstopia/msbuild
 variables:
   DLL_RELEASE_FOLDER: 'Messaging Library\bin\Release'
   TEST_FOLDER: 'Consolidated Unit Tests\bin\Release'
-  base_project: "Messaging Library"
+  base_project: 'Messaging Library'
   test_project: 'Consolidated Unit Tests'
   
 before_script:
-  - 'apt-get install -y nunit nunit-console'
+  - apt-get install -y nunit nunit-console
 
 stages:
   - build
@@ -17,9 +17,9 @@ stages:
 build:
   stage: build
   script:
-    - "cd $base_project"
-    - "nuget restore"
-    - "msbuild /p:Configuration=Release"
+    - cd $base_project
+    - nuget restore
+    - msbuild /p:Configuration=Release
   artifacts:
     paths:
       - '$DLL_Release_folder\Messaging Library.dll'
@@ -27,9 +27,9 @@ build:
 test:
   stage: test
   script:
-    - "cd $test_project"
-    - "nuget restore"
-    - "msbuild /p:Configuration=Release"
+    - cd $test_project
+    - nuget restore
+    - msbuild /p:Configuration=Release
     - 'nunit-console "$TEST_FOLDER\Consolidated Unit Tests.dll" /out:TestResult.txt'
   artifacts:
     paths:
