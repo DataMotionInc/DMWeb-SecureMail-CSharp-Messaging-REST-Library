@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagingLibrary", "Messaging Library\MessagingLibrary.csproj", "{17570103-547B-4B4D-A17F-F4E558ECAFBA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Consolidated Unit Tests", "Consolidated Unit Tests\Consolidated Unit Tests.csproj", "{289D8D12-E392-43C4-A534-5358124FDFF4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{17570103-547B-4B4D-A17F-F4E558ECAFBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17570103-547B-4B4D-A17F-F4E558ECAFBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17570103-547B-4B4D-A17F-F4E558ECAFBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17570103-547B-4B4D-A17F-F4E558ECAFBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{289D8D12-E392-43C4-A534-5358124FDFF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{289D8D12-E392-43C4-A534-5358124FDFF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{289D8D12-E392-43C4-A534-5358124FDFF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{289D8D12-E392-43C4-A534-5358124FDFF4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
