@@ -22,7 +22,9 @@ build:
     #- cd "$base_project"
     - msbuild.exe "REST Messaging Projects.sln" /t:Build /p:Configuration=Debug;Platform="Any CPU"
     - tree
-    - nunit-console "Consolidated Unit Tests/Consolidated Unit Tests.csproj"
+    - cd "Consolidate Unit Tests/bin/Debug"
+    - nunit-console "Consolidated Unit Tests.dll"
+    #- nunit-console "Consolidated Unit Tests/Consolidated Unit Tests.csproj"
     #- msbuild.exe "REST Messaging Projects.sln" /t:Build /p:Configuration=Release;Platform="Any CPU"
   artifacts:
     paths:
