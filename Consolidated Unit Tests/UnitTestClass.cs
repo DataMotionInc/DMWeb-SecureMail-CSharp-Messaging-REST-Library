@@ -443,10 +443,10 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Category("Create Folder")]
         public void CreateFolderPositiveTest()
         {
-            Context.folderId = Context.dmWeb.Folders.Create(new FolderModels.Create { FolderName = "Unit Test 2", FolderType = 0 }).GetAwaiter().GetResult();
+            Context.folderId = Context.dmWeb.Folders.Create(new FolderModels.Create { FolderName = "Unit Test 2", FolderType = 1 }).GetAwaiter().GetResult();
         }
 
-        [Test, Order(27)]
+        [Test, Order(30)]
         [Category("Delete Folder")]
         public void DeleteFolderWithSessionKey()
         {
@@ -477,7 +477,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
             Context.dmWeb.Message.Delete(Context.sendDeleteMID.ToString(), permanentlyDeleteCheck: false).GetAwaiter().GetResult();
         }
 
-        [Test, Order(30)]
+        [Test, Order(27)]
         [Category("Move Message")]
         public void MoveMessagePositiveTest()
         {
@@ -490,7 +490,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
             Context.moveMID = Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress }, Subject = "Move message test" }).GetAwaiter().GetResult();
             Thread.Sleep(5000);
 
-            int DFID = 2;
+            int DFID = int.Parse(Context.folderId); //2;
 
             Context.dmWeb.Message.Move(new MessagingModels.MessageOperations { MessageId = Context.moveMID, DestinationFolderId = DFID }).GetAwaiter().GetResult();
         }
