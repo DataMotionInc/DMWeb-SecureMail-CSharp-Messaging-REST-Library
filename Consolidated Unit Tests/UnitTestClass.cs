@@ -5,6 +5,7 @@ using Newtonsoft;
 using DMWeb_REST;
 using System.IO;
 using System.Threading;
+using System.Reflection;
 
 namespace Messaging_Library.TestFixtures.UnitTestClass
 {
@@ -22,10 +23,13 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
     }
 
     //To enter user credentials, go to the project folder
-    //Data/LogInData.txt
+    //Data/MessageData.txt
     [TestFixture]
     public class AccountTests
     {
+        private string _messageDataPath = Path.Combine(Assembly.GetExecutingAssembly().Location, "Test Documents", "MessageData.txt");
+        private string _testDataPath = Path.Combine(Assembly.GetExecutingAssembly().Location, "Test Documents", "test.txt");
+
         [Test, Order(1)]
         [Category("LogOn")]
         [Category("No Session Key")]
@@ -382,7 +386,8 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
         public void SendMimeMessageNoSessionKeyTest()
         {
-            string[] lines = System.IO.File.ReadAllLines(@"Test Documents\MessageData.txt");
+            
+            string[] lines = System.IO.File.ReadAllLines(_messageDataPath);
 
             string str3 = lines[2];
             string[] linesplit3 = str3.Split(':');
@@ -394,8 +399,8 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                string location = Path.Combine(TestContext.CurrentContext.TestDirectory, @"Test Documents\test.txt");
-                Context.dmWeb.Message.SendMimeMessage(new MessagingModels.SendMessage { To = { toAddress }, From = fromAddress, Subject = "Mime Test Spam", TextBody = "Mime Message Test" }, location).GetAwaiter().GetResult();
+                //string location = Path.Combine(TestContext.CurrentContext.TestDirectory, @"Test Documents\test.txt");
+                Context.dmWeb.Message.SendMimeMessage(new MessagingModels.SendMessage { To = { toAddress }, From = fromAddress, Subject = "Mime Test Spam", TextBody = "Mime Message Test" }, _testDataPath).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -421,7 +426,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Category("LogOn")]
         public void LogOnPositiveTest()
         {
-            string[] lines = System.IO.File.ReadAllLines(@"Test Documents\MessageData.txt");
+            string[] lines = System.IO.File.ReadAllLines(_messageDataPath);
 
             string str = lines[0];
             string[] linesplit = str.Split(':');
@@ -453,7 +458,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         //Will send a message each time function is called
         public void SendMessagePositiveTest()
         {
-            string[] lines = System.IO.File.ReadAllLines(@"Test Documents\MessageData.txt");
+            string[] lines = System.IO.File.ReadAllLines(_messageDataPath);
 
             string str3 = lines[2];
             string[] linesplit3 = str3.Split(':');
@@ -476,7 +481,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Category("Move Message")]
         public void MoveMessagePositiveTest()
         {
-            string[] lines = System.IO.File.ReadAllLines(@"Test Documents\MessageData.txt");
+            string[] lines = System.IO.File.ReadAllLines(_messageDataPath);
 
             string str3 = lines[2];
             string[] linesplit3 = str3.Split(':');
@@ -494,7 +499,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Category("Get Message")]
         public void GetMessagePositiveTest()
         {
-            string[] lines = System.IO.File.ReadAllLines(@"Test Documents\MessageData.txt");
+            string[] lines = System.IO.File.ReadAllLines(_messageDataPath);
 
             string str3 = lines[2];
             string[] linesplit3 = str3.Split(':');
@@ -510,7 +515,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Category("Get Message Metadata")]
         public void GetMessageMetadataPositiveTest()
         {
-            string[] lines = System.IO.File.ReadAllLines(@"Test Documents\MessageData.txt");
+            string[] lines = System.IO.File.ReadAllLines(_messageDataPath);
 
             string str3 = lines[2];
             string[] linesplit3 = str3.Split(':');
@@ -527,7 +532,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Category("Send Mime Message")]
         public void SendMimeMessagePositiveTest()
         {
-            string[] lines = System.IO.File.ReadAllLines(@"Test Documents\MessageData.txt");
+            string[] lines = System.IO.File.ReadAllLines(_messageDataPath);
 
             string str3 = lines[2];
             string[] linesplit3 = str3.Split(':');
@@ -537,8 +542,8 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
             string[] linesplit4 = str4.Split(':');
             string fromAddress = linesplit4[1];
 
-            string location = Path.Combine(TestContext.CurrentContext.TestDirectory, @"Test Documents\test.txt");
-            Context.mimeMessageId = Context.dmWeb.Message.SendMimeMessage(new MessagingModels.SendMessage { To = { toAddress }, From = fromAddress, Subject = "Mime Test WITH SESSION KEY", TextBody = "Mime Message Test" }, location).GetAwaiter().GetResult();
+            //string location = Path.Combine(TestContext.CurrentContext.TestDirectory, @"Test Documents\test.txt");
+            Context.mimeMessageId = Context.dmWeb.Message.SendMimeMessage(new MessagingModels.SendMessage { To = { toAddress }, From = fromAddress, Subject = "Mime Test WITH SESSION KEY", TextBody = "Mime Message Test" }, _testDataPath).GetAwaiter().GetResult();
         }
 
         [Test, Order(34)]
@@ -745,7 +750,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Category("Delete Message")]
         public void DeleteMessageTrueMIDTrueBoolTest()
         {
-            string[] lines = System.IO.File.ReadAllLines(@"Test Documents\MessageData.txt");
+            string[] lines = System.IO.File.ReadAllLines(_messageDataPath);
 
             string str3 = lines[2];
             string[] linesplit3 = str3.Split(':');
@@ -1026,7 +1031,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Category("Retract Message")]
         public void RetractMessagePositiveTest()
         {
-            string[] lines = System.IO.File.ReadAllLines(@"Test Documents\MessageData.txt");
+            string[] lines = System.IO.File.ReadAllLines(_messageDataPath);
 
             string str3 = lines[2];
             string[] linesplit3 = str3.Split(':');
@@ -1195,14 +1200,14 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                string[] lines = System.IO.File.ReadAllLines(@"Test Documents\MessageData.txt");
+                string[] lines = System.IO.File.ReadAllLines(_messageDataPath);
 
                 string str4 = lines[3];
                 string[] linesplit4 = str4.Split(':');
                 string fromAddress = linesplit4[1];
 
-                string location = Path.Combine(TestContext.CurrentContext.TestDirectory, @"Test Documents\test.txt");
-                Context.dmWeb.Message.SendMimeMessage(new MessagingModels.SendMessage { From = fromAddress, Subject = "No To Address", TextBody = "Mime Message Test" }, location).GetAwaiter().GetResult();
+                //string location = Path.Combine(TestContext.CurrentContext.TestDirectory, @"Test Documents\test.txt");
+                Context.dmWeb.Message.SendMimeMessage(new MessagingModels.SendMessage { From = fromAddress, Subject = "No To Address", TextBody = "Mime Message Test" }, _testDataPath).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
