@@ -27,8 +27,8 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
     [TestFixture]
     public class AccountTests
     {
-        private string _messageDataPath = Path.Combine(Assembly.GetExecutingAssembly().Location, "Test Documents", "MessageData.txt");
-        private string _testDataPath = Path.Combine(Assembly.GetExecutingAssembly().Location, "Test Documents", "test.txt");
+        private string _messageDataPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Test Documents", "MessageData.txt");
+        private string _testDataPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Test Documents", "test.txt");
 
         [Test, Order(1)]
         [Category("LogOn")]
