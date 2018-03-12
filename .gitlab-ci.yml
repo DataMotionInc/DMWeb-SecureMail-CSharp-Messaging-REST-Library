@@ -1,4 +1,5 @@
-image: didstopia/msbuild
+#image: didstopia/msbuild
+image: fela98/mono-nunit
 
 # place project specific paths in variables to make the rest of the script more generic
 #variables:
