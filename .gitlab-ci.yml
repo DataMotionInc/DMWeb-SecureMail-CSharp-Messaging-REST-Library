@@ -1,6 +1,7 @@
 image: fela98/mono-nunit
 
 before_script:
+  - apt-get install -y tree
   - nuget restore -NonInteractive
 
 stages:
