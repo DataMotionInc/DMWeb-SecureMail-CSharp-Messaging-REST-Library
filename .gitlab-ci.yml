@@ -8,14 +8,11 @@ image: didstopia/msbuild
 #  test_project: 'Consolidated Unit Tests'
   
 before_script:
-  - apt-get update
-  - apt-get install -y wget
-  - nuget install NUnit.ConsoleRunner -o /tmp/nunit -version 3.8.0
-  - cp -r /tmp/nunit/NUnit.ConsoleRunner.3.8.0/tools/ /nunit/
-  - echo '#!/bin/bash\nmono /nunit/nunit3-console.exe "$@"' > /usr/bin/nunit
-  - chmod +x /usr/bin/nunit
+  #- nuget install NUnit.ConsoleRunner -o /tmp/nunit -version 3.8.0
+  #- cp -r /tmp/nunit/NUnit.ConsoleRunner.3.8.0/tools/ /nunit/
+  #- echo '#!/bin/bash\nmono /nunit/nunit3-console.exe "$@"' > /usr/bin/nunit
+  #- chmod +x /usr/bin/nunit
   - nuget restore -NonInteractive
-  - apt-get clean
 
 stages:
   - build
@@ -26,7 +23,7 @@ build:
   script:
     #- nuget restore
     #- cd "$base_project"
-    - msbuild.exe "REST Messaging Projects.sln" /t:Build /p:Configuration=Debug;Platform="Any CPU"
+    - xbuild "REST Messaging Projects.sln" /t:Build /p:Configuration=Debug;Platform="Any CPU"
     - cd "Consolidated Unit Tests/bin/Debug"
     #- /builds/DataMotion/DMWeb/SecureMail/CSharp/Messaging/Rest/NET-Framework-4.5.2/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe "Consolidated Unit Tests.dll"
     - ls /usr/bin
