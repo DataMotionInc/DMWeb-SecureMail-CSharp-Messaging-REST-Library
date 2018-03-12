@@ -26,7 +26,7 @@ build:
     #- cd "$base_project"
     - msbuild.exe "REST Messaging Projects.sln" /t:Build /p:Configuration=Debug;Platform="Any CPU"
     - cd "Consolidated Unit Tests/bin/Debug"
-    - ../../../NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe
+    - /builds/DataMotion/DMWeb/SecureMail/CSharp/Messaging/Rest/NET-Framework-4.5.2/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe "Consolidated Unit Tests.dll"
     #- nunit-console "Consolidated Unit Tests.dll"
     #- nunit-console "Consolidated Unit Tests/Consolidated Unit Tests.csproj"
     #- msbuild.exe "REST Messaging Projects.sln" /t:Build /p:Configuration=Release;Platform="Any CPU"
