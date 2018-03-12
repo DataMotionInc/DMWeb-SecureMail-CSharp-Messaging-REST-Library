@@ -20,6 +20,10 @@ build:
     #Change directory and run unit tests
     - cd "Consolidated Unit Tests/bin/Debug"
     - nunit "Consolidated Unit Tests.dll"
+    #Build DLLs in Release mode
+    - cd ../../../
+    - xbuild "REST Messaging Projects.sln" /t:Build /p:Configuration=Release;Platform="Any CPU"
+    - tree
   artifacts:
     paths:
-      - TestResult.txt
+      - TestResult.xml
