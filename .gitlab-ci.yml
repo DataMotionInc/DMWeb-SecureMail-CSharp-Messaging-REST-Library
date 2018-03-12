@@ -1,50 +1,17 @@
-#image: didstopia/msbuild
 image: fela98/mono-nunit
 
-# place project specific paths in variables to make the rest of the script more generic
-#variables:
-#  DLL_RELEASE_FOLDER: 'Messaging Library\bin\Release'
-#  TEST_FOLDER: 'Consolidated Unit Tests\bin\Release'
-#  base_project: 'Messaging Library'
-#  test_project: 'Consolidated Unit Tests'
-  
 before_script:
-  #- nuget install NUnit.ConsoleRunner -o /tmp/nunit -version 3.8.0
-  #- cp -r /tmp/nunit/NUnit.ConsoleRunner.3.8.0/tools/ /nunit/
-  #- echo '#!/bin/bash\nmono /nunit/nunit3-console.exe "$@"' > /usr/bin/nunit
-  #- chmod +x /usr/bin/nunit
   - nuget restore -NonInteractive
 
 stages:
   - build
-  #- test
 
 build:
   stage: build
   script:
-    #- nuget restore
-    #- cd "$base_project"
     - xbuild "REST Messaging Projects.sln" /t:Build /p:Configuration=Debug;Platform="Any CPU"
     - cd "Consolidated Unit Tests/bin/Debug"
-    #- /builds/DataMotion/DMWeb/SecureMail/CSharp/Messaging/Rest/NET-Framework-4.5.2/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe "Consolidated Unit Tests.dll"
-    - ls /usr/bin
     - nunit "Consolidated Unit Tests.dll"
-    #- nunit-console "Consolidated Unit Tests.dll"
-    #- nunit-console "Consolidated Unit Tests/Consolidated Unit Tests.csproj"
-    #- msbuild.exe "REST Messaging Projects.sln" /t:Build /p:Configuration=Release;Platform="Any CPU"
   artifacts:
     paths:
       - TestResult.txt
-
-#test:
-#  stage: test
-#  script:
-    #- nuget restore
-    #- cd "$test_project"
-#    - msbuild.exe /p:Configuration=Release /p:OutputPath=..\build
-#    - 'nunit-console "..\build\Consolidated Unit Tests.dll" /out:TestResult.txt'
-#  artifacts:
-#    paths:
-#      - '..\build\TestResult.xml'
-#  dependencies:
-#    - build
