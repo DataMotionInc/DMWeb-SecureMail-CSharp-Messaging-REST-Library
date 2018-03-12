@@ -10,8 +10,8 @@ image: didstopia/msbuild
 before_script:
   - apt-get update
   - apt-get install -y wget
-  - nuget install NUnit.ConsoleRunner -o /tmp/nunit -version 3.8
-  - cp -r /tmp/nunit/NUnit.ConsoleRunner.3.8/tools/ /nunit/
+  - nuget install NUnit.ConsoleRunner -o /tmp/nunit -version 3.8.0
+  - cp -r /tmp/nunit/NUnit.ConsoleRunner.3.8.0/tools/ /nunit/
   - echo '#!/bin/bash\nmono /nunit/nunit3-console.exe "$@"' > /usr/bin/nunit
   - chmod +x /usr/bin/nunit
   - nuget restore -NonInteractive
