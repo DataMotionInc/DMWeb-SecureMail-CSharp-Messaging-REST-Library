@@ -24,7 +24,7 @@ build:
     #Build DLLs in Release mode
     - cd ../../../
     - xbuild "REST Messaging Projects.sln" /t:Build /p:Configuration=Release;Platform="Any CPU"
-    - tree
   artifacts:
     paths:
-      - TestResult.xml
+      - "Consolidated Unit Tests/bin/Debug/TestResult.xml"
+      - "Consolidated Unit Tests/bin/Release/Messaging Library.dll"
