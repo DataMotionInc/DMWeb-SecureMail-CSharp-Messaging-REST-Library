@@ -382,7 +382,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
         public void SendMimeMessageNoSessionKeyTest()
         {
-            string[] lines = System.IO.File.ReadAllLines("Data\\MessageData.txt");
+            string[] lines = System.IO.File.ReadAllLines("..\\..\\Data\\MessageData.txt");
 
             string str3 = lines[2];
             string[] linesplit3 = str3.Split(':');
@@ -421,7 +421,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Category("LogOn")]
         public void LogOnPositiveTest()
         {
-            string[] lines = System.IO.File.ReadAllLines("Data\\MessageData.txt");
+            string[] lines = System.IO.File.ReadAllLines("..\\..\\Data\\MessageData.txt");
 
             string str = lines[0];
             string[] linesplit = str.Split(':');
@@ -453,7 +453,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         //Will send a message each time function is called
         public void SendMessagePositiveTest()
         {
-            string[] lines = System.IO.File.ReadAllLines("Data\\MessageData.txt");
+            string[] lines = System.IO.File.ReadAllLines("..\\..\\Data\\MessageData.txt");
 
             string str3 = lines[2];
             string[] linesplit3 = str3.Split(':');
@@ -476,7 +476,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Category("Move Message")]
         public void MoveMessagePositiveTest()
         {
-            string[] lines = System.IO.File.ReadAllLines("Data\\MessageData.txt");
+            string[] lines = System.IO.File.ReadAllLines("..\\..\\Data\\MessageData.txt");
 
             string str3 = lines[2];
             string[] linesplit3 = str3.Split(':');
@@ -494,7 +494,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Category("Get Message")]
         public void GetMessagePositiveTest()
         {
-            string[] lines = System.IO.File.ReadAllLines("Data\\MessageData.txt");
+            string[] lines = System.IO.File.ReadAllLines("..\\..\\Data\\MessageData.txt");
 
             string str3 = lines[2];
             string[] linesplit3 = str3.Split(':');
@@ -510,7 +510,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Category("Get Message Metadata")]
         public void GetMessageMetadataPositiveTest()
         {
-            string[] lines = System.IO.File.ReadAllLines("Data\\MessageData.txt");
+            string[] lines = System.IO.File.ReadAllLines("..\\..\\Data\\MessageData.txt");
 
             string str3 = lines[2];
             string[] linesplit3 = str3.Split(':');
@@ -527,7 +527,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Category("Send Mime Message")]
         public void SendMimeMessagePositiveTest()
         {
-            string[] lines = System.IO.File.ReadAllLines("Data\\MessageData.txt");
+            string[] lines = System.IO.File.ReadAllLines("..\\..\\Data\\MessageData.txt");
 
             string str3 = lines[2];
             string[] linesplit3 = str3.Split(':');
@@ -745,7 +745,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Category("Delete Message")]
         public void DeleteMessageTrueMIDTrueBoolTest()
         {
-            string[] lines = System.IO.File.ReadAllLines("Data\\MessageData.txt");
+            string[] lines = System.IO.File.ReadAllLines("..\\..\\Data\\MessageData.txt");
 
             string str3 = lines[2];
             string[] linesplit3 = str3.Split(':');
@@ -1026,7 +1026,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Category("Retract Message")]
         public void RetractMessagePositiveTest()
         {
-            string[] lines = System.IO.File.ReadAllLines("Data\\MessageData.txt");
+            string[] lines = System.IO.File.ReadAllLines("..\\..\\Data\\MessageData.txt");
 
             string str3 = lines[2];
             string[] linesplit3 = str3.Split(':');
@@ -1195,7 +1195,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                string[] lines = System.IO.File.ReadAllLines("Data\\MessageData.txt");
+                string[] lines = System.IO.File.ReadAllLines("..\\..\\Data\\MessageData.txt");
 
                 string str4 = lines[3];
                 string[] linesplit4 = str4.Split(':');
