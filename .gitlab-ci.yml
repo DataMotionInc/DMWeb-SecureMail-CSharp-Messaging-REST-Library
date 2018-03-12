@@ -27,4 +27,4 @@ build:
   artifacts:
     paths:
       - "Consolidated Unit Tests/bin/Debug/TestResult.xml"
-      - "Consolidated Unit Tests/bin/Release/Messaging Library.dll"
+      - "Messaging Library/bin/Release/Messaging Library.dll"
