@@ -8,7 +8,7 @@ image: didstopia/msbuild
 #  test_project: 'Consolidated Unit Tests'
   
 before_script:
-  - apt-get install -y nunit nunit-console
+  - apt-get install -y nunit nunit-console tree
   - nuget restore -NonInteractive
 
 stages:
@@ -21,8 +21,9 @@ build:
     #- nuget restore
     #- cd "$base_project"
     - msbuild.exe "REST Messaging Projects.sln" /t:Build /p:Configuration=Debug;Platform="Any CPU"
-    - nunit-console "Consolidated Unit Tests/Consolidated Unit Tests.csproj"
-    - msbuild.exe "REST Messaging Projects.sln" /t:Build /p:Configuration=Release;Platform="Any CPU"
+    - tree
+    #- nunit-console "Consolidated Unit Tests/Consolidated Unit Tests.csproj"
+    #- msbuild.exe "REST Messaging Projects.sln" /t:Build /p:Configuration=Release;Platform="Any CPU"
   artifacts:
     paths:
       - TestResult.txt
