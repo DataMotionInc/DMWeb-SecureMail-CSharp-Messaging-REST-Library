@@ -12,13 +12,13 @@ build:
     #Build DLLs
     - xbuild "REST Messaging Projects.sln" /t:Build /p:Configuration=Debug;Platform="Any CPU"
     #Write Config File from Environment Variables
-    - cat >Consolidated Unit Tests/bin/Debug/MessageData.txt <<EOL
+    - cat >"Consolidated Unit Tests/bin/Debug/MessageData.txt" <<EOL
     - line 1, "UserIdOrEmail:"$UserIdOrEmail
     - line 2, "Password:"$Password
     - line 3, "ToAddress:"$ToAddress
     - line 4, "FromAddress:"$FromAddress
     - EOL
-    - cat Consolidated Unit Tests/bin/Debug/MessageData.txt
+    - cat "Consolidated Unit Tests/bin/Debug/MessageData.txt"
     #Change directory and run unit tests
     - cd "Consolidated Unit Tests/bin/Debug"
     - nunit "Consolidated Unit Tests.dll"
