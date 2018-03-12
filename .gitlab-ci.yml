@@ -15,7 +15,7 @@ build:
     - echo "UserIdOrEmail:"$UserIdOrEmail > "Consolidated Unit Tests/bin/Debug/MessageData.txt"
     - echo "Password:"$Password >> "Consolidated Unit Tests/bin/Debug/MessageData.txt"
     - echo "ToAddress:"$ToAddress >> "Consolidated Unit Tests/bin/Debug/MessageData.txt"
-    - line "FromAddress:"$FromAddress >> "Consolidated Unit Tests/bin/Debug/MessageData.txt"
+    - echo "FromAddress:"$FromAddress >> "Consolidated Unit Tests/bin/Debug/MessageData.txt"
     - cat "Consolidated Unit Tests/bin/Debug/MessageData.txt"
     #Change directory and run unit tests
     - cd "Consolidated Unit Tests/bin/Debug"
