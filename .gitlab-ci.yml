@@ -1,6 +1,4 @@
 image: didstopia/msbuild
-services:
-  - fela98/mono-nunit
 
 # place project specific paths in variables to make the rest of the script more generic
 #variables:
@@ -10,12 +8,14 @@ services:
 #  test_project: 'Consolidated Unit Tests'
   
 before_script:
-  #- apt-get update
-  #- apt-get install -y tree #nunit nunit-console
-  #- nuget install NUnit
-  #- nuget install NUnit.Runners
-  #- tree
+  - apt-get update
+  - apt-get install -y wget
+  - nuget install NUnit.ConsoleRunner -o /tmp/nunit -version 3.8
+  - cp -r /tmp/nunit/NUnit.ConsoleRunner.3.8/tools/ /nunit/
+  - echo '#!/bin/bash\nmono /nunit/nunit3-console.exe "$@"' > /usr/bin/nunit
+  - chmod +x /usr/bin/nunit
   - nuget restore -NonInteractive
+  - apt-get clean
 
 stages:
   - build
@@ -30,7 +30,7 @@ build:
     - cd "Consolidated Unit Tests/bin/Debug"
     #- /builds/DataMotion/DMWeb/SecureMail/CSharp/Messaging/Rest/NET-Framework-4.5.2/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe "Consolidated Unit Tests.dll"
     - ls /usr/bin
-    #- /usr/bin/nunit "Consolidated Unit Tests.dll"
+    - nunit "Consolidated Unit Tests.dll"
     #- nunit-console "Consolidated Unit Tests.dll"
     #- nunit-console "Consolidated Unit Tests/Consolidated Unit Tests.csproj"
     #- msbuild.exe "REST Messaging Projects.sln" /t:Build /p:Configuration=Release;Platform="Any CPU"
