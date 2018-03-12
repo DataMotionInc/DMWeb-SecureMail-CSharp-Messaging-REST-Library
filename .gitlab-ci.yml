@@ -12,8 +12,8 @@ before_script:
   - apt-get install -y tree #nunit nunit-console
   - nuget install NUnit
   - nuget install NUnit.Runners
-  - tree
-  #- nuget restore -NonInteractive
+  #- tree
+  - nuget restore -NonInteractive
 
 stages:
   - build
@@ -25,7 +25,8 @@ build:
     #- nuget restore
     #- cd "$base_project"
     - msbuild.exe "REST Messaging Projects.sln" /t:Build /p:Configuration=Debug;Platform="Any CPU"
-    #- cd "Consolidated Unit Tests/bin/Debug"
+    - cd "Consolidated Unit Tests/bin/Debug"
+    - ../../../NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe
     #- nunit-console "Consolidated Unit Tests.dll"
     #- nunit-console "Consolidated Unit Tests/Consolidated Unit Tests.csproj"
     #- msbuild.exe "REST Messaging Projects.sln" /t:Build /p:Configuration=Release;Platform="Any CPU"
