@@ -8,6 +8,7 @@ image: didstopia/msbuild
 #  test_project: 'Consolidated Unit Tests'
   
 before_script:
+  - apt-get update
   - apt-get install -y nunit nunit-console tree
   - nuget restore -NonInteractive
 
