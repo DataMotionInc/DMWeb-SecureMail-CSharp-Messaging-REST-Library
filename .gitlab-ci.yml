@@ -23,7 +23,7 @@ build:
     - nunit "Consolidated Unit Tests.dll"
     #Build DLLs in Release mode
     - cd ../../../
-    - xbuild "REST Messaging Projects.sln" /t:Build /p:Configuration=Release;Platform="Any CPU"
+    - xbuild "REST Messaging Projects.sln" /t:Build /p:Configuration=Release;Platform="Any CPU";AssemblyMajorVersion=1;AssemblyMinorVersion=0;AssemblyBuildNumber=0;AssemblyRevision=20
   artifacts:
     paths:
       - "Consolidated Unit Tests/bin/Debug/TestResult.xml"
