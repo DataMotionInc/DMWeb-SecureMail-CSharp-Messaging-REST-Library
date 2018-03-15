@@ -11,6 +11,7 @@ build:
   stage: build
   script:
     #Build DLLs
+    - xbuild "REST Messaging Projects.sln" /t:BeforeBuild /p:AssemblyMajorVersion=1;AssemblyMinorVersion=0;AssemblyBuildNumber=0;AssemblyRevision=20
     - xbuild "REST Messaging Projects.sln" /t:Build /p:Configuration=Debug;Platform="Any CPU"
     #Write Config File from Environment Variables
     - echo "UserIdOrEmail:"$UserIdOrEmail > "Consolidated Unit Tests/bin/Debug/Test Documents/MessageData.txt"
@@ -23,7 +24,8 @@ build:
     - nunit "Consolidated Unit Tests.dll"
     #Build DLLs in Release mode
     - cd ../../../
-    - xbuild "REST Messaging Projects.sln" /t:Build /p:Configuration=Release;Platform="Any CPU";AssemblyMajorVersion=1;AssemblyMinorVersion=0;AssemblyBuildNumber=0;AssemblyRevision=20
+    - xbuild "REST Messaging Projects.sln" /t:BeforeBuild /p:AssemblyMajorVersion=1;AssemblyMinorVersion=0;AssemblyBuildNumber=0;AssemblyRevision=20
+    - xbuild "REST Messaging Projects.sln" /t:Build /p:Configuration=Release;Platform="Any CPU"
   artifacts:
     paths:
       - "Consolidated Unit Tests/bin/Debug/TestResult.xml"
