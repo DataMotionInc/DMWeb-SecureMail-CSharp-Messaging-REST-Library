@@ -4,9 +4,11 @@
         <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
         <SolutionRoot>$(MSBuildProjectDirectory)</SolutionRoot>
     </PropertyGroup>
+    <MSBuildCommunityTasksPath>.</MSBuildCommunityTasksPath>
+    <Import Project="MSBuild.Community.Tasks.Targets"/>
  
     <ItemGroup>
-        <FileUpdate Files="version.txt"
+        <FileUpdate Files="CommonAssemblyInfo.cs"
             Regex="(\d+)\.(\d+)\.(\d+)\.(\d+)"
             ReplacementText="$(build_number)" />
     </ItemGroup>
