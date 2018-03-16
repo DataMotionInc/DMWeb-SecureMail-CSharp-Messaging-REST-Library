@@ -24,7 +24,7 @@ build:
     - nunit "Consolidated Unit Tests.dll"
     #Build DLLs in Release mode
     - cd ../../../
-    - xbuild Build.proj /p:Configuration=Release;Platform="Any CPU";build_number=1.0.0.20
+    - xbuild Build.proj /p:Configuration=Release /p:Platform="Any CPU" /p:build_number=1.0.0.20
   artifacts:
     paths:
       - "Consolidated Unit Tests/bin/Debug/TestResult.xml"
