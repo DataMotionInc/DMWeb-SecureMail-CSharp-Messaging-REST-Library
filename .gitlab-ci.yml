@@ -12,7 +12,7 @@ build:
   stage: build
   script:
     #Build DLLs
-    - xbuild Build.proj /p:Configuration=Debug;Platform="Any CPU";build_number=1.0.0.20
+    - xbuild Build.proj /p:Configuration=Debug /p:Platform="Any CPU" /p:build_number=1.0.0.20
     #Write Config File from Environment Variables
     - echo "UserIdOrEmail:"$UserIdOrEmail > "Consolidated Unit Tests/bin/Debug/Test Documents/MessageData.txt"
     - echo "Password:"$Password >> "Consolidated Unit Tests/bin/Debug/Test Documents/MessageData.txt"
