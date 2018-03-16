@@ -3,8 +3,8 @@
     <PropertyGroup>
         <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
         <SolutionRoot>$(MSBuildProjectDirectory)</SolutionRoot>
+        <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\Build</MSBuildCommunityTasksPath>
     </PropertyGroup>
-    <MSBuildCommunityTasksPath>.</MSBuildCommunityTasksPath>
     <Import Project="MSBuild.Community.Tasks.Targets"/>
  
     <Target Name="BeforeBuild">
