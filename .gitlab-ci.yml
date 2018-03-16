@@ -3,7 +3,7 @@ image: fela98/mono-nunit
 before_script:
   - apt-get install -y tree
   - nuget restore -NonInteractive
-  - nuget install MSBuildTasks
+  - nuget install MSBuildTasks -Version 1.5.0.235
 
 stages:
   - build
