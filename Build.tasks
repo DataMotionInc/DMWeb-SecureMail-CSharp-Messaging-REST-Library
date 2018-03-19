@@ -2,34 +2,23 @@
 <Project ToolsVersion="4.0" DefaultTargets="Go" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <UsingTask TaskName="RegexTransform" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
         <ParameterGroup>
-            <Items ParameterType="Microsoft.Build.Framework.ITaskItem[]" />
+            <InputFilename ParameterType="System.String" Required="true" />
+            <OutputFilename ParameterType="System.String" Required="true" />
+            <MatchExpression ParameterType="System.String" Required="true" />
+            <ReplacementText ParameterType="System.String" Required="true" />
         </ParameterGroup>
         <Task>
+            <Reference Include="System.Core" />
+            <Using Namespace="System" />
             <Using Namespace="System.IO" />
             <Using Namespace="System.Text.RegularExpressions" />
-            <Using Namespace="Microsoft.Build.Framework" />
             <Code Type="Fragment" Language="cs">
-                <![CDATA[
-            foreach(ITaskItem item in Items) {
-              string fileName = item.GetMetadata("FullPath");
-              string find = item.GetMetadata("Find");
-              string replaceWith = item.GetMetadata("ReplaceWith");
-              
-              if(!File.Exists(fileName)) {
-                Log.LogError(null, null, null, null, 0, 0, 0, 0, String.Format("Could not find version file: {0}", fileName), new object[0]);
-              }
-              Log.LogInfo(null, null, null, null, 0, 0, 0, 0 String.Format("Replacing {0}, with {1} in {2}", find, replaceWith, fileName), new object[0]);
-              string content = File.ReadAllText(fileName);
-              File.WriteAllText(
-                fileName,
-                Regex.Replace(
-                  content,
-                  find,
-                  replaceWith
-                )
-              );
-            }
-          ]]>
+              <![CDATA[
+                    File.WriteAllText(
+                        OutputFilename,
+                        Regex.Replace(File.ReadAllText(InputFilename), MatchExpression, ReplacementText)
+                        );
+                  ]]>
             </Code>
         </Task>
     </UsingTask>
