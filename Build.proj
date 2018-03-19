@@ -6,11 +6,17 @@
         <MSBuildCommunityTasksPath>.</MSBuildCommunityTasksPath>
     </PropertyGroup>
     <Import Project="/builds/DataMotion/DMWeb/SecureMail/CSharp/Messaging/Rest/NET-Framework-4.5.2/MSBuildTasks.1.5.0.235/tools/MSBuild.Community.Tasks.Targets"/>
+    <Import Project="Build.tasks" />
  
     <Target Name="BeforeBuild">
         <Message Text="Modifying CommonAssemblyInfo.cs file under $(SolutionRoot) to $(build_number)" /> 
-        <FileUpdate Files="CommonAssemblyInfo.cs"
+        <!--<FileUpdate Files="CommonAssemblyInfo.cs"
             Regex="(\d+\.\d+\.\d+\.\d+)"
+            ReplacementText="$(build_number)" />-->
+        <ReplaceFileText 
+            InputFilename="CommonAssemblyInfo.cs" 
+            OutputFilename="CommonAssemblyInfo2.cs" 
+            MatchExpression="(\d+\.\d+\.\d+\.\d+)" 
             ReplacementText="$(build_number)" />
         <Message Text="CommonAssemblyInfo.cs file updated to version $(build_number)" />
     </Target>
