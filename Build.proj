@@ -6,7 +6,7 @@
         <MSBuildCommunityTasksPath>.</MSBuildCommunityTasksPath>
     </PropertyGroup>
     <Import Project="/builds/DataMotion/DMWeb/SecureMail/CSharp/Messaging/Rest/NET-Framework-4.5.2/MSBuildTasks.1.5.0.235/tools/MSBuild.Community.Tasks.Targets"/>
-    <Import Project="Build.tasks" />
+    <Import Project="/builds/DataMotion/DMWeb/SecureMail/CSharp/Messaging/Rest/NET-Framework-4.5.2/Build.tasks" />
  
     <Target Name="BeforeBuild">
         <Message Text="Modifying CommonAssemblyInfo.cs file under $(SolutionRoot) to $(build_number)" /> 
