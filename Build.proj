@@ -13,7 +13,7 @@
         <!--<FileUpdate Files="CommonAssemblyInfo.cs"
             Regex="(\d+\.\d+\.\d+\.\d+)"
             ReplacementText="$(build_number)" />-->
-        <ReplaceFileText 
+        <RegexTransform 
             InputFilename="CommonAssemblyInfo.cs" 
             OutputFilename="CommonAssemblyInfo2.cs" 
             MatchExpression="(\d+\.\d+\.\d+\.\d+)" 
