@@ -10,7 +10,7 @@
     <Target Name="BeforeBuild">
         <Message Text="Modifying CommonAssemblyInfo.cs file under $(SolutionRoot) to $(build_number)" /> 
         <FileUpdate Files="CommonAssemblyInfo.cs"
-            Regex="\d+\.\d+\.\d+\.\d+"
+            Regex="(\d+\.\d+\.\d+\.\d+)"
             ReplacementText="$(build_number)" />
         <Message Text="CommonAssemblyInfo.cs file updated to version $(build_number)" />
     </Target>
