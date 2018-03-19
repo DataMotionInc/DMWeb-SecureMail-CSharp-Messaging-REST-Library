@@ -12,6 +12,7 @@ build:
   stage: build
   script:
     #Build DLLs
+    - cat /usr/lib/mono/xbuild/14.0/bin
     - xbuild Build.proj /p:Configuration=Debug /p:Platform="Any CPU" /p:build_number=1.0.0.20
     - cat CommonAssemblyInfo2.cs
     #Write Config File from Environment Variables
