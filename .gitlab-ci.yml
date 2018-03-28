@@ -1,5 +1,6 @@
 #image: fela98/mono-nunit
-image: didstopia/msbuild
+#image: didstopia/msbuild
+image: dmirmilshteyn/dotnet-msbuild-mono
 
 before_script:
   - nuget restore -NonInteractive
@@ -11,7 +12,7 @@ build:
   stage: build
   script:
     #Build DLLs
-    - msbuild.exe Build.proj /p:Configuration=Debug /p:Platform="Any CPU" /p:build_number=1.0.0.20
+    - msbuild Build.proj /p:Configuration=Debug /p:Platform="Any CPU" /p:build_number=1.0.0.20
     - cat CommonAssemblyInfo2.cs
     #Write Config File from Environment Variables
     - echo "UserIdOrEmail:"$UserIdOrEmail > "Consolidated Unit Tests/bin/Debug/Test Documents/MessageData.txt"
@@ -24,7 +25,7 @@ build:
     - nunit "Consolidated Unit Tests.dll"
     #Build DLLs in Release mode
     - cd ../../../
-    - msbuild.exe Build.proj /p:Configuration=Release /p:Platform="Any CPU" /p:build_number=1.0.0.20
+    - msbuild Build.proj /p:Configuration=Release /p:Platform="Any CPU" /p:build_number=1.0.0.20
     - cat CommonAssemblyInfo2.cs
   artifacts:
     paths:
