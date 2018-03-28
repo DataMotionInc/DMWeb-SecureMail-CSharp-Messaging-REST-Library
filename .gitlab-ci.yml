@@ -1,9 +1,8 @@
-image: fela98/mono-nunit
+#image: fela98/mono-nunit
+image: didstopia/msbuild
 
 before_script:
-  - apt-get install -y tree
   - nuget restore -NonInteractive
-  - nuget install MSBuildTasks -Version 1.5.0.235
 
 stages:
   - build
@@ -12,7 +11,6 @@ build:
   stage: build
   script:
     #Build DLLs
-    - ls /usr/lib/mono/xbuild/14.0/bin
     - msbuild Build.proj /p:Configuration=Debug /p:Platform="Any CPU" /p:build_number=1.0.0.20
     - cat CommonAssemblyInfo2.cs
     #Write Config File from Environment Variables
