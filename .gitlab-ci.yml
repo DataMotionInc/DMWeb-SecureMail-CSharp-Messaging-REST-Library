@@ -1,7 +1,4 @@
-#image: fela98/mono-nunit
-#image: didstopia/msbuild
-#image: dmirmilshteyn/dotnet-msbuild-mono
-image: alexellisio/msbuild:12.0
+image: cly0896/dm-mono-nunit
 
 before_script:
   - nuget restore -NonInteractive
