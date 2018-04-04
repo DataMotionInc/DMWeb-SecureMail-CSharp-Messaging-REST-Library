@@ -37,7 +37,7 @@ namespace Messaging_Library.Models
         public class SummariesAndUnreadMessage
         {
             public int AttachmentCount { get; set; }
-            public string createTime { get; set; }
+            public string createTimeString { get; set; }
             public int FolderId { get; set; }
             public int MessageId { get; set; }
             public int MessageSize { get; set; }
