@@ -16,7 +16,6 @@ build:
     - echo "Password:"$Password >> "Consolidated Unit Tests/bin/Debug/Test Documents/MessageData.txt"
     - echo "ToAddress:"$ToAddress >> "Consolidated Unit Tests/bin/Debug/Test Documents/MessageData.txt"
     - echo "FromAddress:"$FromAddress >> "Consolidated Unit Tests/bin/Debug/Test Documents/MessageData.txt"
-    - cat "Consolidated Unit Tests/bin/Debug/Test Documents/MessageData.txt"
     #Change directory and run unit tests
     - cd "Consolidated Unit Tests/bin/Debug"
     - nunit "Consolidated Unit Tests.dll"
