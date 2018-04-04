@@ -14,7 +14,7 @@
             ReplacementText="$(build_number)" />-->
         <RegexTransform 
             InputFilename="CommonAssemblyInfo.cs" 
-            OutputFilename="CommonAssemblyInfo2.cs" 
+            OutputFilename="CommonAssemblyInfo.cs" 
             MatchExpression="(1.2.3.4)" 
             ReplacementText="$(build_number)" />
         <Message Text="CommonAssemblyInfo.cs file updated to version $(build_number)" />
