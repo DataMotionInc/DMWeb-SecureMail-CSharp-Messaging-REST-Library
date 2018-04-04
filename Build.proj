@@ -15,7 +15,7 @@
         <RegexTransform 
             InputFilename="CommonAssemblyInfo.cs" 
             OutputFilename="CommonAssemblyInfo2.cs" 
-            MatchExpression="(\d+\.\d+\.\d+\.\d+)" 
+            MatchExpression="(1.2.3.4)" 
             ReplacementText="$(build_number)" />
         <Message Text="CommonAssemblyInfo.cs file updated to version $(build_number)" />
     </Target>
