@@ -14,6 +14,7 @@
             <Using Namespace="System.Text.RegularExpressions" />
             <Code Type="Fragment" Language="cs">
               <![CDATA[
+                    Console.WriteLine("Replacing " + MatchExpression + " with " + ReplacementText);
                     File.WriteAllText(
                         OutputFilename,
                         Regex.Replace(File.ReadAllText(InputFilename), MatchExpression, ReplacementText)
