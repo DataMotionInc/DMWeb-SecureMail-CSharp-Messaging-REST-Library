@@ -1,7 +1,6 @@
 ﻿using System.Net.Http;
 using Messaging_Library.Models;
 using NUnit.Framework;
-using Newtonsoft;
 using DMWeb_REST;
 using System.IO;
 using System.Threading;
@@ -31,7 +30,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         private string _testDataPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Test Documents", "test.txt");
 
         [Test, Order(1)]
-        [Category("LogOn")]
+        [Category("LogOn")] 
         [Category("No Session Key")]
         public void LogOnEmptyFieldsTest()
         {
