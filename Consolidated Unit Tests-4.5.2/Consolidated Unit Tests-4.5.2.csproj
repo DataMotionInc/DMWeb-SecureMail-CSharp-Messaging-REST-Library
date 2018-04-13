@@ -43,7 +43,7 @@
     </Reference>
     <Reference Include="Messaging Library, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Messaging Library\bin\Debug\Messaging Library.dll</HintPath>
+      <HintPath>..\MessagingLibrary-4.5.2\bin\Release\Messaging Library.dll</HintPath>
     </Reference>
     <Reference Include="MimeKit, Version=1.22.0.0, Culture=neutral, PublicKeyToken=bede1c8a46c66814, processorArchitecture=MSIL">
       <HintPath>..\packages\MimeKit.1.22.0\lib\net451\MimeKit.dll</HintPath>
