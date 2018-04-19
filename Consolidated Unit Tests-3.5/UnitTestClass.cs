@@ -4,6 +4,7 @@ using DMWeb_REST;
 using System.IO;
 using System.Threading;
 using System.Net;
+using System;
 
 namespace Messaging_Library.TestFixtures.UnitTestClass
 {
@@ -11,6 +12,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
     {
         public static DMWeb dmWeb = new DMWeb();
         public static string folderId;
+        public static string trackSentFID;
         public static int sendDeleteMID;
         public static int moveMID;
         public static string mimeMessageId;
@@ -20,11 +22,12 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
     }
 
-    //To enter user credentials, go to the project folder
-    //Data/LogInData.txt
     [TestFixture]
     public class AccountTests
     {
+        private string _messageDataPath = "Consolidated Unit Tests\\Test Documents\\MessageData.txt";
+        private string _testDataPath = "Consolidated Unit Tests\\Test Documents\\test.txt";
+
         [Test, Order(1)]
         [Category("LogOn")] 
         [Category("No Session Key")]
@@ -173,7 +176,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Folders.Create(new FolderModels.Create { FolderName = "UnitTest2", FolderId = 0 });
+                Context.dmWeb.Folders.Create(new FolderModels.Create { FolderName = "Unit Test 3.5", FolderId = 0 });
             }
             catch (WebException ex)
             {
@@ -381,7 +384,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
         public void SendMimeMessageNoSessionKeyTest()
         {
-            string[] lines = System.IO.File.ReadAllLines("Data\\MessageData.txt");
+            string[] lines = System.IO.File.ReadAllLines(_messageDataPath);
 
             string str3 = lines[2];
             string[] linesplit3 = str3.Split(':');
@@ -393,8 +396,8 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                string location = Path.Combine(TestContext.CurrentContext.TestDirectory, @"Test Documents\test.txt");
-                Context.dmWeb.Message.SendMimeMessage(new MessagingModels.SendMessage { To = { toAddress }, From = fromAddress, Subject = "Mime Test Spam", TextBody = "Mime Message Test" }, location);
+                string location = _testDataPath;
+                Context.dmWeb.Message.SendMimeMessage(new MessagingModels.SendMessage { To = { toAddress }, From = fromAddress, Subject = "Mime Test 3.5", TextBody = "Mime Message Test" }, location);
             }
             catch (WebException ex)
             {
@@ -420,8 +423,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Category("LogOn")]
         public void LogOnPositiveTest()
         {
-            string[] lines = System.IO.File.ReadAllLines("Data\\MessageData.txt");
-
+            string[] lines = System.IO.File.ReadAllLines(_messageDataPath);
             string str = lines[0];
             string[] linesplit = str.Split(':');
             Context.userName = linesplit[1];
@@ -431,20 +433,26 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
             Context.password = linesplit2[1];
             string sessionKey = Context.dmWeb.Account.LogOn(new AccountModels.LogOn { UserIdOrEmail = Context.userName, Password = Context.password });
             Assert.AreNotEqual(string.Empty, sessionKey);
+
+            Thread.Sleep(2000);
         }
 
         [Test, Order(26)]
         [Category("Create Folder")]
         public void CreateFolderPositiveTest()
         {
-            Context.folderId = Context.dmWeb.Folders.Create(new FolderModels.Create { FolderName = "Unit Test 2", FolderType = 0 });
+            Context.folderId = Context.dmWeb.Folders.Create(new FolderModels.Create { FolderName = "UnitTest3.5", FolderType = 0 });
+            Context.trackSentFID = Context.dmWeb.Folders.Create(new FolderModels.Create { FolderName = "TrackSent3.5", FolderType = 1 });
+
+            Thread.Sleep(5000);
         }
 
-        [Test, Order(27)]
+        [Test, Order(30)]
         [Category("Delete Folder")]
         public void DeleteFolderWithSessionKey()
         {
             Context.dmWeb.Folders.Delete(Context.folderId);
+            Context.dmWeb.Folders.Delete(Context.trackSentFID);
         }
 
         [Test, Order(28)]
@@ -452,13 +460,13 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         //Will send a message each time function is called
         public void SendMessagePositiveTest()
         {
-            string[] lines = System.IO.File.ReadAllLines("Data\\MessageData.txt");
+            string[] lines = System.IO.File.ReadAllLines(_messageDataPath);
 
             string str3 = lines[2];
             string[] linesplit3 = str3.Split(':');
             string toAddress = linesplit3[1];
 
-            Context.sendDeleteMID = Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress }, Subject = "Positive test"});
+            Context.sendDeleteMID = Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress }, Subject = "Positive test 3.5"});
             Thread.Sleep(5000);
         }
 
@@ -471,20 +479,22 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
             Context.dmWeb.Message.Delete(Context.sendDeleteMID.ToString(), permanentlyDeleteCheck: false);
         }
 
-        [Test, Order(30)]
+        [Test, Order(27)]
         [Category("Move Message")]
         public void MoveMessagePositiveTest()
         {
-            string[] lines = System.IO.File.ReadAllLines("Data\\MessageData.txt");
+            Thread.Sleep(5000);
+
+            string[] lines = System.IO.File.ReadAllLines(_messageDataPath);
 
             string str3 = lines[2];
             string[] linesplit3 = str3.Split(':');
             string toAddress = linesplit3[1];
 
-            Context.moveMID = Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress }, Subject = "Move message test" });
+            Context.moveMID = Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress }, Subject = "Move message test 3.5" });
             Thread.Sleep(5000);
 
-            int DFID = 2;
+            int DFID = int.Parse(Context.trackSentFID);
 
             Context.dmWeb.Message.Move(new MessagingModels.MessageOperations { MessageId = Context.moveMID, DestinationFolderId = DFID });
         }
@@ -493,13 +503,13 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Category("Get Message")]
         public void GetMessagePositiveTest()
         {
-            string[] lines = System.IO.File.ReadAllLines("Data\\MessageData.txt");
+            string[] lines = System.IO.File.ReadAllLines(_messageDataPath);
 
             string str3 = lines[2];
             string[] linesplit3 = str3.Split(':');
             string toAddress = linesplit3[1];
 
-            int getMID = Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress }, Subject = "Get message test" });
+            int getMID = Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress }, Subject = "Get message test 3.5" });
             Thread.Sleep(5000);
 
             Context.dmWeb.Message.Get(getMID.ToString());
@@ -509,13 +519,13 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Category("Get Message Metadata")]
         public void GetMessageMetadataPositiveTest()
         {
-            string[] lines = System.IO.File.ReadAllLines("Data\\MessageData.txt");
+            string[] lines = System.IO.File.ReadAllLines(_messageDataPath);
 
             string str3 = lines[2];
             string[] linesplit3 = str3.Split(':');
             string toAddress = linesplit3[1];
 
-            int getMetadataMID = Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress }, Subject = "Get message test" });
+            int getMetadataMID = Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress }, Subject = "Get message test 3.5" });
             Thread.Sleep(5000);
 
             Context.dmWeb.Message.GetMessageMetadata(getMetadataMID.ToString());
@@ -526,7 +536,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Category("Send Mime Message")]
         public void SendMimeMessagePositiveTest()
         {
-            string[] lines = System.IO.File.ReadAllLines("Data\\MessageData.txt");
+            string[] lines = System.IO.File.ReadAllLines(_messageDataPath);
 
             string str3 = lines[2];
             string[] linesplit3 = str3.Split(':');
@@ -536,8 +546,8 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
             string[] linesplit4 = str4.Split(':');
             string fromAddress = linesplit4[1];
 
-            string location = Path.Combine(TestContext.CurrentContext.TestDirectory, @"Test Documents\test.txt");
-            Context.mimeMessageId = Context.dmWeb.Message.SendMimeMessage(new MessagingModels.SendMessage { To = { toAddress }, From = fromAddress, Subject = "Mime Test WITH SESSION KEY", TextBody = "Mime Message Test" }, location);
+            string location = _testDataPath;
+            Context.mimeMessageId = Context.dmWeb.Message.SendMimeMessage(new MessagingModels.SendMessage { To = { toAddress }, From = fromAddress, Subject = "Mime Test with SessionKey 3.5", TextBody = "Mime Message Test" }, location);
         }
 
         [Test, Order(34)]
@@ -682,7 +692,9 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Folders.Create(new FolderModels.Create { FolderName = "Unit Test" });
+                string fid = Context.dmWeb.Folders.Create(new FolderModels.Create { FolderName = "Unit Test Folder Name Only 3.5" });
+                Thread.Sleep(5000);
+                Context.dmWeb.Folders.Delete(fid);
             }
             catch (WebException ex)
             {
@@ -710,7 +722,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Folders.Create(new FolderModels.Create { FolderName = "UnitTest", FolderType = 15 });
+                Context.dmWeb.Folders.Create(new FolderModels.Create { FolderName = "Unit Test 3.5", FolderType = 15 });
             }
             catch (WebException ex)
             {
@@ -744,13 +756,13 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Category("Delete Message")]
         public void DeleteMessageTrueMIDTrueBoolTest()
         {
-            string[] lines = System.IO.File.ReadAllLines("Data\\MessageData.txt");
+            string[] lines = System.IO.File.ReadAllLines(_messageDataPath);
 
             string str3 = lines[2];
             string[] linesplit3 = str3.Split(':');
             string toAddress = linesplit3[1];
 
-            int mid = Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress }, Subject = "True bool: Delete Message" });
+            int mid = Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress }, Subject = "True bool: Delete Message 3.5" });
             Thread.Sleep(5000);
 
             Context.dmWeb.Message.Delete(mid.ToString(), permanentlyDeleteCheck: true);
@@ -1025,14 +1037,14 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Category("Retract Message")]
         public void RetractMessagePositiveTest()
         {
-            string[] lines = System.IO.File.ReadAllLines("Data\\MessageData.txt");
+            string[] lines = System.IO.File.ReadAllLines(_messageDataPath);
 
             string str3 = lines[2];
             string[] linesplit3 = str3.Split(':');
             string toAddress = linesplit3[1];
 
 
-            int MID = Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress }, Subject = "Retract Message Test" });
+            int MID = Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress }, Subject = "Retract Message Test 3.5" });
 
             Context.dmWeb.Message.Retract(new MessagingModels.MessageOperations { MessageId = MID });
         }
@@ -1194,14 +1206,14 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                string[] lines = System.IO.File.ReadAllLines("Data\\MessageData.txt");
+                string[] lines = System.IO.File.ReadAllLines(_messageDataPath);
 
                 string str4 = lines[3];
                 string[] linesplit4 = str4.Split(':');
                 string fromAddress = linesplit4[1];
 
-                string location = Path.Combine(TestContext.CurrentContext.TestDirectory, @"Test Documents\test.txt");
-                Context.dmWeb.Message.SendMimeMessage(new MessagingModels.SendMessage { From = fromAddress, Subject = "No To Address", TextBody = "Mime Message Test" }, location);
+                string location = @_testDataPath;
+                Context.dmWeb.Message.SendMimeMessage(new MessagingModels.SendMessage { From = fromAddress, Subject = "No To Address", TextBody = "Mime Message Test 3.5" }, location);
             }
             catch (WebException ex)
             {
