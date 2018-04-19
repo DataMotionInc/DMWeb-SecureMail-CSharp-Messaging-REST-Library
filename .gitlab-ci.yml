@@ -24,7 +24,7 @@ build:
     - cd "Consolidated Unit Tests-4.5.2/bin/Debug"
     - nunit "Consolidated Unit Tests.dll"
     - cd "../../../Consolidated Unit Tests-3.5/bin/Debug"
-    - nunit "Consolidated Unit Tests.dll"
+    - nunit "Consolidated Unit Tests-3.5.dll"
     #Build DLLs in Release mode
     - cd ../../../
     - msbuild Build.proj /p:Configuration=Release /p:Platform="Any CPU" /p:build_number=1.0.0.20
