@@ -25,8 +25,8 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
     [TestFixture]
     public class AccountTests
     {
-        private string _messageDataPath = "Consolidated Unit Tests\\Test Documents\\MessageData.txt";
-        private string _testDataPath = "Consolidated Unit Tests\\Test Documents\\test.txt";
+        private string _messageDataPath = "..\\..\\..\\Consolidated Unit Tests\\Test Documents\\MessageData.txt";
+        private string _testDataPath = "..\\..\\..\\Consolidated Unit Tests\\Test Documents\\test.txt";
 
         [Test, Order(1)]
         [Category("LogOn")] 
