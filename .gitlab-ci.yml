@@ -24,6 +24,7 @@ build:
     - cd "Consolidated Unit Tests-4.5.2/bin/Debug"
     - nunit "Consolidated Unit Tests.dll"
     - cd "../../../Consolidated Unit Tests-3.5/bin/Debug"
+    - nunit "Consolidated Unit Tests.dll"
     #Build DLLs in Release mode
     - cd ../../../
     - msbuild Build.proj /p:Configuration=Release /p:Platform="Any CPU" /p:build_number=1.0.0.20
@@ -31,5 +32,5 @@ build:
     paths:
       - "Consolidated Unit Tests-4.5.2/bin/Debug/TestResult.xml"
       - "Consolidated Unit Tests-3.5/bin/Debug/TestResult.xml"
-      - "Messaging Library-4.5.2/bin/Release/Messaging Library.dll"
-      - "Messaging Library-3.5/bin/Release/Messaging Library.dll"
+      - "Messaging Library-4.5.2/bin/Release/MessagingLibrary-4.5.2.dll"
+      - "Messaging Library-3.5/bin/Release/MessagingLibrary-3.5.dll"
