@@ -28,5 +28,5 @@ build:
     paths:
       - "Consolidated Unit Tests-4.5.2/bin/Debug/TestResult.xml"
       - "Consolidated Unit Tests-3.5/bin/Debug/TestResult.xml"
-      - "Messaging Library-4.5.2/bin/Release/MessagingLibrary-4.5.2.dll"
-      - "Messaging Library-3.5/bin/Release/MessagingLibrary-3.5.dll"
+      - "MessagingLibrary-4.5.2/bin/Release/Messaging Library.dll"
+      - "MessagingLibrary-3.5/bin/Release/MessagingLibrary-3.5.dll"
