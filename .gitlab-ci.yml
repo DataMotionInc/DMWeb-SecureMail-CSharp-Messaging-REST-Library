@@ -1,0 +1,32 @@
+image: cly0896/dm-mono-nunit
+
+before_script:
+  - nuget restore -NonInteractive
+
+stages:
+  - build
+
+build:
+  stage: build
+  script:
+    #Build DLLs
+    - msbuild Build.proj /p:Configuration=Debug /p:Platform="Any CPU" /p:build_number=1.0.0.20
+    #Write Config File from Environment Variables
+    - echo "UserIdOrEmail:"$UserIdOrEmail > "Consolidated Unit Tests/Test Documents/MessageData.txt"
+    - echo "Password:"$Password >> "Consolidated Unit Tests/Test Documents/MessageData.txt"
+    - echo "ToAddress:"$ToAddress >> "Consolidated Unit Tests/Test Documents/MessageData.txt"
+    - echo "FromAddress:"$FromAddress >> "Consolidated Unit Tests/Test Documents/MessageData.txt"
+    #Change directory and run unit tests
+    - cd "Consolidated Unit Tests-4.5.2/bin/Debug"
+    - nunit "Consolidated Unit Tests.dll"
+    - cd "../../../Consolidated Unit Tests-3.5/bin/Debug"
+    - nunit "Consolidated Unit Tests-3.5.dll"
+    #Build DLLs in Release mode
+    - cd ../../../
+    - msbuild Build.proj /p:Configuration=Release /p:Platform="Any CPU" /p:build_number=1.0.0.20
+  artifacts:
+    paths:
+      - "Consolidated Unit Tests-4.5.2/bin/Debug/TestResult.xml"
+      - "Consolidated Unit Tests-3.5/bin/Debug/TestResult.xml"
+      - "MessagingLibrary-4.5.2/bin/Release/Messaging Library.dll"
+      - "MessagingLibrary-3.5/bin/Release/MessagingLibrary-3.5.dll"
