@@ -84,17 +84,21 @@ namespace DMWeb_REST
                 
                 client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
 
+                string details = "";
+
                 try
                 {
                     HttpResponseMessage response = await client.GetAsync(_baseUrl + "/Account/Details");
                     response.EnsureSuccessStatusCode();
-                    string details = await response.Content.ReadAsStringAsync();
+                    details = await response.Content.ReadAsStringAsync();
                     AccountModels.AccountDetails temp = JsonConvert.DeserializeObject<AccountModels.AccountDetails>(details);
                     return temp;
                 }
                 catch(HttpRequestException ex)
                 {
+                    string errorMsg = JsonConvert.DeserializeObject<string>(details);
                     throw ex;  
+
                 }
             }
 

@@ -47,11 +47,6 @@
     <Compile Include="UnitTestClass.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Test Documents\test.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

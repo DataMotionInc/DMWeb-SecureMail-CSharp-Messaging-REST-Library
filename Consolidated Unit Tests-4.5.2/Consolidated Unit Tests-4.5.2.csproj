@@ -71,14 +71,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Test Documents\MessageData.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Test Documents\test.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\MessagingLibrary-4.5.2\MessagingLibrary-4.5.2.csproj">
       <Project>{17570103-547b-4b4d-a17f-f4e558ecafba}</Project>
       <Name>MessagingLibrary-4.5.2</Name>
