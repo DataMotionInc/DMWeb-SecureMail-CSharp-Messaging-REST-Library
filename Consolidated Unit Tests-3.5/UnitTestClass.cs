@@ -5,6 +5,8 @@ using System.IO;
 using System.Threading;
 using System.Net;
 using System;
+using System.Reflection;
+using System.Diagnostics;
 
 namespace Messaging_Library.TestFixtures.UnitTestClass
 {
@@ -25,8 +27,12 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
     [TestFixture]
     public class AccountTests
     {
-        private string _messageDataPath = "Consolidated Unit Tests\\Test Documents\\MessageData.txt";
-        private string _testDataPath = "Consolidated Unit Tests\\Test Documents\\test.txt";
+        static string assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        private static string rootPath = Directory.GetParent(assemblyFolder).Parent.Parent.FullName;
+        private static string _consolidatedPath = Path.Combine(rootPath, "Consolidated Unit Tests");
+        private static string _documentsPath = Path.Combine(_consolidatedPath, "Test Documents"); 
+        private string _messageDataPath = Path.Combine(_documentsPath, "MessageData.txt");
+        private string _testDataPath = Path.Combine(_documentsPath, "test.txt");
 
         [Test, Order(1)]
         [Category("LogOn")] 
