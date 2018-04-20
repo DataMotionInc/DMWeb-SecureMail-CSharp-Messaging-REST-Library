@@ -6,7 +6,7 @@ before_script:
 stages:
   - build
 
-build:
+1.0.0.0:
   stage: build
   script:
     #Build DLLs
