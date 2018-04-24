@@ -2,6 +2,7 @@ image: cly0896/dm-mono-nunit
 
 before_script:
   - nuget restore -NonInteractive
+  - while IFS='' read -r line || [[ -n "$line" ]]; do Configuration = $line\nBuildNum = $line; done < "BUILD"
 
 stages:
   - build
@@ -10,6 +11,8 @@ stages:
   stage: build
   script:
     #Build DLLs
+    - echo "Configuration:$Configuration"
+    - echo "BuildNum:$BuildNum"
     - msbuild Build.proj /p:Configuration=Debug /p:Platform="Any CPU" /p:build_number=1.0.0.20
     #Write Config File from Environment Variables
     - echo "UserIdOrEmail:"$UserIdOrEmail > "Consolidated Unit Tests/Test Documents/MessageData.txt"
@@ -24,6 +27,12 @@ stages:
     #Build DLLs in Release mode
     - cd ../../../
     - msbuild Build.proj /p:Configuration=Release /p:Platform="Any CPU" /p:build_number=1.0.0.20
+    #Copy DLLs to lib folder for NuGet
+    - cp "MessagingLibrary-4.5.2/bin/Release/Messaging Library.dll" "lib/net452/Messaging Library.dll"
+    - cp "MessagingLibrary-3.5/bin/Release/MessagingLibrary-3.5.dll" "lib/net35/Messaging Library.dll"
+    - cat MessagingLibrary.nuspec
+    - nuget pack MessagingLibrary.nuspec
+    - nuget push *.nupkg $ApiKey -Source https://api.nuget.org/v3/index.json
   artifacts:
     paths:
       - "Consolidated Unit Tests-4.5.2/bin/Debug/TestResult.xml"

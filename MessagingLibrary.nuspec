@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>DMWeb.SecureMail.NET.Messaging</id>
+    <version>$version$</version>
+    <title>DMWeb - SecureMail - .NET - Messaging</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://support.datamotion.com/LICENSE.txt</licenseUrl>
+    <projectUrl>https://gitlab.com/DataMotion/DMWeb/SecureMail/CSharp/Messaging/Rest/Library</projectUrl>
+    <iconUrl>https://support.datamotion.com/icon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>This is a .NET Software Development Kit (SDK) for DataMotion SecureMail Messaging. This SDK is a wrapper providing helper functions for our Messaging RESTful APIs. This code is simple in nature, and is present to provide a complete yet basic implementation.</description>
+    <releaseNotes>Initial Upload!</releaseNotes>
+    <copyright>$copyright$</copyright>
+    <tags>datamotion data motion secure mail securemail direct phi ihe ehr hipaa ehnac soap rest restful administration account company provisioning messaging email</tags>
+  </metadata>
+  <files>
+    <file src="lib\**" target="lib/{framework name}[{version}]" />
+  </files>
+</package>
