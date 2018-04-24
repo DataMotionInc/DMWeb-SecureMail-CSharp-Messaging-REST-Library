@@ -25,14 +25,14 @@ stages:
     - cd "../../../Consolidated Unit Tests-3.5/bin/Debug"
     - nunit "Consolidated Unit Tests-3.5.dll"
     #Build DLLs in Release mode
-    - if [${BuildConfiguration[0]} -eq "Release"]; then cd ../../../
-    - if [${BuildConfiguration[0]} -eq "Release"]; then msbuild Build.proj /p:Configuration=${BuildConfiguration[0]} /p:Platform="Any CPU" /p:build_number=${BuildConfiguration[1]}
+    - if ["${BuildConfiguration[0]}" -eq "Release"]; then cd ../../../
+    - if ["${BuildConfiguration[0]}" -eq "Release"]; then msbuild Build.proj /p:Configuration=${BuildConfiguration[0]} /p:Platform="Any CPU" /p:build_number=${BuildConfiguration[1]}
     #Copy DLLs to lib folder for NuGet
-    - if [${BuildConfiguration[0]} -eq "Release"]; then mkdir -p "lib/net452" && cp "MessagingLibrary-4.5.2/bin/Release/Messaging Library.dll" "lib/net452/Messaging Library.dll"
-    - if [${BuildConfiguration[0]} -eq "Release"]; then mkdir -p "lib/net35" && cp "MessagingLibrary-3.5/bin/Release/MessagingLibrary-3.5.dll" "lib/net35/Messaging Library.dll"
-    - if [${BuildConfiguration[0]} -eq "Release"]; then cat MessagingLibrary.nuspec
-    - if [${BuildConfiguration[0]} -eq "Release"]; then nuget pack MessagingLibrary.nuspec
-    - if [${BuildConfiguration[0]} -eq "Release"]; then nuget push *.nupkg $ApiKey -Source https://api.nuget.org/v3/index.json
+    - if ["${BuildConfiguration[0]"} -eq "Release"]; then mkdir -p "lib/net452" && cp "MessagingLibrary-4.5.2/bin/Release/Messaging Library.dll" "lib/net452/Messaging Library.dll"
+    - if ["${BuildConfiguration[0]"} -eq "Release"]; then mkdir -p "lib/net35" && cp "MessagingLibrary-3.5/bin/Release/MessagingLibrary-3.5.dll" "lib/net35/Messaging Library.dll"
+    - if ["${BuildConfiguration[0]"} -eq "Release"]; then cat MessagingLibrary.nuspec
+    - if ["${BuildConfiguration[0]"} -eq "Release"]; then nuget pack MessagingLibrary.nuspec
+    - if ["${BuildConfiguration[0]"} -eq "Release"]; then nuget push *.nupkg $ApiKey -Source https://api.nuget.org/v3/index.json
   artifacts:
     paths:
       - "Consolidated Unit Tests-4.5.2/bin/Debug/TestResult.xml"
