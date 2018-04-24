@@ -2,7 +2,6 @@ image: cly0896/dm-mono-nunit
 
 before_script:
   - nuget restore -NonInteractive
-  #- while IFS='' read -r line || [[ -n "$line" ]]; do $Configuration = $line\n$BuildNum = $line; done < "BUILD"
   - mapfile BuildConfiguration < BUILD
 
 stages:
@@ -14,7 +13,7 @@ stages:
     #Build DLLs
     - echo "Configuration:${BuildConfiguration[0]}"
     - echo "BuildNum:${BuildConfiguration[1]}"
-    - msbuild Build.proj /p:Configuration=Debug /p:Platform="Any CPU" /p:build_number=1.0.0.20
+    - msbuild Build.proj /p:Configuration=Debug /p:Platform="Any CPU" /p:build_number=${BuildConfiguration[1]}
     #Write Config File from Environment Variables
     - echo "UserIdOrEmail:"$UserIdOrEmail > "Consolidated Unit Tests/Test Documents/MessageData.txt"
     - echo "Password:"$Password >> "Consolidated Unit Tests/Test Documents/MessageData.txt"
@@ -26,14 +25,14 @@ stages:
     - cd "../../../Consolidated Unit Tests-3.5/bin/Debug"
     - nunit "Consolidated Unit Tests-3.5.dll"
     #Build DLLs in Release mode
-    - cd ../../../
-    - msbuild Build.proj /p:Configuration=Release /p:Platform="Any CPU" /p:build_number=1.0.0.20
+    - if [${BuildConfiguration[0]} -eq "Release"]; then cd ../../../
+    - if [${BuildConfiguration[0]} -eq "Release"]; then msbuild Build.proj /p:Configuration=${BuildConfiguration[0]} /p:Platform="Any CPU" /p:build_number=${BuildConfiguration[1]}
     #Copy DLLs to lib folder for NuGet
-    - cp "MessagingLibrary-4.5.2/bin/Release/Messaging Library.dll" "lib/net452/Messaging Library.dll"
-    - cp "MessagingLibrary-3.5/bin/Release/MessagingLibrary-3.5.dll" "lib/net35/Messaging Library.dll"
-    - cat MessagingLibrary.nuspec
-    - nuget pack MessagingLibrary.nuspec
-    - nuget push *.nupkg $ApiKey -Source https://api.nuget.org/v3/index.json
+    - if [${BuildConfiguration[0]} -eq "Release"]; then mkdir -p "lib/net452" && cp "MessagingLibrary-4.5.2/bin/Release/Messaging Library.dll" "lib/net452/Messaging Library.dll"
+    - if [${BuildConfiguration[0]} -eq "Release"]; then mkdir -p "lib/net35" && cp "MessagingLibrary-3.5/bin/Release/MessagingLibrary-3.5.dll" "lib/net35/Messaging Library.dll"
+    - if [${BuildConfiguration[0]} -eq "Release"]; then cat MessagingLibrary.nuspec
+    - if [${BuildConfiguration[0]} -eq "Release"]; then nuget pack MessagingLibrary.nuspec
+    - if [${BuildConfiguration[0]} -eq "Release"]; then nuget push *.nupkg $ApiKey -Source https://api.nuget.org/v3/index.json
   artifacts:
     paths:
       - "Consolidated Unit Tests-4.5.2/bin/Debug/TestResult.xml"
