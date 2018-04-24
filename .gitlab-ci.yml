@@ -2,7 +2,8 @@ image: cly0896/dm-mono-nunit
 
 before_script:
   - nuget restore -NonInteractive
-  - while IFS='' read -r line || [[ -n "$line" ]]; do $Configuration = $line\n$BuildNum = $line; done < "BUILD"
+  #- while IFS='' read -r line || [[ -n "$line" ]]; do $Configuration = $line\n$BuildNum = $line; done < "BUILD"
+  - mapfile BuildConfiguration < BUILD
 
 stages:
   - build
@@ -11,8 +12,8 @@ stages:
   stage: build
   script:
     #Build DLLs
-    - echo "Configuration:$Configuration"
-    - echo "BuildNum:$BuildNum"
+    - echo "Configuration:${BuildConfiguration[0]}"
+    - echo "BuildNum:${BuildConfiguration[1]}"
     - msbuild Build.proj /p:Configuration=Debug /p:Platform="Any CPU" /p:build_number=1.0.0.20
     #Write Config File from Environment Variables
     - echo "UserIdOrEmail:"$UserIdOrEmail > "Consolidated Unit Tests/Test Documents/MessageData.txt"
