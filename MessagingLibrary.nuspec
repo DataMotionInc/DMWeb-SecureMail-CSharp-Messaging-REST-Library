@@ -16,6 +16,6 @@
     <tags>datamotion data motion secure mail securemail direct phi ihe ehr hipaa ehnac soap rest restful administration account company provisioning messaging email</tags>
   </metadata>
   <files>
-    <file src="lib\**" target="lib/{framework name}[{version}]" />
+    <file src="lib/**" target="lib/{framework name}[{version}]" />
   </files>
 </package>
