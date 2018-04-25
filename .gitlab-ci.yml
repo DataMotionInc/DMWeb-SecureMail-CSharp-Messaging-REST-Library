@@ -6,36 +6,55 @@ before_script:
 
 stages:
   - build
+  - test
+  - deploy
 
-1.0.0.0:
+build:
   stage: build
   script:
     #Build DLLs
-    - echo "Configuration:${BuildConfiguration[0]}"
-    - echo "BuildNum:${BuildConfiguration[1]}"
-    - msbuild Build.proj /p:Configuration=Debug /p:Platform="Any CPU" /p:build_number=${BuildConfiguration[1]}
+    - echo "BuildNum:${BuildConfiguration[0]}"
+    #Build DLLs in Release mode
+    - msbuild Build.proj /p:Configuration=Release /p:Platform="Any CPU" /p:build_number=${BuildConfiguration[0]}
+  artifacts:
+    paths:
+      - "MessagingLibrary-4.5.2/bin/Release/"
+      - "MessagingLibrary-3.5/bin/Release/"
+      - "Consolidated Unit Tests-4.5.2/bin/Release/"
+      - "Consolidated Unit Tests-3.5/bin/Release/"
+     
+test:
+  stage: test
+  script:
     #Write Config File from Environment Variables
     - echo "UserIdOrEmail:"$UserIdOrEmail > "Consolidated Unit Tests/Test Documents/MessageData.txt"
     - echo "Password:"$Password >> "Consolidated Unit Tests/Test Documents/MessageData.txt"
     - echo "ToAddress:"$ToAddress >> "Consolidated Unit Tests/Test Documents/MessageData.txt"
     - echo "FromAddress:"$FromAddress >> "Consolidated Unit Tests/Test Documents/MessageData.txt"
     #Change directory and run unit tests
-    - cd "Consolidated Unit Tests-4.5.2/bin/Debug"
+    - cd "Consolidated Unit Tests-4.5.2/bin/Release"
     - nunit "Consolidated Unit Tests.dll"
-    - cd "../../../Consolidated Unit Tests-3.5/bin/Debug"
+    - cd "Consolidated Unit Tests-3.5/bin/Release"
     - nunit "Consolidated Unit Tests-3.5.dll"
-    #Build DLLs in Release mode
-    - if ["${BuildConfiguration[0]}" -eq "Release"]; then cd ../../../
-    - if ["${BuildConfiguration[0]}" -eq "Release"]; then msbuild Build.proj /p:Configuration=${BuildConfiguration[0]} /p:Platform="Any CPU" /p:build_number=${BuildConfiguration[1]}
-    #Copy DLLs to lib folder for NuGet
-    - if ["${BuildConfiguration[0]"} -eq "Release"]; then mkdir -p "lib/net452" && cp "MessagingLibrary-4.5.2/bin/Release/Messaging Library.dll" "lib/net452/Messaging Library.dll"
-    - if ["${BuildConfiguration[0]"} -eq "Release"]; then mkdir -p "lib/net35" && cp "MessagingLibrary-3.5/bin/Release/MessagingLibrary-3.5.dll" "lib/net35/Messaging Library.dll"
-    - if ["${BuildConfiguration[0]"} -eq "Release"]; then cat MessagingLibrary.nuspec
-    - if ["${BuildConfiguration[0]"} -eq "Release"]; then nuget pack MessagingLibrary.nuspec
-    - if ["${BuildConfiguration[0]"} -eq "Release"]; then nuget push *.nupkg $ApiKey -Source https://api.nuget.org/v3/index.json
   artifacts:
     paths:
-      - "Consolidated Unit Tests-4.5.2/bin/Debug/TestResult.xml"
-      - "Consolidated Unit Tests-3.5/bin/Debug/TestResult.xml"
-      - "MessagingLibrary-4.5.2/bin/Release/Messaging Library.dll"
-      - "MessagingLibrary-3.5/bin/Release/MessagingLibrary-3.5.dll"
+      - "Consolidated Unit Tests-4.5.2/bin/Release/TestResult.xml"
+      - "Consolidated Unit Tests-3.5/bin/Release/TestResult.xml"
+  dependencies:
+    - build
+      
+release:
+  stage: deploy
+  only:
+    - tags
+  script:
+    #Copy DLLs to lib folder for NuGet
+    - mkdir -p "lib/net452" && cp "MessagingLibrary-4.5.2/bin/Release/Messaging Library.dll" "lib/net452/Messaging Library.dll"
+    - mkdir -p "lib/net35" && cp "MessagingLibrary-3.5/bin/Release/MessagingLibrary-3.5.dll" "lib/net35/Messaging Library.dll"
+    - cat MessagingLibrary.nuspec
+    - nuget pack MessagingLibrary.nuspec
+    - nuget push *.nupkg $ApiKey -Source https://api.nuget.org/v3/index.json
+  environment:
+    name: nuget
+  dependencies:
+    - build
