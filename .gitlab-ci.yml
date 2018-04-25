@@ -22,6 +22,7 @@ build:
       - "MessagingLibrary-3.5/bin/Release/"
       - "Consolidated Unit Tests-4.5.2/bin/Release/"
       - "Consolidated Unit Tests-3.5/bin/Release/"
+      - "MessagingLibrary.nuspec"
      
 test:
   stage: test
