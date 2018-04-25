@@ -32,10 +32,8 @@ test:
     - echo "ToAddress:"$ToAddress >> "Consolidated Unit Tests/Test Documents/MessageData.txt"
     - echo "FromAddress:"$FromAddress >> "Consolidated Unit Tests/Test Documents/MessageData.txt"
     #Change directory and run unit tests
-    - cd "Consolidated Unit Tests-4.5.2/bin/Release"
-    - nunit "Consolidated Unit Tests.dll"
-    - cd "Consolidated Unit Tests-3.5/bin/Release"
-    - nunit "Consolidated Unit Tests-3.5.dll"
+    - nunit "Consolidated Unit Tests-4.5.2/bin/Release/Consolidated Unit Tests.dll"
+    - nunit "Consolidated Unit Tests-3.5/bin/Release/Consolidated Unit Tests-3.5.dll"
   artifacts:
     paths:
       - "Consolidated Unit Tests-4.5.2/bin/Release/TestResult.xml"
