@@ -52,9 +52,8 @@ release:
     - sed -i "s/version-num/${BuildConfiguration[0]}/g" MessagingLibrary.nuspec
     - sed -i "s/author-name/DataMotion/g" MessagingLibrary.nuspec
     - sed -i "s/copyright-date/Copyright 2018/g" MessagingLibrary.nuspec
-    - cat MessagingLibrary.nuspec
-    #- nuget pack MessagingLibrary.nuspec
-    #- nuget push *.nupkg $ApiKey -Source https://api.nuget.org/v3/index.json
+    - nuget pack MessagingLibrary.nuspec
+    - nuget push *.nupkg $ApiKey -Source https://api.nuget.org/v3/index.json
   environment:
     name: nuget
   dependencies:
