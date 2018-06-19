@@ -37,7 +37,7 @@ or
 
 Simply include the release DLL provided or compiled on your own into your .NET Project. 
 
->Nuget Package coming very soon!
+The package can also be installed via the [NuGet Gallery.](https://www.nuget.org/packages/DMWeb.SecureMail.NET.Messaging/)
 
 ## Authors
 
