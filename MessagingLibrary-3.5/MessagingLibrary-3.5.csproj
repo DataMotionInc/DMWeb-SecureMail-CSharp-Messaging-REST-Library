@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MessagingLibrary_3._5</RootNamespace>
-    <AssemblyName>MessagingLibrary-3.5</AssemblyName>
+    <AssemblyName>DataMotion Messaging Library</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
