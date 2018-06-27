@@ -6,7 +6,7 @@
 
 | Build   | Status  | Released  |
 | ------------- |:-------------:| -----:|
-| master      | [![pipeline status](https://gitlab.com/DataMotion/DMWeb/SecureMail/CSharp/Messaging/Rest/Library/badges/master/pipeline.svg)](https://gitlab.com/DataMotion/DMWeb/SecureMail/CSharp/Messaging/Rest/Library/commits/master) | ✓ 1.0.0.0 |
+| master      | [![pipeline status](https://gitlab.com/DataMotion/DMWeb/SecureMail/CSharp/Messaging/Rest/Library/badges/1.1.0.0/pipeline.svg)](https://gitlab.com/DataMotion/DMWeb/SecureMail/CSharp/Messaging/Rest/Library/commits/master) | ✓ 1.1.0.0 |
 
 ## Description
 
