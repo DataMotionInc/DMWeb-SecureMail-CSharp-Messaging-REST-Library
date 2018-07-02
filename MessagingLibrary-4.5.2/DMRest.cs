@@ -624,6 +624,133 @@ namespace DMWeb_REST
                     throw ex;
                 }
             }
+
+            // 5.42
+
+            /// <summary>
+            /// Gets a message without attachment data
+            /// </summary>
+            /// <param name="messageId"></param>
+            /// <returns>MessagingModels.GetMessageWithoutAttachmentDataResponse object</returns>
+            public async Task<MessagingModels.GetMessageWithoutAttachmentDataResponse> GetMessageWithoutAttachmentData(int messageId)
+            {
+                HttpClient client = new HttpClient();
+                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
+
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync(_baseUrl + "/Message/" + messageId + "/NoAttachmentData");
+                    response.EnsureSuccessStatusCode();
+                    string responseString = await response.Content.ReadAsStringAsync();
+
+                    MessagingModels.GetMessageWithoutAttachmentDataResponse responseObject = JsonConvert.DeserializeObject<MessagingModels.GetMessageWithoutAttachmentDataResponse>(responseString);
+                    return responseObject;
+                }
+                catch (HttpRequestException ex)
+                {
+                    throw ex;
+                }
+            }
+
+            /// <summary>
+            /// Gets only the attachment data from a message 
+            /// </summary>
+            /// <param name="attachmentId"></param>
+            /// <returns>MessagingModels.GetAttachmentResponse object</returns>
+            public async Task<MessagingModels.GetAttachmentResponse> GetAttachment(int attachmentId)
+            {
+                HttpClient client = new HttpClient();
+                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
+
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync(_baseUrl + "/Message/" + attachmentId + "/Attachment");
+                    response.EnsureSuccessStatusCode();
+                    string responseString = await response.Content.ReadAsStringAsync();
+
+                    MessagingModels.GetAttachmentResponse responseObject = JsonConvert.DeserializeObject<MessagingModels.GetAttachmentResponse>(responseString);
+                    return responseObject;
+                }
+                catch (HttpRequestException ex)
+                {
+                    throw ex;
+                }
+            }
+
+            /// <summary>
+            /// Gets the message summaries with metadata
+            /// </summary>
+            /// <param name="model"></param>
+            /// <returns>MessagingModels.GetMessageSummariesWithMetadataResponse object</returns>
+            public async Task<MessagingModels.GetMessageSummariesWithMetadataResponse> GetMessageSummariesWithMetadata(MessagingModels.GetMessageSummariesWithMetadataRequest model)
+            {
+                HttpClient client = new HttpClient();
+                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
+
+                try
+                {
+                    HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Message/GetMessageSummariesWithMetadata", model);
+                    response.EnsureSuccessStatusCode();
+                    string responseString = await response.Content.ReadAsStringAsync();
+
+                    MessagingModels.GetMessageSummariesWithMetadataResponse responseObject = JsonConvert.DeserializeObject<MessagingModels.GetMessageSummariesWithMetadataResponse>(responseString);
+                    return responseObject;
+                }
+                catch (HttpRequestException ex)
+                {
+                    throw ex;
+                }
+            }
+
+            /// <summary>
+            /// Save a message as a draft
+            /// </summary>
+            /// <param name="model"></param>
+            /// <returns>MessagingModels.SaveDraftResponse object</returns>
+            public async Task<MessagingModels.SaveDraftResponse> SaveDraft(MessagingModels.SaveDraftRequest model)
+            {
+                HttpClient client = new HttpClient();
+                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
+
+                try
+                {
+                    HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Message/SaveDraft", model);
+                    response.EnsureSuccessStatusCode();
+                    string responseString = await response.Content.ReadAsStringAsync();
+
+                    MessagingModels.SaveDraftResponse responseObject = JsonConvert.DeserializeObject<MessagingModels.SaveDraftResponse>(responseString);
+                    return responseObject;
+                }
+                catch (HttpRequestException ex)
+                {
+                    throw ex;
+                }
+            }
+
+            /// <summary>
+            /// Send a draft
+            /// </summary>
+            /// <param name="messageId"></param>
+            /// <returns>MessagingModels.SendDraftResponse object</returns>
+            public async Task<MessagingModels.SendDraftResponse> SendDraft(int messageId)
+            {
+                HttpClient client = new HttpClient();
+                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
+
+                try
+                {
+                    HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Message/" + messageId + "/SendDraft", "");
+                    response.EnsureSuccessStatusCode();
+                    string responseString = await response.Content.ReadAsStringAsync();
+
+                    MessagingModels.SendDraftResponse responseObject = JsonConvert.DeserializeObject<MessagingModels.SendDraftResponse>(responseString);
+                    return responseObject;
+                }
+                catch (HttpRequestException ex)
+                {
+                    throw ex;
+                }
+            }
         }
 
         /// <summary>

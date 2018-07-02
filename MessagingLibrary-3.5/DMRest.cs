@@ -633,6 +633,132 @@ namespace DMWeb_REST
                     throw ex;
                 }
             }
+
+            // 5.42
+
+            /// <summary>
+            /// Gets a message without attachment data
+            /// </summary>
+            /// <param name="messageId"></param>
+            /// <returns>MessagingModels.GetMessageWithoutAttachmentDataResponse object</returns>
+            public MessagingModels.GetMessageWithoutAttachmentDataResponse GetMessageWithoutAttachmentData(int messageId)
+            {
+                WebClient client = new WebClient();
+                client.Headers.Add("Content-Type", "application/json");
+                client.Headers.Add("X-Session-Key", _sessionKey);
+
+                try
+                {
+                    string response = client.DownloadString(_baseUrl + "/Message/" + messageId + "/NoAttachmentData");
+                    MessagingModels.GetMessageWithoutAttachmentDataResponse responseObject = JsonConvert.DeserializeObject<MessagingModels.GetMessageWithoutAttachmentDataResponse>(response);
+                    return responseObject;
+                }
+                catch (WebException ex)
+                {
+                    throw ex;
+                }
+            }
+
+            /// <summary>
+            /// Gets only the attachment data from a message 
+            /// </summary>
+            /// <param name="attachmentId"></param>
+            /// <returns>MessagingModels.GetAttachmentResponse object</returns>
+            public MessagingModels.GetAttachmentResponse GetAttachment(int attachmentId)
+            {
+                WebClient client = new WebClient();
+                client.Headers.Add("Content-Type", "application/json");
+                client.Headers.Add("X-Session-Key", _sessionKey);
+
+                try
+                {
+                    string response = client.DownloadString(_baseUrl + "/Message/" + attachmentId + "/Attachment");
+                    MessagingModels.GetAttachmentResponse responseObject = JsonConvert.DeserializeObject<MessagingModels.GetAttachmentResponse>(response);
+                    return responseObject;
+                }
+                catch (WebException ex)
+                {
+                    throw ex;
+                }
+            }
+
+            /// <summary>
+            /// Gets the message summaries with metadata
+            /// </summary>
+            /// <param name="model"></param>
+            /// <returns>MessagingModels.GetMessageSummariesWithMetadataResponse object</returns>
+            public MessagingModels.GetMessageSummariesWithMetadataResponse GetMessageSummariesWithMetadata(MessagingModels.GetMessageSummariesWithMetadataRequest model)
+            {
+                string jsonString = JsonConvert.SerializeObject(model);
+                byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
+
+                WebClient client = new WebClient();
+                client.Headers.Add("Content-Type", "application/json");
+                client.Headers.Add("X-Session-Key", _sessionKey);
+
+                try
+                {
+                    string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/GetMessageSummariesWithMetadata", "POST", jsonByteArray));
+                    MessagingModels.GetMessageSummariesWithMetadataResponse responseObject = JsonConvert.DeserializeObject<MessagingModels.GetMessageSummariesWithMetadataResponse>(response);
+                    return responseObject;
+                }
+                catch (WebException ex)
+                {
+                    throw ex;
+                }
+            }
+
+            /// <summary>
+            /// Save a message as a draft
+            /// </summary>
+            /// <param name="model"></param>
+            /// <returns>MessagingModels.SaveDraftResponse object</returns>
+            public MessagingModels.SaveDraftResponse SaveDraft(MessagingModels.SaveDraftRequest model)
+            {
+                string jsonString = JsonConvert.SerializeObject(model);
+                byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
+
+                WebClient client = new WebClient();
+                client.Headers.Add("Content-Type", "application/json");
+                client.Headers.Add("X-Session-Key", _sessionKey);
+
+                try
+                {
+                    string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/SaveDraft", "POST", jsonByteArray));
+                    MessagingModels.SaveDraftResponse responseObject = JsonConvert.DeserializeObject<MessagingModels.SaveDraftResponse>(response);
+                    return responseObject;
+                }
+                catch (WebException ex)
+                {
+                    throw ex;
+                }
+            }
+
+            /// <summary>
+            /// Send a draft
+            /// </summary>
+            /// <param name="messageId"></param>
+            /// <returns>MessagingModels.SendDraftResponse object</returns>
+            public MessagingModels.SendDraftResponse SendDraft(int messageId)
+            {
+                string jsonString = JsonConvert.SerializeObject("");
+                byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
+
+                WebClient client = new WebClient();
+                client.Headers.Add("Content-Type", "application/json");
+                client.Headers.Add("X-Session-Key", _sessionKey);
+
+                try
+                {
+                    string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/" + messageId + "SendDraft", "POST", jsonByteArray));
+                    MessagingModels.SendDraftResponse responseObject = JsonConvert.DeserializeObject<MessagingModels.SendDraftResponse>(response);
+                    return responseObject;
+                }
+                catch (WebException ex)
+                {
+                    throw ex;
+                }
+            }
         }
     }
 }
