@@ -1,4 +1,0 @@
-UserIdOrEmail:kylec@datamotion.com
-Password:test#password
-ToAddress:heatherp@datamotion.com
-FromAddress:kylec@datamotion.com

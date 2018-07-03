@@ -301,7 +301,7 @@ namespace Messaging_Library.Models
             public string ExpirationDate { get; set; }
             public int MessageSize { get; set; }
             public GetMessageSummariesWithMetadataSecurityEnvelopeStructure SecurityEnvelope { get; set; }
-            public GetMessageSummariesWithMetadataTrackingCollection[] Tracking { get; set; }
+            public List<GetMessageSummariesWithMetadataTrackingCollection> Tracking = new List<GetMessageSummariesWithMetadataTrackingCollection>();
         }
 
         public class GetMessageSummariesWithMetadataAttachmentsCollection
@@ -334,7 +334,7 @@ namespace Messaging_Library.Models
 
         public class GetMessageSummariesWithMetadataRecipientsCollection
         {
-            public int ChecksumValidated { get; set; }
+            public int? ChecksumValidated { get; set; }
             public bool Delivered { get; set; }
             public string DeliveredDate { get; set; }
             public bool Downloaded { get; set; }
