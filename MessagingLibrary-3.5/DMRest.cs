@@ -18,6 +18,7 @@ namespace DMWeb_REST
         
 
         public MessagingModels.SendMessage sendMessagePayload = new MessagingModels.SendMessage();
+        public MessagingModels.SaveDraftRequest saveDraftPayload = new MessagingModels.SaveDraftRequest();
         public List<string> _base64 = new List<string>();
 
         public DMAccount Account = new DMAccount();
