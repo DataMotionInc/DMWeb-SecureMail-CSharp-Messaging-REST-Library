@@ -19,7 +19,7 @@ namespace Messaging_Library.Models
         /// </summary>
         public class GetInboxMIDResponse
         {
-            public int[] MessageIds { get; set; }
+            public List<int> MessageIds = new List<int>();
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace Messaging_Library.Models
         public class GetMessageSummaries
         {
             public bool MoreMessagesAvailable { get; set; }
-            public SummariesAndUnreadMessage[] Summaries { get; set; }
+            public List<SummariesAndUnreadMessage> Summaries = new List<SummariesAndUnreadMessage>();
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Messaging_Library.Models
         public class GetUnreadMessages
         {
             public bool MoreMessagesAvailable { get; set; }
-            public SummariesAndUnreadMessage[] Summaries { get; set; }
+            public List<SummariesAndUnreadMessage> Summaries = new List<SummariesAndUnreadMessage>();
         }
         /// <summary>
         /// Structure for payload to search inbox
@@ -117,9 +117,8 @@ namespace Messaging_Library.Models
         public class SearchInboxResponse
         {
             public PageDetails PageDetails { get; set; }
-            public Results[] Results { get; set; }
+            public List<Results> Results = new List<Results>();
         }
-
         public class MetadataSecurityEnvelope
         {
             public string Checksum { get; set; }
@@ -131,7 +130,7 @@ namespace Messaging_Library.Models
         public class Recipient
         {
 
-            public int ChecksumValidated { get; set; }
+            public int? ChecksumValidated { get; set; }
             public bool Delivered { get; set; }
             public string DeliveredDate { get; set; }
             public bool Downloaded { get; set; }
@@ -140,7 +139,7 @@ namespace Messaging_Library.Models
         }
         public class MetadataAttachmentTracking
         {
-            public Recipient[] Recipients { get; set; }
+            public List<Recipient> Recipients = new List<Recipient>();
         }
 
         public class MetadataAttachmentSize
@@ -161,17 +160,17 @@ namespace Messaging_Library.Models
             public string DateOpened { get; set; }
             public string Email { get; set; }
             public string MessageStatusDescription { get; set; }
-            public int MessageStatus { get; set; }
+            public int MessageStatusId { get; set; }
             public string ReceiverField { get; set; }
         }
         public class MetadataResponse
         {
-            public MetadataAttachment[] Attachments { get; set; }
+            public List<MetadataAttachment> Attachments = new List<MetadataAttachment>();
             public string ExpirationDate { get; set; }
             public int MessageId { get; set; }
             public int MessageSize { get; set; }
             public MetadataSecurityEnvelope SecurityEnvelope { get; set; }
-            public Tracking[] Tracking { get; set; }
+            public List<Tracking> Tracking { get; set; }
         }
 
         /// <summary>
@@ -203,7 +202,7 @@ namespace Messaging_Library.Models
             public string HtmlBody { get; set; }
             public string TextBody { get; set; }
         }
-        
+
         public class SendMessageResponse
         {
             public int MessageId { get; set; }
@@ -228,20 +227,46 @@ namespace Messaging_Library.Models
             public string HtmlBody { get; set; }
             public string TextBody { get; set; }
         }
+
         /// <summary>
-        /// Structure for moving, deleting, and retracting a message
+        /// Structure to move a message
         /// </summary>
-        public class MessageOperations
+        public class MoveMessageRequest
         {
-            public int MessageId { get; set; }
             public int DestinationFolderId { get; set; }
+        }
+
+        /// <summary>
+        /// Structure to delete a message
+        /// </summary>
+        public class DeleteMessageResponse
+        {
             public int NewFolderId { get; set; }
             public string Results { get; set; }
         }
-        public class MimeMessageRequestandResponse
+
+        /// <summary>
+        /// Structure to get a Mime message
+        /// </summary>
+        public class GetMimeMessageResponse
         {
             public string MimeMessage { get; set; }
-            public int MessageId { get; set; }
+        }
+
+        /// <summary>
+        /// Structure to send a Mime message
+        /// </summary>
+        public class SendMimeMessageRequest
+        {
+            public string MimeMessage { get; set; }
+        }
+
+        /// <summary>
+        /// Structure for the response body of sending a Mime message
+        /// </summary>
+        public class SendMimeMessageResponse
+        {
+            public string MessageId { get; set; }
         }
 
         //5.42

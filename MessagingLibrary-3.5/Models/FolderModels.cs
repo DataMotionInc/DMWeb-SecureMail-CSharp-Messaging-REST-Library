@@ -1,4 +1,6 @@
-﻿namespace Messaging_Library.Models
+﻿using System.Collections.Generic;
+
+namespace Messaging_Library.Models
 {
     public class FolderModels
     {
@@ -24,7 +26,7 @@
             /// <summary>
             /// Create an array (Folders) of type Folder which has the data types of the payload being received
             /// </summary>
-            public Create[] Folders { get; set; }
+            public List<Create> Folders = new List<Create>();
         }
 
         public class FolderResponse
