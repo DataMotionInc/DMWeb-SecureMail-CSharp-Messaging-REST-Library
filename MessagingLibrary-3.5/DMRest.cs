@@ -15,10 +15,10 @@ namespace DMWeb_REST
     { 
         public static string _baseUrl = "";
         public static string _sessionKey = "";
-        
 
         public MessagingModels.SendMessage sendMessagePayload = new MessagingModels.SendMessage();
         public MessagingModels.SaveDraftRequest saveDraftPayload = new MessagingModels.SaveDraftRequest();
+        public List<MessagingModels.AttachmentsBody> attachmentPayload = new List<MessagingModels.AttachmentsBody>();
         public List<string> _base64 = new List<string>();
 
         public DMAccount Account = new DMAccount();
