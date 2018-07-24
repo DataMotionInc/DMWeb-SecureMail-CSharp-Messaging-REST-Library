@@ -324,6 +324,7 @@ namespace Messaging_Library.Models
             public string Subject { get; set; }
             public List<GetMessageSummariesWithMetadataAttachmentsCollection> Attachments = new List<GetMessageSummariesWithMetadataAttachmentsCollection>();
             public string ExpirationDate { get; set; }
+            public string FirstRecipient { get; set; }
             public int MessageSize { get; set; }
             public GetMessageSummariesWithMetadataSecurityEnvelopeStructure SecurityEnvelope { get; set; }
             public List<GetMessageSummariesWithMetadataTrackingCollection> Tracking = new List<GetMessageSummariesWithMetadataTrackingCollection>();
