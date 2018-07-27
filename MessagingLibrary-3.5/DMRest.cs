@@ -15,10 +15,10 @@ namespace DMWeb_REST
     { 
         public static string _baseUrl = "";
         public static string _sessionKey = "";
-        
 
         public MessagingModels.SendMessage sendMessagePayload = new MessagingModels.SendMessage();
         public MessagingModels.SaveDraftRequest saveDraftPayload = new MessagingModels.SaveDraftRequest();
+        public List<MessagingModels.AttachmentsBody> attachmentPayload = new List<MessagingModels.AttachmentsBody>();
         public List<string> _base64 = new List<string>();
 
         public DMAccount Account = new DMAccount();
@@ -392,9 +392,9 @@ namespace DMWeb_REST
             /// </summary>
             /// <param name="model">Model contains string messageId</param>
             /// <returns>HttpResponseMessage(null if successful) </returns>
-            public string Retract(MessagingModels.MessageOperations model)
+            public string Retract(string messageId)
             {
-                string jsonString = JsonConvert.SerializeObject(model);
+                string jsonString = JsonConvert.SerializeObject("");
                 byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
 
                 WebClient client = new WebClient();
@@ -403,8 +403,6 @@ namespace DMWeb_REST
 
                 try
                 {
-                    string messageId = model.MessageId.ToString();
-
                     string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/" + messageId + "/Retract", "POST", jsonByteArray));
 
                     return response;
@@ -420,7 +418,7 @@ namespace DMWeb_REST
             /// </summary>
             /// <param name="model">Model contains string messageId</param>
             /// <returns>HttpResponseMessage(null if successful)</returns>
-            public string Move(MessagingModels.MessageOperations model)
+            public string Move(MessagingModels.MoveMessageRequest model, string messageId)
             {
                 string jsonString = JsonConvert.SerializeObject(model);
                 byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
@@ -431,8 +429,6 @@ namespace DMWeb_REST
 
                 try
                 {
-                    string messageId = model.MessageId.ToString();
-
                     string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/" + messageId + "/Move/", "POST", jsonByteArray));
 
                     return response;
@@ -477,7 +473,7 @@ namespace DMWeb_REST
             /// <param name="model">Model contains messageId</param>
             /// <param name="permanentlyDeleteCheck">Boolean value used to delete a message permanently or to trash</param>
             /// <returns>HttpResponseMessage</returns>
-            public string Delete(string mid, bool permanentlyDeleteCheck)
+            public MessagingModels.DeleteMessageResponse Delete(string mid, bool permanentlyDeleteCheck)
             {
                 string jsonString = JsonConvert.SerializeObject("");
                 byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
@@ -493,8 +489,9 @@ namespace DMWeb_REST
                     try
                     {
                         string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/" + messageId + "?Permanently=true", "DELETE", jsonByteArray));
+                        MessagingModels.DeleteMessageResponse deletedResponse = JsonConvert.DeserializeObject<MessagingModels.DeleteMessageResponse>(response);
 
-                        return response;
+                        return deletedResponse;
                     }
                     catch (WebException ex)
                     {
@@ -506,8 +503,9 @@ namespace DMWeb_REST
                     try
                     {
                         string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/" + messageId, "DELETE", jsonByteArray));
+                        MessagingModels.DeleteMessageResponse deletedResponse = JsonConvert.DeserializeObject<MessagingModels.DeleteMessageResponse>(response);
 
-                        return response;
+                        return deletedResponse;
                     }
                     catch (WebException ex)
                     {
@@ -546,7 +544,7 @@ namespace DMWeb_REST
             /// </summary>
             /// <param name="messageId"></param>
             /// <returns>MimeMessageRequestandResponse object</returns>
-            public MessagingModels.MimeMessageRequestandResponse GetaMimeMessage(string messageId)
+            public MessagingModels.GetMimeMessageResponse GetaMimeMessage(string messageId)
             {
                 WebClient client = new WebClient();
                 client.Headers.Add("Content-Type", "application/json");
@@ -555,7 +553,7 @@ namespace DMWeb_REST
                 try
                 {
                     string response = client.DownloadString(_baseUrl + "/Message/" + messageId + "/Mime");
-                    MessagingModels.MimeMessageRequestandResponse mimeMessage = JsonConvert.DeserializeObject<MessagingModels.MimeMessageRequestandResponse>(response);
+                    MessagingModels.GetMimeMessageResponse mimeMessage = JsonConvert.DeserializeObject<MessagingModels.GetMimeMessageResponse>(response);
 
                     return mimeMessage;
                 }
@@ -577,61 +575,109 @@ namespace DMWeb_REST
                 client.Headers.Add("Content-Type", "application/json");
                 client.Headers.Add("X-Session-Key", _sessionKey);
 
-                var message = new MimeMessage();
-
-                message.From.Add(new MailboxAddress(model.From));
-
-                foreach (string str in model.To)
+                if (location != "")
                 {
-                    message.To.Add(new MailboxAddress(str));
+                    var message = new MimeMessage();
+
+                    message.From.Add(new MailboxAddress(model.From));
+
+                    foreach (string str in model.To)
+                    {
+                        message.To.Add(new MailboxAddress(str));
+                    }
+
+                    foreach (string str in model.Cc)
+                    {
+                        message.Cc.Add(new MailboxAddress(str));
+                    }
+
+                    foreach (string str in model.Bcc)
+                    {
+                        message.Bcc.Add(new MailboxAddress(str));
+                    }
+
+                    message.Subject = model.Subject;
+                    string messageString = model.TextBody;
+
+                    var body = new TextPart("plain") { Text = @messageString };
+
+                    var attachment = new MimePart("", "")
+                    {
+                        ContentObject = new ContentObject(File.OpenRead(location), ContentEncoding.Default),
+                        ContentDisposition = new ContentDisposition(ContentDisposition.Attachment),
+                        ContentTransferEncoding = ContentEncoding.Base64,
+                        FileName = Path.GetFileName(location)
+                    };
+
+                    var multipart = new Multipart("mixed");
+                    multipart.Add(body);
+                    multipart.Add(attachment);
+
+                    message.Body = multipart;
+
+                    MessagingModels.SendMimeMessageRequest mimeMessageObject = new MessagingModels.SendMimeMessageRequest();
+                    mimeMessageObject.MimeMessage = message.ToString();
+
+                    string jsonString = JsonConvert.SerializeObject(mimeMessageObject);
+                    byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
+
+                    try
+                    {
+                        string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/Mime", "POST", jsonByteArray));
+
+                        MessagingModels.SendMimeMessageResponse mid = JsonConvert.DeserializeObject<MessagingModels.SendMimeMessageResponse>(response);
+
+                        return mid.MessageId.ToString();
+                    }
+                    catch (WebException ex)
+                    {
+                        throw ex;
+                    }
                 }
-
-                foreach (string str in model.Cc)
+                else
                 {
-                    message.Cc.Add(new MailboxAddress(str));
-                }
+                    var message = new MimeMessage();
 
-                foreach (string str in model.Bcc)
-                {
-                    message.Bcc.Add(new MailboxAddress(str));
-                }
+                    message.From.Add(new MailboxAddress(model.From));
 
-                message.Subject = model.Subject;
-                string messageString = model.TextBody;
+                    foreach (string str in model.To)
+                    {
+                        message.To.Add(new MailboxAddress(str));
+                    }
 
-                var body = new TextPart("plain") { Text = @messageString };
+                    foreach (string str in model.Cc)
+                    {
+                        message.Cc.Add(new MailboxAddress(str));
+                    }
 
-                var attachment = new MimePart("", "")
-                {
-                    ContentObject = new ContentObject(File.OpenRead(location), ContentEncoding.Default),
-                    ContentDisposition = new ContentDisposition(ContentDisposition.Attachment),
-                    ContentTransferEncoding = ContentEncoding.Base64,
-                    FileName = Path.GetFileName(location)
-                };
+                    foreach (string str in model.Bcc)
+                    {
+                        message.Bcc.Add(new MailboxAddress(str));
+                    }
 
-                var multipart = new Multipart("mixed");
-                multipart.Add(body);
-                multipart.Add(attachment);
+                    message.Subject = model.Subject;
+                    string messageString = model.TextBody;
 
-                message.Body = multipart;
+                    message.Body = new TextPart("plain") { Text = @messageString };
 
-                MessagingModels.MimeMessageRequestandResponse mimeMessageObject = new MessagingModels.MimeMessageRequestandResponse();
-                mimeMessageObject.MimeMessage = message.ToString();
+                    MessagingModels.SendMimeMessageRequest mimeMessageObject = new MessagingModels.SendMimeMessageRequest();
+                    mimeMessageObject.MimeMessage = message.ToString();
 
-                string jsonString = JsonConvert.SerializeObject(mimeMessageObject);
-                byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
+                    string jsonString = JsonConvert.SerializeObject(mimeMessageObject);
+                    byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
 
-                try
-                {
-                    string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/Mime", "POST", jsonByteArray));
+                    try
+                    {
+                        string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/Mime", "POST", jsonByteArray));
 
-                    MessagingModels.MimeMessageRequestandResponse mid = JsonConvert.DeserializeObject<MessagingModels.MimeMessageRequestandResponse>(response);
+                        MessagingModels.SendMimeMessageResponse mid = JsonConvert.DeserializeObject<MessagingModels.SendMimeMessageResponse>(response);
 
-                    return mid.MessageId.ToString();
-                }
-                catch (WebException ex)
-                {
-                    throw ex;
+                        return mid.MessageId.ToString();
+                    }
+                    catch (WebException ex)
+                    {
+                        throw ex;
+                    }
                 }
             }
 

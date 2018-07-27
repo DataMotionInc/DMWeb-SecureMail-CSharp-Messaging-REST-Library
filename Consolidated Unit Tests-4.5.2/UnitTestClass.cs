@@ -326,7 +326,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                Context.dmWeb.Message.Move(new MessagingModels.MessageOperations { MessageId = MID, DestinationFolderId = DFID }).GetAwaiter().GetResult();
+                Context.dmWeb.Message.Move(new MessagingModels.MoveMessageRequest { DestinationFolderId = DFID }, MID.ToString()).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -343,7 +343,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                Context.dmWeb.Message.Retract(new MessagingModels.MessageOperations { MessageId = MID }).GetAwaiter().GetResult();
+                Context.dmWeb.Message.Retract(MID.ToString()).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -500,7 +500,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             int DFID = int.Parse(Context.trackSentFID); 
 
-            Context.dmWeb.Message.Move(new MessagingModels.MessageOperations { MessageId = Context.moveMID, DestinationFolderId = DFID }).GetAwaiter().GetResult();
+            Context.dmWeb.Message.Move(new MessagingModels.MoveMessageRequest { DestinationFolderId = DFID }, Context.moveMID.ToString()).GetAwaiter().GetResult();
         }
 
         [Test, Order(31)]
@@ -962,7 +962,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                Context.dmWeb.Message.Move(new MessagingModels.MessageOperations { MessageId = MID }).GetAwaiter().GetResult();
+                Context.dmWeb.Message.Move(new MessagingModels.MoveMessageRequest { DestinationFolderId = 0 }, MID.ToString()).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -978,7 +978,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                Context.dmWeb.Message.Move(new MessagingModels.MessageOperations { DestinationFolderId = DFID }).GetAwaiter().GetResult();
+                Context.dmWeb.Message.Move(new MessagingModels.MoveMessageRequest { DestinationFolderId = DFID }, 0.ToString()).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -995,7 +995,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                Context.dmWeb.Message.Move(new MessagingModels.MessageOperations { MessageId = MID, DestinationFolderId = 15143 }).GetAwaiter().GetResult();
+                Context.dmWeb.Message.Move(new MessagingModels.MoveMessageRequest { DestinationFolderId = 15143 }, MID.ToString()).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -1012,7 +1012,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                Context.dmWeb.Message.Move(new MessagingModels.MessageOperations { MessageId = MID, DestinationFolderId = DFID }).GetAwaiter().GetResult();
+                Context.dmWeb.Message.Move(new MessagingModels.MoveMessageRequest { DestinationFolderId = DFID }, MID.ToString()).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -1029,7 +1029,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                Context.dmWeb.Message.Move(new MessagingModels.MessageOperations { MessageId = MID, DestinationFolderId = DFID }).GetAwaiter().GetResult();
+                Context.dmWeb.Message.Move(new MessagingModels.MoveMessageRequest { DestinationFolderId = DFID }, MID.ToString()).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
@@ -1050,7 +1050,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             int MID = Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress }, Subject = "Retract Message Test 4.5.2" }).GetAwaiter().GetResult();
 
-            Context.dmWeb.Message.Retract(new MessagingModels.MessageOperations { MessageId = MID }).GetAwaiter().GetResult();
+            Context.dmWeb.Message.Retract(MID.ToString()).GetAwaiter().GetResult();
         }
 
         [Test]
@@ -1061,7 +1061,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                Context.dmWeb.Message.Retract(new MessagingModels.MessageOperations { MessageId = MID }).GetAwaiter().GetResult();
+                Context.dmWeb.Message.Retract(MID.ToString()).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
             {
