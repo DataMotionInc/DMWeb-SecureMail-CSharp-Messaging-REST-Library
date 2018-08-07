@@ -3,6 +3,7 @@ using System.IO;
 using Newtonsoft.Json;
 using Messaging_Library.Models;
 using System.Net;
+using System.Security.Authentication;
 using System.Text;
 using MimeKit;
 
@@ -25,6 +26,8 @@ namespace DMWeb_REST
         public DMFolders Folders = new DMFolders();
         public DMMessage Message = new DMMessage();
 
+        public const SslProtocols _Tls12 = (SslProtocols)0x00000C00;
+        public const SecurityProtocolType Tls12 = (SecurityProtocolType)_Tls12;
 
         /// <summary>
         /// Default constructor that sets the _baseUrl to SecureMail
@@ -32,7 +35,7 @@ namespace DMWeb_REST
         public DMWeb()
         {
             _baseUrl = "https://ssl.datamotion.com/SecureMessagingApi";
-            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls;
+            ServicePointManager.SecurityProtocol = Tls12;
         }
 
         /// <summary>
@@ -42,7 +45,7 @@ namespace DMWeb_REST
         public DMWeb(string url)
         {
             _baseUrl = url;
-            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls;
+            ServicePointManager.SecurityProtocol = Tls12;
         }
         public class DMAccount
         {
