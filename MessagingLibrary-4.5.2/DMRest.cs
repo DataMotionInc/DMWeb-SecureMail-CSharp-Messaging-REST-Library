@@ -7,7 +7,7 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using Messaging_Library.Models;
 using MimeKit;
-using System.Text;
+using System.Net;
 
 namespace DMWeb_REST
 {
@@ -35,6 +35,7 @@ namespace DMWeb_REST
         public DMWeb()
         {
             _baseUrl = "https://ssl.datamotion.com/SecureMessagingApi";
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
         }
 
         /// <summary>
@@ -44,6 +45,7 @@ namespace DMWeb_REST
         public DMWeb(string url)
         {
             _baseUrl = url;
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
         }
         public class DMAccount
         {

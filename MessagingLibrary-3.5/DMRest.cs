@@ -32,6 +32,7 @@ namespace DMWeb_REST
         public DMWeb()
         {
             _baseUrl = "https://ssl.datamotion.com/SecureMessagingApi";
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls;
         }
 
         /// <summary>
@@ -41,6 +42,7 @@ namespace DMWeb_REST
         public DMWeb(string url)
         {
             _baseUrl = url;
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls;
         }
         public class DMAccount
         {
