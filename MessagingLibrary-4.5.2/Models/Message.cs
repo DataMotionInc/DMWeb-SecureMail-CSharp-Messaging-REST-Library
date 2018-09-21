@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Messaging_Library.Models
+namespace DMWeb_REST.Models
 {
     public enum MessageStatusCodes
     {
@@ -35,7 +35,7 @@ namespace Messaging_Library.Models
         DirectMessageProcessed = 19
     };
 
-    public class MessagingModels
+    public class Message
     {
         /// <summary>
         /// Structure for payload to retrieve messageIDs

@@ -1,10 +1,10 @@
 ﻿using System.Net.Http;
-using Messaging_Library.Models;
-using NUnit.Framework;
-using DMWeb_REST;
 using System.IO;
 using System.Threading;
 using System.Reflection;
+using NUnit.Framework;
+using DMWeb_REST;
+using DMWeb_REST.Models;
 
 namespace Consolidated_Unit_Tests
 {
@@ -76,7 +76,7 @@ namespace Consolidated_Unit_Tests
 
         public void GetMessageSummariesWithMetadataNoSessionKeyFalseFIDFalseLMID()
         {
-            MessagingModels.GetMessageSummariesWithMetadataRequest request = new MessagingModels.GetMessageSummariesWithMetadataRequest();
+            Message.GetMessageSummariesWithMetadataRequest request = new Message.GetMessageSummariesWithMetadataRequest();
             request.FolderId = 12345;
             request.LastMessageIdReceived = 12345;
 
@@ -92,7 +92,7 @@ namespace Consolidated_Unit_Tests
 
         public void GetMessageSummariesWithMetadataNoSessionKeyFalseFIDTrueLMID()
         {
-            MessagingModels.GetMessageSummariesWithMetadataRequest request = new MessagingModels.GetMessageSummariesWithMetadataRequest();
+            Message.GetMessageSummariesWithMetadataRequest request = new Message.GetMessageSummariesWithMetadataRequest();
             request.FolderId = 12345;
             request.LastMessageIdReceived = 74;
 
@@ -108,7 +108,7 @@ namespace Consolidated_Unit_Tests
 
         public void GetMessageSummariesWithMetadataNoSessionKeyTrueFIDFalseLMID()
         {
-            MessagingModels.GetMessageSummariesWithMetadataRequest request = new MessagingModels.GetMessageSummariesWithMetadataRequest();
+            Message.GetMessageSummariesWithMetadataRequest request = new Message.GetMessageSummariesWithMetadataRequest();
             request.FolderId = 1;
             request.LastMessageIdReceived = 12345;
 
@@ -124,7 +124,7 @@ namespace Consolidated_Unit_Tests
 
         public void GetMessageSummariesWithMetadataNoSessionKeyTrueFIDTrueLMID()
         {
-            MessagingModels.GetMessageSummariesWithMetadataRequest request = new MessagingModels.GetMessageSummariesWithMetadataRequest();
+            Message.GetMessageSummariesWithMetadataRequest request = new Message.GetMessageSummariesWithMetadataRequest();
             request.FolderId = 1;
             request.LastMessageIdReceived = 74;
 
@@ -142,11 +142,11 @@ namespace Consolidated_Unit_Tests
         {
             try
             {
-                MessagingModels.SaveDraftRequest request = new MessagingModels.SaveDraftRequest();
+                Message.SaveDraftRequest request = new Message.SaveDraftRequest();
                 request.To.Add("user1@dmweb.citest.com");
                 request.Subject = "No Session Key True MID Test";
 
-                MessagingModels.SaveDraftResponse response = Context.dmWeb.Message.SaveDraft(request).GetAwaiter().GetResult();
+                Message.SaveDraftResponse response = Context.dmWeb.Message.SaveDraft(request).GetAwaiter().GetResult();
                 Context.dmWeb.Message.SendDraft(response.MessageId).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
@@ -181,7 +181,7 @@ namespace Consolidated_Unit_Tests
             string[] linesplit2 = str2.Split(':');
             Context.password = linesplit2[1];
 
-            string sessionKey = Context.dmWeb.Account.LogOn(new AccountModels.LogOn { UserIdOrEmail = Context.userName, Password = Context.password }).GetAwaiter().GetResult();
+            string sessionKey = Context.dmWeb.Account.LogOn(new Account.LogOn { UserIdOrEmail = Context.userName, Password = Context.password }).GetAwaiter().GetResult();
             Assert.AreNotEqual(string.Empty, sessionKey);
 
             Thread.Sleep(2000);
@@ -237,7 +237,7 @@ namespace Consolidated_Unit_Tests
 
         public void GetMessageSummariesWithMetadataWithSessionKeyFalseFIDFalseLMID()
         {
-            MessagingModels.GetMessageSummariesWithMetadataRequest request = new MessagingModels.GetMessageSummariesWithMetadataRequest();
+            Message.GetMessageSummariesWithMetadataRequest request = new Message.GetMessageSummariesWithMetadataRequest();
             request.FolderId = 12345;
             request.LastMessageIdReceived = 12345;
 
@@ -253,7 +253,7 @@ namespace Consolidated_Unit_Tests
 
         public void GetMessageSummariesWithMetadataWithSessionKeyFalseFIDTrueLMID()
         {
-            MessagingModels.GetMessageSummariesWithMetadataRequest request = new MessagingModels.GetMessageSummariesWithMetadataRequest();
+            Message.GetMessageSummariesWithMetadataRequest request = new Message.GetMessageSummariesWithMetadataRequest();
             request.FolderId = 12345;
             request.LastMessageIdReceived = 74;
 
@@ -269,7 +269,7 @@ namespace Consolidated_Unit_Tests
 
         public void GetMessageSummariesWithMetadataWithSessionKeyTrueFIDFalseLMID()
         {
-            MessagingModels.GetMessageSummariesWithMetadataRequest request = new MessagingModels.GetMessageSummariesWithMetadataRequest();
+            Message.GetMessageSummariesWithMetadataRequest request = new Message.GetMessageSummariesWithMetadataRequest();
             request.FolderId = 1;
             request.LastMessageIdReceived = 12345;
 
@@ -285,7 +285,7 @@ namespace Consolidated_Unit_Tests
 
         public void GetMessageSummariesWithMetadataWithSessionKeyTrueFIDTrueLMID()
         {
-            MessagingModels.GetMessageSummariesWithMetadataRequest request = new MessagingModels.GetMessageSummariesWithMetadataRequest();
+            Message.GetMessageSummariesWithMetadataRequest request = new Message.GetMessageSummariesWithMetadataRequest();
             request.FolderId = 1;
             request.LastMessageIdReceived = 74;
 
@@ -303,11 +303,11 @@ namespace Consolidated_Unit_Tests
         {
             try
             {
-                MessagingModels.SaveDraftRequest request = new MessagingModels.SaveDraftRequest();
+                Message.SaveDraftRequest request = new Message.SaveDraftRequest();
                 request.To.Add("user1@dmweb.citest.com");
                 request.Subject = "No Session Key True MID Test";
 
-                MessagingModels.SaveDraftResponse response = Context.dmWeb.Message.SaveDraft(request).GetAwaiter().GetResult();
+                Message.SaveDraftResponse response = Context.dmWeb.Message.SaveDraft(request).GetAwaiter().GetResult();
                 Context.dmWeb.Message.SendDraft(response.MessageId).GetAwaiter().GetResult();
             }
             catch (HttpRequestException ex)
