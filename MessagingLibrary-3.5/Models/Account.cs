@@ -1,6 +1,6 @@
-﻿namespace Messaging_Library.Models
+﻿namespace DMWeb_REST.Models
 {
-    public class AccountModels
+    public class Account
     {
         /// <summary>
         /// Structure used to hold the SessionKey

@@ -1,12 +1,10 @@
-﻿using Messaging_Library.Models;
-using NUnit.Framework;
-using DMWeb_REST;
+﻿using NUnit.Framework;
 using System.IO;
 using System.Threading;
 using System.Net;
-using System;
 using System.Reflection;
-using System.Diagnostics;
+using DMWeb_REST;
+using DMWeb_REST.Models;
 
 namespace Messaging_Library.TestFixtures.UnitTestClass
 {
@@ -41,7 +39,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Account.LogOn(new AccountModels.LogOn { });
+                Context.dmWeb.Account.LogOn(new Account.LogOn { });
             }
             catch (WebException ex)
             {
@@ -57,7 +55,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                Context.dmWeb.Account.LogOn(new AccountModels.LogOn { UserIdOrEmail = Context.userName, Password = "" });
+                Context.dmWeb.Account.LogOn(new Account.LogOn { UserIdOrEmail = Context.userName, Password = "" });
             }
             catch (WebException ex)
             {
@@ -74,7 +72,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                Context.dmWeb.Account.LogOn(new AccountModels.LogOn { UserIdOrEmail = "", Password = Context.password });
+                Context.dmWeb.Account.LogOn(new Account.LogOn { UserIdOrEmail = "", Password = Context.password });
             }
             catch (WebException ex)
             {
@@ -89,7 +87,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Account.LogOn(new AccountModels.LogOn { UserIdOrEmail = Context.userName + "0", Password = Context.password + "0" });
+                Context.dmWeb.Account.LogOn(new Account.LogOn { UserIdOrEmail = Context.userName + "0", Password = Context.password + "0" });
             }
             catch (WebException ex)
             {
@@ -104,7 +102,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Account.LogOn(new AccountModels.LogOn { UserIdOrEmail = Context.userName + "0", Password = Context.password });
+                Context.dmWeb.Account.LogOn(new Account.LogOn { UserIdOrEmail = Context.userName + "0", Password = Context.password });
             }
             catch (WebException ex)
             {
@@ -120,7 +118,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Account.LogOn(new AccountModels.LogOn { UserIdOrEmail = Context.userName, Password = Context.password + "0" });
+                Context.dmWeb.Account.LogOn(new Account.LogOn { UserIdOrEmail = Context.userName, Password = Context.password + "0" });
             }
             catch (WebException ex)
             {
@@ -151,7 +149,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Account.ChangePassword(new AccountModels.ChangePassword { OldPassword = "test#password", NewPassword = "test#password2" });
+                Context.dmWeb.Account.ChangePassword(new Account.ChangePassword { OldPassword = "test#password", NewPassword = "test#password2" });
             }
             catch (WebException ex)
             {
@@ -182,7 +180,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Folders.Create(new FolderModels.Create { FolderName = "Unit Test 3.5", FolderId = 0 });
+                Context.dmWeb.Folders.Create(new Folder.Create { FolderName = "Unit Test 3.5", FolderId = 0 });
             }
             catch (WebException ex)
             {
@@ -244,7 +242,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Message.GetInboxMessageIds(new MessagingModels.GetInboxMIDRequest { FolderId = 0, MessageListFilter = 0, MustHaveAttachments = false });
+                Context.dmWeb.Message.GetInboxMessageIds(new Message.GetInboxMIDRequest { FolderId = 0, MessageListFilter = 0, MustHaveAttachments = false });
             }
             catch (WebException ex)
             {
@@ -276,7 +274,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Message.GetMessageSummaries(new MessagingModels.GetMessageSummariesRequest { FolderId = 0, LastMessageIDReceived = 0 });
+                Context.dmWeb.Message.GetMessageSummaries(new Message.GetMessageSummariesRequest { FolderId = 0, LastMessageIDReceived = 0 });
             }
             catch (WebException ex)
             {
@@ -328,7 +326,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                Context.dmWeb.Message.Move(new MessagingModels.MoveMessageRequest { DestinationFolderId = DFID }, MID.ToString());
+                Context.dmWeb.Message.Move(new Message.MoveMessageRequest { DestinationFolderId = DFID }, MID.ToString());
             }
             catch (WebException ex)
             {
@@ -360,7 +358,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Message.SearchInbox(new MessagingModels.SearchInbox { PageNum = 1, PageSize = 1 });
+                Context.dmWeb.Message.SearchInbox(new Message.SearchInbox { PageNum = 1, PageSize = 1 });
             }
             catch (WebException ex)
             {
@@ -377,7 +375,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
             string toAddress = "";
             try
             {
-                Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress } });
+                Context.dmWeb.Message.Send(new Message.SendMessage { To = { toAddress } });
             }
             catch (WebException ex)
             {
@@ -402,8 +400,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                string location = _testDataPath;
-                Context.dmWeb.Message.SendMimeMessage(new MessagingModels.SendMessage { To = { toAddress }, From = fromAddress, Subject = "Mime Test 3.5", TextBody = "Mime Message Test" }, location);
+                Context.dmWeb.Message.SendMimeMessage("From: User1 <user1@dmweb.citest.com>\r\nDate: Fri, 21 Sep 2018 14:41:44 -0400\r\nSubject: Test MIME String\r\nMessage-Id: <3A8GMGOFI5U4.S80Z2OIX4YNA1@DellBlackTop>\r\nTo: \"user1@dmweb.citest.com\" <user1@dmweb.citest.com>\r\nCc: \r\nBcc: \r\nX-DateCreated: Fri, 21 Sep 2018 14:41:44 -0400\r\nMIME-Version: 1.0\r\nContent-Type: text/plain; charset=utf-8\r\n\r\nTest\r\n");
             }
             catch (WebException ex)
             {
@@ -437,7 +434,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
             string str2 = lines[1];
             string[] linesplit2 = str2.Split(':');
             Context.password = linesplit2[1];
-            string sessionKey = Context.dmWeb.Account.LogOn(new AccountModels.LogOn { UserIdOrEmail = Context.userName, Password = Context.password });
+            string sessionKey = Context.dmWeb.Account.LogOn(new Account.LogOn { UserIdOrEmail = Context.userName, Password = Context.password });
             Assert.AreNotEqual(string.Empty, sessionKey);
 
             Thread.Sleep(2000);
@@ -447,8 +444,8 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Category("Create Folder")]
         public void CreateFolderPositiveTest()
         {
-            Context.folderId = Context.dmWeb.Folders.Create(new FolderModels.Create { FolderName = "UnitTest3.5", FolderType = 0 });
-            Context.trackSentFID = Context.dmWeb.Folders.Create(new FolderModels.Create { FolderName = "TrackSent3.5", FolderType = 1 });
+            Context.folderId = Context.dmWeb.Folders.Create(new Folder.Create { FolderName = "UnitTest3.5", FolderType = 0 });
+            Context.trackSentFID = Context.dmWeb.Folders.Create(new Folder.Create { FolderName = "TrackSent3.5", FolderType = 1 });
 
             Thread.Sleep(5000);
         }
@@ -472,7 +469,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
             string[] linesplit3 = str3.Split(':');
             string toAddress = linesplit3[1];
 
-            Context.sendDeleteMID = Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress }, Subject = "Positive test 3.5"});
+            Context.sendDeleteMID = Context.dmWeb.Message.Send(new Message.SendMessage { To = { toAddress }, Subject = "Positive test 3.5"});
             Thread.Sleep(5000);
         }
 
@@ -497,12 +494,12 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
             string[] linesplit3 = str3.Split(':');
             string toAddress = linesplit3[1];
 
-            Context.moveMID = Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress }, Subject = "Move message test 3.5" });
+            Context.moveMID = Context.dmWeb.Message.Send(new Message.SendMessage { To = { toAddress }, Subject = "Move message test 3.5" });
             Thread.Sleep(5000);
 
             int DFID = int.Parse(Context.trackSentFID);
 
-            Context.dmWeb.Message.Move(new MessagingModels.MoveMessageRequest { DestinationFolderId = DFID }, Context.moveMID.ToString());
+            Context.dmWeb.Message.Move(new Message.MoveMessageRequest { DestinationFolderId = DFID }, Context.moveMID.ToString());
         }
 
         [Test, Order(31)]
@@ -515,7 +512,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
             string[] linesplit3 = str3.Split(':');
             string toAddress = linesplit3[1];
 
-            int getMID = Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress }, Subject = "Get message test 3.5" });
+            int getMID = Context.dmWeb.Message.Send(new Message.SendMessage { To = { toAddress }, Subject = "Get message test 3.5" });
             Thread.Sleep(5000);
 
             Context.dmWeb.Message.Get(getMID.ToString());
@@ -531,7 +528,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
             string[] linesplit3 = str3.Split(':');
             string toAddress = linesplit3[1];
 
-            int getMetadataMID = Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress }, Subject = "Get message test 3.5" });
+            int getMetadataMID = Context.dmWeb.Message.Send(new Message.SendMessage { To = { toAddress }, Subject = "Get message test 3.5" });
             Thread.Sleep(5000);
 
             Context.dmWeb.Message.GetMessageMetadata(getMetadataMID.ToString());
@@ -552,8 +549,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
             string[] linesplit4 = str4.Split(':');
             string fromAddress = linesplit4[1];
 
-            string location = _testDataPath;
-            Context.mimeMessageId = Context.dmWeb.Message.SendMimeMessage(new MessagingModels.SendMessage { To = { toAddress }, From = fromAddress, Subject = "Mime Test with SessionKey 3.5", TextBody = "Mime Message Test" }, location);
+            Context.mimeMessageId = Context.dmWeb.Message.SendMimeMessage("From: User1 <user1@dmweb.citest.com>\r\nDate: Fri, 21 Sep 2018 14:41:44 -0400\r\nSubject: Test MIME String\r\nMessage-Id: <3A8GMGOFI5U4.S80Z2OIX4YNA1@DellBlackTop>\r\nTo: \"user1@dmweb.citest.com\" <user1@dmweb.citest.com>\r\nCc: \r\nBcc: \r\nX-DateCreated: Fri, 21 Sep 2018 14:41:44 -0400\r\nMIME-Version: 1.0\r\nContent-Type: text/plain; charset=utf-8\r\n\r\nTest\r\n");
         }
 
         [Test, Order(34)]
@@ -575,7 +571,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Ignore("Ignore test: Avoid changing password")]
         public void ChangePasswordPositiveTest()
         {
-            Context.dmWeb.Account.ChangePassword(new AccountModels.ChangePassword { OldPassword = Context.password, NewPassword = "temp#pass" });
+            Context.dmWeb.Account.ChangePassword(new Account.ChangePassword { OldPassword = Context.password, NewPassword = "temp#pass" });
         }
 
         [Test]
@@ -584,7 +580,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Account.ChangePassword(new AccountModels.ChangePassword { OldPassword = "", NewPassword = "" });
+                Context.dmWeb.Account.ChangePassword(new Account.ChangePassword { OldPassword = "", NewPassword = "" });
             }
             catch (WebException ex)
             {
@@ -598,7 +594,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Account.ChangePassword(new AccountModels.ChangePassword { OldPassword = Context.password, NewPassword = "" });
+                Context.dmWeb.Account.ChangePassword(new Account.ChangePassword { OldPassword = Context.password, NewPassword = "" });
             }
             catch (WebException ex)
             {
@@ -612,7 +608,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Account.ChangePassword(new AccountModels.ChangePassword { OldPassword = "", NewPassword = "newtest#password" });
+                Context.dmWeb.Account.ChangePassword(new Account.ChangePassword { OldPassword = "", NewPassword = "newtest#password" });
             }
             catch (WebException ex)
             {
@@ -626,7 +622,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Account.ChangePassword(new AccountModels.ChangePassword { OldPassword = Context.password, NewPassword = Context.password });
+                Context.dmWeb.Account.ChangePassword(new Account.ChangePassword { OldPassword = Context.password, NewPassword = Context.password });
             }
             catch (WebException ex)
             {
@@ -641,7 +637,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Account.ChangePassword(new AccountModels.ChangePassword { OldPassword = "false1", NewPassword = "false2" });
+                Context.dmWeb.Account.ChangePassword(new Account.ChangePassword { OldPassword = "false1", NewPassword = "false2" });
             }
             catch (WebException ex)
             {
@@ -655,7 +651,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Account.ChangePassword(new AccountModels.ChangePassword { OldPassword = "false", NewPassword = "" });
+                Context.dmWeb.Account.ChangePassword(new Account.ChangePassword { OldPassword = "false", NewPassword = "" });
             }
             catch (WebException ex)
             {
@@ -670,7 +666,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Account.ChangePassword(new AccountModels.ChangePassword { OldPassword = "", NewPassword = "false" });
+                Context.dmWeb.Account.ChangePassword(new Account.ChangePassword { OldPassword = "", NewPassword = "false" });
             }
             catch (WebException ex)
             {
@@ -684,7 +680,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Folders.Create(new FolderModels.Create { });
+                Context.dmWeb.Folders.Create(new Folder.Create { });
             }
             catch (WebException ex)
             {
@@ -698,7 +694,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                string fid = Context.dmWeb.Folders.Create(new FolderModels.Create { FolderName = "Unit Test Folder Name Only 3.5" });
+                string fid = Context.dmWeb.Folders.Create(new Folder.Create { FolderName = "Unit Test Folder Name Only 3.5" });
                 Thread.Sleep(5000);
                 Context.dmWeb.Folders.Delete(fid);
             }
@@ -714,7 +710,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Folders.Create(new FolderModels.Create { FolderType = 0 });
+                Context.dmWeb.Folders.Create(new Folder.Create { FolderType = 0 });
             }
             catch (WebException ex)
             {
@@ -728,7 +724,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Folders.Create(new FolderModels.Create { FolderName = "Unit Test 3.5", FolderType = 15 });
+                Context.dmWeb.Folders.Create(new Folder.Create { FolderName = "Unit Test 3.5", FolderType = 15 });
             }
             catch (WebException ex)
             {
@@ -768,7 +764,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
             string[] linesplit3 = str3.Split(':');
             string toAddress = linesplit3[1];
 
-            int mid = Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress }, Subject = "True bool: Delete Message 3.5" });
+            int mid = Context.dmWeb.Message.Send(new Message.SendMessage { To = { toAddress }, Subject = "True bool: Delete Message 3.5" });
             Thread.Sleep(5000);
 
             Context.dmWeb.Message.Delete(mid.ToString(), permanentlyDeleteCheck: true);
@@ -809,35 +805,35 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Category("Get Inbox MID")]
         public void GetInboxMIDNoFieldWithSessionKeyTest()
         {
-            Context.dmWeb.Message.GetInboxMessageIds(new MessagingModels.GetInboxMIDRequest { });
+            Context.dmWeb.Message.GetInboxMessageIds(new Message.GetInboxMIDRequest { });
         }
 
         [Test]
         [Category("Get Inbox MID")]
         public void GetInboxMIDAllFieldsTest()
         {
-            Context.dmWeb.Message.GetInboxMessageIds(new MessagingModels.GetInboxMIDRequest { FolderId = 1, MessageListFilter = 0, MustHaveAttachments = false });
+            Context.dmWeb.Message.GetInboxMessageIds(new Message.GetInboxMIDRequest { FolderId = 1, MessageListFilter = 0, MustHaveAttachments = false });
         }
 
         [Test]
         [Category("Get Inbox MID")]
         public void GetInboxMIDOnlyFIDTest()
         {
-            Context.dmWeb.Message.GetInboxMessageIds(new MessagingModels.GetInboxMIDRequest { FolderId = 1 });
+            Context.dmWeb.Message.GetInboxMessageIds(new Message.GetInboxMIDRequest { FolderId = 1 });
         }
 
         [Test]
         [Category("Get Inbox MID")]
         public void GetInboxMIDOnlyMLFTest()
         {
-            Context.dmWeb.Message.GetInboxMessageIds(new MessagingModels.GetInboxMIDRequest { MessageListFilter = 1 });
+            Context.dmWeb.Message.GetInboxMessageIds(new Message.GetInboxMIDRequest { MessageListFilter = 1 });
         }
 
         [Test]
         [Category("Get Inbox MID")]
         public void GetInboxMIDOnlyMHATest()
         {
-            Context.dmWeb.Message.GetInboxMessageIds(new MessagingModels.GetInboxMIDRequest { MustHaveAttachments = false });
+            Context.dmWeb.Message.GetInboxMessageIds(new Message.GetInboxMIDRequest { MustHaveAttachments = false });
         }
 
         [Test]
@@ -846,7 +842,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Message.GetInboxMessageIds(new MessagingModels.GetInboxMIDRequest { FolderId = 214 });
+                Context.dmWeb.Message.GetInboxMessageIds(new Message.GetInboxMIDRequest { FolderId = 214 });
             }
             catch (WebException ex)
             {
@@ -860,7 +856,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Message.GetInboxMessageIds(new MessagingModels.GetInboxMIDRequest { MessageListFilter = 12 });
+                Context.dmWeb.Message.GetInboxMessageIds(new Message.GetInboxMIDRequest { MessageListFilter = 12 });
             }
             catch (WebException ex)
             {
@@ -887,14 +883,14 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Category("Get Message Summaries")]
         public void GetMessageSummariesPositiveTest()
         {
-            Context.dmWeb.Message.GetMessageSummaries(new MessagingModels.GetMessageSummariesRequest { FolderId = 1, LastMessageIDReceived = 22722701 });
+            Context.dmWeb.Message.GetMessageSummaries(new Message.GetMessageSummariesRequest { FolderId = 1, LastMessageIDReceived = 22722701 });
         }
 
         [Test]
         [Category("Get Message Summaries")]
         public void GetMessageSummariesOnlyFIDTest()
         {
-            Context.dmWeb.Message.GetMessageSummaries(new MessagingModels.GetMessageSummariesRequest { FolderId = 1 });
+            Context.dmWeb.Message.GetMessageSummaries(new Message.GetMessageSummariesRequest { FolderId = 1 });
         }
 
         [Test]
@@ -903,7 +899,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Message.GetMessageSummaries(new MessagingModels.GetMessageSummariesRequest { FolderId = 12, LastMessageIDReceived = 12 });
+                Context.dmWeb.Message.GetMessageSummaries(new Message.GetMessageSummariesRequest { FolderId = 12, LastMessageIDReceived = 12 });
             }
             catch (WebException ex)
             {
@@ -917,7 +913,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Message.GetMessageSummaries(new MessagingModels.GetMessageSummariesRequest { FolderId = 12 });
+                Context.dmWeb.Message.GetMessageSummaries(new Message.GetMessageSummariesRequest { FolderId = 12 });
             }
             catch (WebException ex)
             {
@@ -964,7 +960,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                Context.dmWeb.Message.Move(new MessagingModels.MoveMessageRequest { DestinationFolderId = 0 }, MID.ToString());
+                Context.dmWeb.Message.Move(new Message.MoveMessageRequest { DestinationFolderId = 0 }, MID.ToString());
             }
             catch (WebException ex)
             {
@@ -980,7 +976,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                Context.dmWeb.Message.Move(new MessagingModels.MoveMessageRequest { DestinationFolderId = DFID }, 0.ToString());
+                Context.dmWeb.Message.Move(new Message.MoveMessageRequest { DestinationFolderId = DFID }, 0.ToString());
             }
             catch (WebException ex)
             {
@@ -997,7 +993,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                Context.dmWeb.Message.Move(new MessagingModels.MoveMessageRequest { DestinationFolderId = 15143 }, MID.ToString());
+                Context.dmWeb.Message.Move(new Message.MoveMessageRequest { DestinationFolderId = 15143 }, MID.ToString());
             }
             catch (WebException ex)
             {
@@ -1014,7 +1010,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                Context.dmWeb.Message.Move(new MessagingModels.MoveMessageRequest { DestinationFolderId = DFID }, MID.ToString());
+                Context.dmWeb.Message.Move(new Message.MoveMessageRequest { DestinationFolderId = DFID }, MID.ToString());
             }
             catch (WebException ex)
             {
@@ -1031,7 +1027,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
 
             try
             {
-                Context.dmWeb.Message.Move(new MessagingModels.MoveMessageRequest { DestinationFolderId = DFID }, MID.ToString());
+                Context.dmWeb.Message.Move(new Message.MoveMessageRequest { DestinationFolderId = DFID }, MID.ToString());
             }
             catch (WebException ex)
             {
@@ -1050,7 +1046,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
             string toAddress = linesplit3[1];
 
 
-            int MID = Context.dmWeb.Message.Send(new MessagingModels.SendMessage { To = { toAddress }, Subject = "Retract Message Test 3.5" });
+            int MID = Context.dmWeb.Message.Send(new Message.SendMessage { To = { toAddress }, Subject = "Retract Message Test 3.5" });
 
             Context.dmWeb.Message.Retract(MID.ToString());
         }
@@ -1075,7 +1071,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Category("Search Inbox")]
         public void SearchInboxPositiveTest()
         {
-            Context.dmWeb.Message.SearchInbox(new MessagingModels.SearchInbox { PageNum = 1, PageSize = 1 });
+            Context.dmWeb.Message.SearchInbox(new Message.SearchInbox { PageNum = 1, PageSize = 1 });
         }
 
         [Test]
@@ -1084,7 +1080,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Message.SearchInbox(new MessagingModels.SearchInbox { PageNum = 1 });
+                Context.dmWeb.Message.SearchInbox(new Message.SearchInbox { PageNum = 1 });
             }
             catch (WebException ex)
             {
@@ -1098,7 +1094,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Message.SearchInbox(new MessagingModels.SearchInbox { PageSize = 1 });
+                Context.dmWeb.Message.SearchInbox(new Message.SearchInbox { PageSize = 1 });
             }
             catch (WebException ex)
             {
@@ -1113,7 +1109,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Message.SearchInbox(new MessagingModels.SearchInbox { PageNum = 1561, PageSize = 1 });
+                Context.dmWeb.Message.SearchInbox(new Message.SearchInbox { PageNum = 1561, PageSize = 1 });
             }
             catch (WebException ex)
             {
@@ -1128,7 +1124,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Message.SearchInbox(new MessagingModels.SearchInbox { PageNum = 1, PageSize = 1561 });
+                Context.dmWeb.Message.SearchInbox(new Message.SearchInbox { PageNum = 1, PageSize = 1561 });
             }
             catch (WebException ex)
             {
@@ -1142,7 +1138,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Message.SearchInbox(new MessagingModels.SearchInbox { PageNum = 1561, PageSize = 1561 });
+                Context.dmWeb.Message.SearchInbox(new Message.SearchInbox { PageNum = 1561, PageSize = 1561 });
             }
             catch (WebException ex)
             {
@@ -1156,7 +1152,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         {
             try
             {
-                Context.dmWeb.Message.SearchInbox(new MessagingModels.SearchInbox { PageNum = 1, PageSize = 1, FolderId = 1565 });
+                Context.dmWeb.Message.SearchInbox(new Message.SearchInbox { PageNum = 1, PageSize = 1, FolderId = 1565 });
             }
             catch (WebException ex)
             {
@@ -1168,42 +1164,42 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
         [Category("Search Inbox")]
         public void SearchInboxGetInboxUnReadOnlyTrueTest()
         {
-            Context.dmWeb.Message.SearchInbox(new MessagingModels.SearchInbox { PageNum = 1, PageSize = 1, GetInboxUnReadOnly = true });
+            Context.dmWeb.Message.SearchInbox(new Message.SearchInbox { PageNum = 1, PageSize = 1, GetInboxUnReadOnly = true });
         }
 
         [Test]
         [Category("Search Inbox")]
         public void SearchInboxGetInboxUnReadOnlyFalseTest()
         {
-            Context.dmWeb.Message.SearchInbox(new MessagingModels.SearchInbox { PageNum = 1, PageSize = 1, GetInboxUnReadOnly = false });
+            Context.dmWeb.Message.SearchInbox(new Message.SearchInbox { PageNum = 1, PageSize = 1, GetInboxUnReadOnly = false });
         }
 
         [Test]
         [Category("Search Inbox")]
         public void SearchInboxGetRetractedMsgsTrueTest()
         {
-            Context.dmWeb.Message.SearchInbox(new MessagingModels.SearchInbox { PageNum = 1, PageSize = 1, GetRetractedMsgs = true });
+            Context.dmWeb.Message.SearchInbox(new Message.SearchInbox { PageNum = 1, PageSize = 1, GetRetractedMsgs = true });
         }
 
         [Test]
         [Category("Search Inbox")]
         public void SearchInboxGetRetractedMsgsFalseTest()
         {
-            Context.dmWeb.Message.SearchInbox(new MessagingModels.SearchInbox { PageNum = 1, PageSize = 1, GetRetractedMsgs = false });
+            Context.dmWeb.Message.SearchInbox(new Message.SearchInbox { PageNum = 1, PageSize = 1, GetRetractedMsgs = false });
         }
 
         [Test]
         [Category("Search Inbox")]
         public void SearchInboxOrderDescTrueTest()
         {
-            Context.dmWeb.Message.SearchInbox(new MessagingModels.SearchInbox { PageNum = 1, PageSize = 1, OrderDesc = true });
+            Context.dmWeb.Message.SearchInbox(new Message.SearchInbox { PageNum = 1, PageSize = 1, OrderDesc = true });
         }
 
         [Test]
         [Category("Search Inbox")]
         public void SearchInboxOrderDescFalseTest()
         {
-            Context.dmWeb.Message.SearchInbox(new MessagingModels.SearchInbox { PageNum = 1, PageSize = 1, OrderDesc = false });
+            Context.dmWeb.Message.SearchInbox(new Message.SearchInbox { PageNum = 1, PageSize = 1, OrderDesc = false });
         }
 
         [Test]
@@ -1219,7 +1215,7 @@ namespace Messaging_Library.TestFixtures.UnitTestClass
                 string fromAddress = linesplit4[1];
 
                 string location = @_testDataPath;
-                Context.dmWeb.Message.SendMimeMessage(new MessagingModels.SendMessage { From = fromAddress, Subject = "No To Address", TextBody = "Mime Message Test 3.5" }, location);
+                Context.dmWeb.Message.SendMimeMessage("From: User1 <user1@dmweb.citest.com>\r\nDate: Fri, 21 Sep 2018 14:44:38 -0400\r\nSubject: Test MIME String\r\nMessage-Id: <8FWTG9PFI5U4.4II4VETOXSE9@DellBlackTop>\r\nTo: \r\nCc: \r\nBcc: \r\nX-DateCreated: Fri, 21 Sep 2018 14:44:38 -0400\r\nMIME-Version: 1.0\r\nContent-Type: text/plain; charset=utf-8\r\n\r\nTest\r\n");
             }
             catch (WebException ex)
             {

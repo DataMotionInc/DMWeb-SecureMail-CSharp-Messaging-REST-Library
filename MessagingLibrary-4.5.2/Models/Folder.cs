@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Messaging_Library.Models
+namespace DMWeb_REST.Models
 {
-    public class FolderModels
+    public class Folder
     {
         /// <summary>
         /// Structure for Folder object
@@ -18,21 +18,14 @@ namespace Messaging_Library.Models
             public int TotalSize { get; set; }
         }
 
-        /// <summary>
-        /// Classes associated with folders
-        /// </summary>
-        public class Folder
-        {
-            /// <summary>
-            /// Create an array (Folders) of type Folder which has the data types of the payload being received
-            /// </summary>
-            public List<Create> Folders = new List<Create>();
-        }
-
         public class FolderResponse
         {
             public int FolderId { get; set; }
         }
 
+        public class ListFolders
+        {
+            public List<Create> Folders = new List<Create>();
+        }
     }
 }
