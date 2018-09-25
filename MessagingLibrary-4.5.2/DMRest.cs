@@ -155,7 +155,7 @@ namespace DMWeb_REST
             /// Displays the details of a folder
             /// </summary>
             /// <returns>HttpResponseMessage deserialized into FolderResponses object</returns>
-            public async Task<List<Folder.Create>> List()
+            public async Task<Folder.ListFolders> List()
             {
                 HttpClient client = new HttpClient();
                 
@@ -167,7 +167,7 @@ namespace DMWeb_REST
                     response.EnsureSuccessStatusCode();
                     string stringFolders = await response.Content.ReadAsStringAsync();
 
-                    List<Folder.Create> folderResponse = JsonConvert.DeserializeObject<List<Folder.Create>>(stringFolders);
+                    Folder.ListFolders folderResponse = JsonConvert.DeserializeObject<Folder.ListFolders>(stringFolders);
 
                     return folderResponse;
                 }
