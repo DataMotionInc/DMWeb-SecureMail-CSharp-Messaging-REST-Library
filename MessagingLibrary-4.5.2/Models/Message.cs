@@ -304,143 +304,143 @@ namespace DMWeb_REST.Models
 
         //5.42
 
-        public class GetMessageWithoutAttachmentDataResponse
-        {
-            public List<string> To = new List<string>();
-            public string From { get; set; }
-            public List<string> Cc = new List<string>();
-            public List<string> Bcc = new List<string>();
-            public string Subject { get; set; }
-            public string CreateTime { get; set; }
-            public string HtmlBody { get; set; }
-            public string TextBody { get; set; }
-            public List<GetMessageSummariesWithoutAttachmentDataAttachmentsObject> Attachments = new List<GetMessageSummariesWithoutAttachmentDataAttachmentsObject>();
-        }
+        //public class GetMessageWithoutAttachmentDataResponse
+        //{
+        //    public List<string> To = new List<string>();
+        //    public string From { get; set; }
+        //    public List<string> Cc = new List<string>();
+        //    public List<string> Bcc = new List<string>();
+        //    public string Subject { get; set; }
+        //    public string CreateTime { get; set; }
+        //    public string HtmlBody { get; set; }
+        //    public string TextBody { get; set; }
+        //    public List<GetMessageSummariesWithoutAttachmentDataAttachmentsObject> Attachments = new List<GetMessageSummariesWithoutAttachmentDataAttachmentsObject>();
+        //}
 
-        public class GetMessageSummariesWithoutAttachmentDataAttachmentsObject
-        {
-            public string AttachmentId { get; set; }
-            public string ContentID { get; set; }
-            public string ContentType { get; set; }
-            public string FileName { get; set; }
-            public int Size { get; set; }
-        }
-        public class GetAttachmentResponse
-        {
-            public string AttachmentBase64 { get; set; }
-            public string ContentID { get; set; }
-            public string ContentType { get; set; }
-            public string FileName { get; set; }
-            public int Size { get; set; }
-        }
+        //public class GetMessageSummariesWithoutAttachmentDataAttachmentsObject
+        //{
+        //    public string AttachmentId { get; set; }
+        //    public string ContentID { get; set; }
+        //    public string ContentType { get; set; }
+        //    public string FileName { get; set; }
+        //    public int Size { get; set; }
+        //}
+        //public class GetAttachmentResponse
+        //{
+        //    public string AttachmentBase64 { get; set; }
+        //    public string ContentID { get; set; }
+        //    public string ContentType { get; set; }
+        //    public string FileName { get; set; }
+        //    public int Size { get; set; }
+        //}
 
-        public class GetMessageSummariesWithMetadataRequest
-        {
-            public int FolderId { get; set; }
-            public int LastMessageIdReceived { get; set; }
-        }
+        //public class GetMessageSummariesWithMetadataRequest
+        //{
+        //    public int FolderId { get; set; }
+        //    public int LastMessageIdReceived { get; set; }
+        //}
 
-        public class GetMessageSummariesWithMetadataResponse
-        {
-            public List<GetMessageSummariesWithMetadataSummariesCollection> Summaries = new List<GetMessageSummariesWithMetadataSummariesCollection>();
-        }
+        //public class GetMessageSummariesWithMetadataResponse
+        //{
+        //    public List<GetMessageSummariesWithMetadataSummariesCollection> Summaries = new List<GetMessageSummariesWithMetadataSummariesCollection>();
+        //}
 
-        public class GetMessageSummariesWithMetadataSummariesCollection
-        {
-            public int AttachmentCount { get; set; }
-            public string createTimeString { get; set; }
-            public int FolderId { get; set; }
-            public int MessageId { get; set; }
-            public bool Read { get; set; }
-            public MessageStatusCodes MessageStatus { get; set; }
-            public string SenderAddress { get; set; }
-            public string Subject { get; set; }
-            public List<GetMessageSummariesWithMetadataAttachmentsCollection> Attachments = new List<GetMessageSummariesWithMetadataAttachmentsCollection>();
-            public string ExpirationDate { get; set; }
-            public string FirstRecipient { get; set; }
-            public int MessageSize { get; set; }
-            public GetMessageSummariesWithMetadataSecurityEnvelopeStructure SecurityEnvelope { get; set; }
-            public List<GetMessageSummariesWithMetadataTrackingCollection> Tracking = new List<GetMessageSummariesWithMetadataTrackingCollection>();
-        }
+        //public class GetMessageSummariesWithMetadataSummariesCollection
+        //{
+        //    public int AttachmentCount { get; set; }
+        //    public string createTimeString { get; set; }
+        //    public int FolderId { get; set; }
+        //    public int MessageId { get; set; }
+        //    public bool Read { get; set; }
+        //    public MessageStatusCodes MessageStatus { get; set; }
+        //    public string SenderAddress { get; set; }
+        //    public string Subject { get; set; }
+        //    public List<GetMessageSummariesWithMetadataAttachmentsCollection> Attachments = new List<GetMessageSummariesWithMetadataAttachmentsCollection>();
+        //    public string ExpirationDate { get; set; }
+        //    public string FirstRecipient { get; set; }
+        //    public int MessageSize { get; set; }
+        //    public GetMessageSummariesWithMetadataSecurityEnvelopeStructure SecurityEnvelope { get; set; }
+        //    public List<GetMessageSummariesWithMetadataTrackingCollection> Tracking = new List<GetMessageSummariesWithMetadataTrackingCollection>();
+        //}
 
-        public class GetMessageSummariesWithMetadataAttachmentsCollection
-        {
-            public int AttachmentId { get; set; }
-            public string ContentID { get; set; }
-            public string FileName { get; set; }
-            public GetMessageSummariesWithMetadataSecurityEnvelopeStructure SecurityEnvelope { get; set; }
-            public GetMessageSummariesWithMetadataSizeStructure Size { get; set; }
-            public GetMessageSummariesWithMetadataTrackingStructure Tracking { get; set; }
-        }
+        //public class GetMessageSummariesWithMetadataAttachmentsCollection
+        //{
+        //    public int AttachmentId { get; set; }
+        //    public string ContentID { get; set; }
+        //    public string FileName { get; set; }
+        //    public GetMessageSummariesWithMetadataSecurityEnvelopeStructure SecurityEnvelope { get; set; }
+        //    public GetMessageSummariesWithMetadataSizeStructure Size { get; set; }
+        //    public GetMessageSummariesWithMetadataTrackingStructure Tracking { get; set; }
+        //}
 
-        public class GetMessageSummariesWithMetadataSecurityEnvelopeStructure
-        {
-            public string Checksum { get; set; }
-            public string HashAlgorithm { get; set; }
-            public int Status { get; set; }
-            public string StatusDescription { get; set; }
-        }
+        //public class GetMessageSummariesWithMetadataSecurityEnvelopeStructure
+        //{
+        //    public string Checksum { get; set; }
+        //    public string HashAlgorithm { get; set; }
+        //    public int Status { get; set; }
+        //    public string StatusDescription { get; set; }
+        //}
 
-        public class GetMessageSummariesWithMetadataSizeStructure
-        {
-            public string StdString { get; set; }
-        }
+        //public class GetMessageSummariesWithMetadataSizeStructure
+        //{
+        //    public string StdString { get; set; }
+        //}
 
-        public class GetMessageSummariesWithMetadataTrackingStructure
-        {
-            public List<GetMessageSummariesWithMetadataRecipientsCollection> Recipients = new List<GetMessageSummariesWithMetadataRecipientsCollection>();
-        }
+        //public class GetMessageSummariesWithMetadataTrackingStructure
+        //{
+        //    public List<GetMessageSummariesWithMetadataRecipientsCollection> Recipients = new List<GetMessageSummariesWithMetadataRecipientsCollection>();
+        //}
 
-        public class GetMessageSummariesWithMetadataRecipientsCollection
-        {
-            public int? ChecksumValidated { get; set; }
-            public bool Delivered { get; set; }
-            public string DeliveredDate { get; set; }
-            public bool Downloaded { get; set; }
-            public string DownloadedDate { get; set; }
-            public string Email { get; set; }
-        }
+        //public class GetMessageSummariesWithMetadataRecipientsCollection
+        //{
+        //    public int? ChecksumValidated { get; set; }
+        //    public bool Delivered { get; set; }
+        //    public string DeliveredDate { get; set; }
+        //    public bool Downloaded { get; set; }
+        //    public string DownloadedDate { get; set; }
+        //    public string Email { get; set; }
+        //}
 
-        public class GetMessageSummariesWithMetadataTrackingCollection
-        {
-            public string DateOpened { get; set; }
-            public string Email { get; set; }
-            public string MessageStatusDescription { get; set; }
-            public int MessageStatusId { get; set; }
-            public string ReceiverField { get; set; }
-        }
+        //public class GetMessageSummariesWithMetadataTrackingCollection
+        //{
+        //    public string DateOpened { get; set; }
+        //    public string Email { get; set; }
+        //    public string MessageStatusDescription { get; set; }
+        //    public int MessageStatusId { get; set; }
+        //    public string ReceiverField { get; set; }
+        //}
 
-        public class SaveDraftRequest
-        {
-            public int MessageId { get; set; }
-            public List<string> To = new List<string>();
-            public string From { get; set; }
-            public List<string> Cc = new List<string>();
-            public List<string> Bcc = new List<string>();
-            public string Subject { get; set; }
-            public string CreateTime { get; set; }
-            public List<SaveDraftAttachmentsCollection> Attachments = new List<SaveDraftAttachmentsCollection>();
-            public string HtmlBody { get; set; }
-            public string TextBody { get; set; }
-        }
+        //public class SaveDraftRequest
+        //{
+        //    public int MessageId { get; set; }
+        //    public List<string> To = new List<string>();
+        //    public string From { get; set; }
+        //    public List<string> Cc = new List<string>();
+        //    public List<string> Bcc = new List<string>();
+        //    public string Subject { get; set; }
+        //    public string CreateTime { get; set; }
+        //    public List<SaveDraftAttachmentsCollection> Attachments = new List<SaveDraftAttachmentsCollection>();
+        //    public string HtmlBody { get; set; }
+        //    public string TextBody { get; set; }
+        //}
 
-        public class SaveDraftAttachmentsCollection
-        {
-            public string AttachmentBase64 { get; set; }
-            public string ContentType { get; set; }
-            public string FileName { get; set; }
-            public string ContentId { get; set; }
-        }
+        //public class SaveDraftAttachmentsCollection
+        //{
+        //    public string AttachmentBase64 { get; set; }
+        //    public string ContentType { get; set; }
+        //    public string FileName { get; set; }
+        //    public string ContentId { get; set; }
+        //}
 
-        public class SaveDraftResponse
+        //public class SaveDraftResponse
 
-        {
-            public int MessageId { get; set; }
-        }
+        //{
+        //    public int MessageId { get; set; }
+        //}
 
-        public class SendDraftResponse
-        {
-            public int MessageId { get; set; }
-        }
+        //public class SendDraftResponse
+        //{
+        //    public int MessageId { get; set; }
+        //}
     }
 }
