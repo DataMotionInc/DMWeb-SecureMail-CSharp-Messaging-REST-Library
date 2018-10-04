@@ -16,7 +16,7 @@ namespace DMWeb_REST
         public static string _sessionKey = "";
 
         public Message.SendMessage sendMessagePayload = new Message.SendMessage();
-        public Message.SaveDraftRequest saveDraftPayload = new Message.SaveDraftRequest();
+        //public Message.SaveDraftRequest saveDraftPayload = new Message.SaveDraftRequest();
         public List<Message.AttachmentsBody> attachmentPayload = new List<Message.AttachmentsBody>();
         public List<string> _base64 = new List<string>();
 
@@ -600,129 +600,129 @@ namespace DMWeb_REST
 
             // 5.42
 
-            /// <summary>
-            /// Gets a message without attachment data
-            /// </summary>
-            /// <param name="messageId"></param>
-            /// <returns>MessagingModels.GetMessageWithoutAttachmentDataResponse object</returns>
-            public Message.GetMessageWithoutAttachmentDataResponse GetMessageWithoutAttachmentData(int messageId)
-            {
-                WebClient client = new WebClient();
-                client.Headers.Add("Content-Type", "application/json");
-                client.Headers.Add("X-Session-Key", _sessionKey);
+            ///// <summary>
+            ///// Gets a message without attachment data
+            ///// </summary>
+            ///// <param name="messageId"></param>
+            ///// <returns>MessagingModels.GetMessageWithoutAttachmentDataResponse object</returns>
+            //public Message.GetMessageWithoutAttachmentDataResponse GetMessageWithoutAttachmentData(int messageId)
+            //{
+            //    WebClient client = new WebClient();
+            //    client.Headers.Add("Content-Type", "application/json");
+            //    client.Headers.Add("X-Session-Key", _sessionKey);
 
-                try
-                {
-                    string response = client.DownloadString(_baseUrl + "/Message/" + messageId + "/NoAttachmentData");
-                    Message.GetMessageWithoutAttachmentDataResponse responseObject = JsonConvert.DeserializeObject<Message.GetMessageWithoutAttachmentDataResponse>(response);
-                    return responseObject;
-                }
-                catch (WebException ex)
-                {
-                    throw ex;
-                }
-            }
+            //    try
+            //    {
+            //        string response = client.DownloadString(_baseUrl + "/Message/" + messageId + "/NoAttachmentData");
+            //        Message.GetMessageWithoutAttachmentDataResponse responseObject = JsonConvert.DeserializeObject<Message.GetMessageWithoutAttachmentDataResponse>(response);
+            //        return responseObject;
+            //    }
+            //    catch (WebException ex)
+            //    {
+            //        throw ex;
+            //    }
+            //}
 
-            /// <summary>
-            /// Gets only the attachment data from a message 
-            /// </summary>
-            /// <param name="attachmentId"></param>
-            /// <returns>MessagingModels.GetAttachmentResponse object</returns>
-            public Message.GetAttachmentResponse GetAttachment(int attachmentId)
-            {
-                WebClient client = new WebClient();
-                client.Headers.Add("Content-Type", "application/json");
-                client.Headers.Add("X-Session-Key", _sessionKey);
+            ///// <summary>
+            ///// Gets only the attachment data from a message 
+            ///// </summary>
+            ///// <param name="attachmentId"></param>
+            ///// <returns>MessagingModels.GetAttachmentResponse object</returns>
+            //public Message.GetAttachmentResponse GetAttachment(int attachmentId)
+            //{
+            //    WebClient client = new WebClient();
+            //    client.Headers.Add("Content-Type", "application/json");
+            //    client.Headers.Add("X-Session-Key", _sessionKey);
 
-                try
-                {
-                    string response = client.DownloadString(_baseUrl + "/Message/" + attachmentId + "/Attachment");
-                    Message.GetAttachmentResponse responseObject = JsonConvert.DeserializeObject<Message.GetAttachmentResponse>(response);
-                    return responseObject;
-                }
-                catch (WebException ex)
-                {
-                    throw ex;
-                }
-            }
+            //    try
+            //    {
+            //        string response = client.DownloadString(_baseUrl + "/Message/" + attachmentId + "/Attachment");
+            //        Message.GetAttachmentResponse responseObject = JsonConvert.DeserializeObject<Message.GetAttachmentResponse>(response);
+            //        return responseObject;
+            //    }
+            //    catch (WebException ex)
+            //    {
+            //        throw ex;
+            //    }
+            //}
 
-            /// <summary>
-            /// Gets the message summaries with metadata
-            /// </summary>
-            /// <param name="model"></param>
-            /// <returns>MessagingModels.GetMessageSummariesWithMetadataResponse object</returns>
-            public Message.GetMessageSummariesWithMetadataResponse GetMessageSummariesWithMetadata(Message.GetMessageSummariesWithMetadataRequest model)
-            {
-                string jsonString = JsonConvert.SerializeObject(model);
-                byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
+            ///// <summary>
+            ///// Gets the message summaries with metadata
+            ///// </summary>
+            ///// <param name="model"></param>
+            ///// <returns>MessagingModels.GetMessageSummariesWithMetadataResponse object</returns>
+            //public Message.GetMessageSummariesWithMetadataResponse GetMessageSummariesWithMetadata(Message.GetMessageSummariesWithMetadataRequest model)
+            //{
+            //    string jsonString = JsonConvert.SerializeObject(model);
+            //    byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
 
-                WebClient client = new WebClient();
-                client.Headers.Add("Content-Type", "application/json");
-                client.Headers.Add("X-Session-Key", _sessionKey);
+            //    WebClient client = new WebClient();
+            //    client.Headers.Add("Content-Type", "application/json");
+            //    client.Headers.Add("X-Session-Key", _sessionKey);
 
-                try
-                {
-                    string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/GetMessageSummariesWithMetadata", "POST", jsonByteArray));
-                    Message.GetMessageSummariesWithMetadataResponse responseObject = JsonConvert.DeserializeObject<Message.GetMessageSummariesWithMetadataResponse>(response);
-                    return responseObject;
-                }
-                catch (WebException ex)
-                {
-                    throw ex;
-                }
-            }
+            //    try
+            //    {
+            //        string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/GetMessageSummariesWithMetadata", "POST", jsonByteArray));
+            //        Message.GetMessageSummariesWithMetadataResponse responseObject = JsonConvert.DeserializeObject<Message.GetMessageSummariesWithMetadataResponse>(response);
+            //        return responseObject;
+            //    }
+            //    catch (WebException ex)
+            //    {
+            //        throw ex;
+            //    }
+            //}
 
-            /// <summary>
-            /// Save a message as a draft
-            /// </summary>
-            /// <param name="model"></param>
-            /// <returns>MessagingModels.SaveDraftResponse object</returns>
-            public Message.SaveDraftResponse SaveDraft(Message.SaveDraftRequest model)
-            {
-                string jsonString = JsonConvert.SerializeObject(model);
-                byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
+            ///// <summary>
+            ///// Save a message as a draft
+            ///// </summary>
+            ///// <param name="model"></param>
+            ///// <returns>MessagingModels.SaveDraftResponse object</returns>
+            //public Message.SaveDraftResponse SaveDraft(Message.SaveDraftRequest model)
+            //{
+            //    string jsonString = JsonConvert.SerializeObject(model);
+            //    byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
 
-                WebClient client = new WebClient();
-                client.Headers.Add("Content-Type", "application/json");
-                client.Headers.Add("X-Session-Key", _sessionKey);
+            //    WebClient client = new WebClient();
+            //    client.Headers.Add("Content-Type", "application/json");
+            //    client.Headers.Add("X-Session-Key", _sessionKey);
 
-                try
-                {
-                    string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/SaveDraft", "POST", jsonByteArray));
-                    Message.SaveDraftResponse responseObject = JsonConvert.DeserializeObject<Message.SaveDraftResponse>(response);
-                    return responseObject;
-                }
-                catch (WebException ex)
-                {
-                    throw ex;
-                }
-            }
+            //    try
+            //    {
+            //        string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/SaveDraft", "POST", jsonByteArray));
+            //        Message.SaveDraftResponse responseObject = JsonConvert.DeserializeObject<Message.SaveDraftResponse>(response);
+            //        return responseObject;
+            //    }
+            //    catch (WebException ex)
+            //    {
+            //        throw ex;
+            //    }
+            //}
 
-            /// <summary>
-            /// Send a draft
-            /// </summary>
-            /// <param name="messageId"></param>
-            /// <returns>MessagingModels.SendDraftResponse object</returns>
-            public Message.SendDraftResponse SendDraft(int messageId)
-            {
-                string jsonString = JsonConvert.SerializeObject("");
-                byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
+            ///// <summary>
+            ///// Send a draft
+            ///// </summary>
+            ///// <param name="messageId"></param>
+            ///// <returns>MessagingModels.SendDraftResponse object</returns>
+            //public Message.SendDraftResponse SendDraft(int messageId)
+            //{
+            //    string jsonString = JsonConvert.SerializeObject("");
+            //    byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
 
-                WebClient client = new WebClient();
-                client.Headers.Add("Content-Type", "application/json");
-                client.Headers.Add("X-Session-Key", _sessionKey);
+            //    WebClient client = new WebClient();
+            //    client.Headers.Add("Content-Type", "application/json");
+            //    client.Headers.Add("X-Session-Key", _sessionKey);
 
-                try
-                {
-                    string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/" + messageId + "SendDraft", "POST", jsonByteArray));
-                    Message.SendDraftResponse responseObject = JsonConvert.DeserializeObject<Message.SendDraftResponse>(response);
-                    return responseObject;
-                }
-                catch (WebException ex)
-                {
-                    throw ex;
-                }
-            }
+            //    try
+            //    {
+            //        string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/" + messageId + "SendDraft", "POST", jsonByteArray));
+            //        Message.SendDraftResponse responseObject = JsonConvert.DeserializeObject<Message.SendDraftResponse>(response);
+            //        return responseObject;
+            //    }
+            //    catch (WebException ex)
+            //    {
+            //        throw ex;
+            //    }
+            //}
         }
     }
 }
