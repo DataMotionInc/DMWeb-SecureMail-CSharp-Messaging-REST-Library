@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using Newtonsoft.Json;
-using Messaging_Library.Models;
 using System.Net;
+using System.Security.Authentication;
 using System.Text;
-using MimeKit;
+using Newtonsoft.Json;
+using DMWeb_REST.Models;
 
 namespace DMWeb_REST
 {
@@ -15,15 +14,18 @@ namespace DMWeb_REST
     { 
         public static string _baseUrl = "";
         public static string _sessionKey = "";
-        
 
-        public MessagingModels.SendMessage sendMessagePayload = new MessagingModels.SendMessage();
+        public Message.SendMessage sendMessagePayload = new Message.SendMessage();
+        //public Message.SaveDraftRequest saveDraftPayload = new Message.SaveDraftRequest();
+        public List<Message.AttachmentsBody> attachmentPayload = new List<Message.AttachmentsBody>();
         public List<string> _base64 = new List<string>();
 
         public DMAccount Account = new DMAccount();
         public DMFolders Folders = new DMFolders();
         public DMMessage Message = new DMMessage();
 
+        public const SslProtocols _Tls12 = (SslProtocols)0x00000C00;
+        public const SecurityProtocolType Tls12 = (SecurityProtocolType)_Tls12;
 
         /// <summary>
         /// Default constructor that sets the _baseUrl to SecureMail
@@ -31,6 +33,7 @@ namespace DMWeb_REST
         public DMWeb()
         {
             _baseUrl = "https://ssl.datamotion.com/SecureMessagingApi";
+            ServicePointManager.SecurityProtocol = Tls12;
         }
 
         /// <summary>
@@ -40,6 +43,7 @@ namespace DMWeb_REST
         public DMWeb(string url)
         {
             _baseUrl = url;
+            ServicePointManager.SecurityProtocol = Tls12;
         }
         public class DMAccount
         {
@@ -48,7 +52,7 @@ namespace DMWeb_REST
             /// </summary>
             /// <param name="model">Model of type AccountLogOn contains string UserIdOrEmail and string Password</param>
             /// <returns>HttpResponseMessage deserialized into AccountSessionKey object</returns>
-            public string LogOn(AccountModels.LogOn model)
+            public string LogOn(Account.LogOn model)
             {
                 string jsonString = JsonConvert.SerializeObject(model);
                 byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
@@ -60,7 +64,7 @@ namespace DMWeb_REST
                 {
                     string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Account/Logon", "POST", jsonByteArray));
 
-                    AccountModels.AccountSessionKey temp = JsonConvert.DeserializeObject<AccountModels.AccountSessionKey>(response);
+                    Account.AccountSessionKey temp = JsonConvert.DeserializeObject<Account.AccountSessionKey>(response);
                     _sessionKey = temp.SessionKey;
 
                     client.Headers.Add("X-Session-Key", _sessionKey);
@@ -77,7 +81,7 @@ namespace DMWeb_REST
             /// Displays the account details to the user
             /// </summary>
             /// <returns>HttpResponseMessage deserialized into AccountResponses object</returns>
-            public AccountModels.AccountDetails Details()
+            public Account.AccountDetails Details()
             {
                 WebClient client = new WebClient();
                 client.Headers.Add("Content-Type", "application/json");
@@ -86,7 +90,7 @@ namespace DMWeb_REST
                 try
                 {
                     string response = client.DownloadString(_baseUrl + "/Account/Details");
-                    AccountModels.AccountDetails temp = JsonConvert.DeserializeObject<AccountModels.AccountDetails>(response);
+                    Account.AccountDetails temp = JsonConvert.DeserializeObject<Account.AccountDetails>(response);
                     return temp;
                 }
                 catch(WebException ex)
@@ -100,7 +104,7 @@ namespace DMWeb_REST
             /// </summary>
             /// <param name="model">Model of type AccountChangePassword contains string OldPassword and string NewPassword</param>
             /// <returns>HttpResponseMessage</returns>
-            public string ChangePassword(AccountModels.ChangePassword model)
+            public string ChangePassword(Account.ChangePassword model)
             {
                 string jsonString = JsonConvert.SerializeObject(model);
                 byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
@@ -156,7 +160,7 @@ namespace DMWeb_REST
             /// Displays the details of a folder
             /// </summary>
             /// <returns>HttpResponseMessage deserialized into FolderResponses object</returns>
-            public FolderModels.Folder List()
+            public Folder.ListFolders List()
             {
                 WebClient client = new WebClient();
                 client.Headers.Add("Content-Type", "application/json");
@@ -165,7 +169,7 @@ namespace DMWeb_REST
                 try
                 {
                     string response = client.DownloadString(_baseUrl + "/Folder/List");
-                    FolderModels.Folder folderResponse = JsonConvert.DeserializeObject<FolderModels.Folder>(response);
+                    Folder.ListFolders folderResponse = JsonConvert.DeserializeObject<Folder.ListFolders>(response);
 
                     return folderResponse;
                 }
@@ -180,7 +184,7 @@ namespace DMWeb_REST
             /// </summary>
             /// <param name="model">Model of type Folder contains string FolderName and int FolderType</param>
             /// <returns>FolderID as a string</returns>
-            public string Create(FolderModels.Create model)
+            public string Create(Folder.Create model)
             {
                 string jsonString = JsonConvert.SerializeObject(model);
                 byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
@@ -192,7 +196,7 @@ namespace DMWeb_REST
                 try
                 {
                     string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Folder", jsonByteArray));
-                    FolderModels.FolderResponse fid = JsonConvert.DeserializeObject<FolderModels.FolderResponse>(response);
+                    Folder.FolderResponse fid = JsonConvert.DeserializeObject<Folder.FolderResponse>(response);
 
                     return fid.FolderId.ToString();
                 }
@@ -237,7 +241,7 @@ namespace DMWeb_REST
             /// </summary>
             /// <param name="model"></param>
             /// <returns>GetInboxMIDResponse object</returns>
-            public MessagingModels.GetInboxMIDResponse GetInboxMessageIds(MessagingModels.GetInboxMIDRequest model)
+            public Message.GetInboxMIDResponse GetInboxMessageIds(Message.GetInboxMIDRequest model)
             {
                 string jsonString = JsonConvert.SerializeObject(model);
                 byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
@@ -250,7 +254,7 @@ namespace DMWeb_REST
                 {
                     string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/GetInboxMessageIds", "POST", jsonByteArray));
 
-                    MessagingModels.GetInboxMIDResponse inboxResponse = JsonConvert.DeserializeObject<MessagingModels.GetInboxMIDResponse>(response);
+                    Message.GetInboxMIDResponse inboxResponse = JsonConvert.DeserializeObject<Message.GetInboxMIDResponse>(response);
 
                     return inboxResponse;
                 }
@@ -265,7 +269,7 @@ namespace DMWeb_REST
             /// </summary>
             /// <param name="model">Model of type GetMessageSummariesRequest contains int FolderId and int LastMessageIDReceived</param>
             /// <returns>HttpResponseMessage deserialized into SummariesResponseBody object</returns>
-            public MessagingModels.GetMessageSummaries GetMessageSummaries(MessagingModels.GetMessageSummariesRequest model)
+            public Message.GetMessageSummaries GetMessageSummaries(Message.GetMessageSummariesRequest model)
             {
                 string jsonString = JsonConvert.SerializeObject(model);
                 byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
@@ -278,7 +282,7 @@ namespace DMWeb_REST
                 {
                     string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/GetMessageSummaries", "POST", jsonByteArray));
 
-                    MessagingModels.GetMessageSummaries summariesResponse = JsonConvert.DeserializeObject<MessagingModels.GetMessageSummaries>(response);
+                    Message.GetMessageSummaries summariesResponse = JsonConvert.DeserializeObject<Message.GetMessageSummaries>(response);
 
                     return summariesResponse;
                 }
@@ -294,7 +298,7 @@ namespace DMWeb_REST
             /// <param name="LastMIDReceived">Receive only messages created since the ID reference</param>
             /// <param name="MID">MessageID</param>
             /// <returns>GetMessageSummariesResponse object</returns>
-            public MessagingModels.GetUnreadMessages GetUnreadMessages(bool LastMIDReceived, string MID)
+            public Message.GetUnreadMessages GetUnreadMessages(bool LastMIDReceived, string MID)
             {
                 WebClient client = new WebClient();
                 client.Headers.Add("Content-Type", "application/json");
@@ -307,7 +311,7 @@ namespace DMWeb_REST
                     {
                         string response = client.DownloadString(_baseUrl + "/Message/Inbox/Unread");
 
-                        MessagingModels.GetUnreadMessages unreadResponse = JsonConvert.DeserializeObject<MessagingModels.GetUnreadMessages>(response);
+                        Message.GetUnreadMessages unreadResponse = JsonConvert.DeserializeObject<Message.GetUnreadMessages>(response);
 
                         return unreadResponse;
                     }
@@ -322,7 +326,7 @@ namespace DMWeb_REST
                     {
                         string response = client.DownloadString(_baseUrl + "/Message/Inbox/Unread/?After=" + MID);
 
-                        MessagingModels.GetUnreadMessages unreadResponse = JsonConvert.DeserializeObject<MessagingModels.GetUnreadMessages>(response);
+                        Message.GetUnreadMessages unreadResponse = JsonConvert.DeserializeObject<Message.GetUnreadMessages>(response);
 
                         return unreadResponse;
                     }
@@ -338,7 +342,7 @@ namespace DMWeb_REST
             /// </summary>
             /// <param name="model"></param>
             /// <returns>searchInboxResponse object</returns>
-            public MessagingModels.SearchInboxResponse SearchInbox(MessagingModels.SearchInbox model)
+            public Message.SearchInboxResponse SearchInbox(Message.SearchInbox model)
             {
                 string jsonString = JsonConvert.SerializeObject(model);
                 byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
@@ -351,7 +355,7 @@ namespace DMWeb_REST
                 {
                     string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/Inbox/Search", "POST", jsonByteArray));
 
-                    MessagingModels.SearchInboxResponse searchInboxResponseObject = JsonConvert.DeserializeObject<MessagingModels.SearchInboxResponse>(response);
+                    Message.SearchInboxResponse searchInboxResponseObject = JsonConvert.DeserializeObject<Message.SearchInboxResponse>(response);
 
                     return searchInboxResponseObject;
                 }
@@ -366,7 +370,7 @@ namespace DMWeb_REST
             /// </summary>
             /// <param name="MessageId"></param>
             /// <returns>MetadataResponse object</returns>
-            public MessagingModels.MetadataResponse GetMessageMetadata(string MessageId)
+            public Message.MetadataResponse GetMessageMetadata(string MessageId)
             {
                 WebClient client = new WebClient();
                 client.Headers.Add("Content-Type", "application/json");
@@ -376,7 +380,7 @@ namespace DMWeb_REST
                 {
                     string response = client.DownloadString(_baseUrl + "/Message/" + MessageId + "/Metadata");
 
-                    MessagingModels.MetadataResponse messageMetadata = JsonConvert.DeserializeObject<MessagingModels.MetadataResponse>(response);
+                    Message.MetadataResponse messageMetadata = JsonConvert.DeserializeObject<Message.MetadataResponse>(response);
 
                     return messageMetadata;
                 }
@@ -391,9 +395,9 @@ namespace DMWeb_REST
             /// </summary>
             /// <param name="model">Model contains string messageId</param>
             /// <returns>HttpResponseMessage(null if successful) </returns>
-            public string Retract(MessagingModels.MessageOperations model)
+            public string Retract(string messageId)
             {
-                string jsonString = JsonConvert.SerializeObject(model);
+                string jsonString = JsonConvert.SerializeObject("");
                 byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
 
                 WebClient client = new WebClient();
@@ -402,8 +406,6 @@ namespace DMWeb_REST
 
                 try
                 {
-                    string messageId = model.MessageId.ToString();
-
                     string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/" + messageId + "/Retract", "POST", jsonByteArray));
 
                     return response;
@@ -419,7 +421,7 @@ namespace DMWeb_REST
             /// </summary>
             /// <param name="model">Model contains string messageId</param>
             /// <returns>HttpResponseMessage(null if successful)</returns>
-            public string Move(MessagingModels.MessageOperations model)
+            public string Move(Message.MoveMessageRequest model, string messageId)
             {
                 string jsonString = JsonConvert.SerializeObject(model);
                 byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
@@ -430,8 +432,6 @@ namespace DMWeb_REST
 
                 try
                 {
-                    string messageId = model.MessageId.ToString();
-
                     string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/" + messageId + "/Move/", "POST", jsonByteArray));
 
                     return response;
@@ -447,7 +447,7 @@ namespace DMWeb_REST
             /// </summary>
             /// <param name="model">Model contains multiple parameters</param>
             /// <returns>MessageID as an integer</returns>
-            public int Send(MessagingModels.SendMessage model)
+            public int Send(Message.SendMessage model)
             {
                 string jsonString = JsonConvert.SerializeObject(model);
                 byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
@@ -460,7 +460,7 @@ namespace DMWeb_REST
                 {
                     string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message", "POST", jsonByteArray));
 
-                    MessagingModels.SendMessageResponse mid = JsonConvert.DeserializeObject<MessagingModels.SendMessageResponse>(response);
+                    Message.SendMessageResponse mid = JsonConvert.DeserializeObject<Message.SendMessageResponse>(response);
 
                     return mid.MessageId;
                 }
@@ -476,7 +476,7 @@ namespace DMWeb_REST
             /// <param name="model">Model contains messageId</param>
             /// <param name="permanentlyDeleteCheck">Boolean value used to delete a message permanently or to trash</param>
             /// <returns>HttpResponseMessage</returns>
-            public string Delete(string mid, bool permanentlyDeleteCheck)
+            public Message.DeleteMessageResponse Delete(string mid, bool permanentlyDeleteCheck)
             {
                 string jsonString = JsonConvert.SerializeObject("");
                 byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
@@ -492,8 +492,9 @@ namespace DMWeb_REST
                     try
                     {
                         string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/" + messageId + "?Permanently=true", "DELETE", jsonByteArray));
+                        Message.DeleteMessageResponse deletedResponse = JsonConvert.DeserializeObject<Message.DeleteMessageResponse>(response);
 
-                        return response;
+                        return deletedResponse;
                     }
                     catch (WebException ex)
                     {
@@ -505,8 +506,9 @@ namespace DMWeb_REST
                     try
                     {
                         string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/" + messageId, "DELETE", jsonByteArray));
+                        Message.DeleteMessageResponse deletedResponse = JsonConvert.DeserializeObject<Message.DeleteMessageResponse>(response);
 
-                        return response;
+                        return deletedResponse;
                     }
                     catch (WebException ex)
                     {
@@ -520,7 +522,7 @@ namespace DMWeb_REST
             /// </summary>
             /// <param name="messageID">string messageID of selected message</param>
             /// <returns>GetMessage object</returns>
-            public MessagingModels.GetMessage Get(string messageID)
+            public Message.GetMessage Get(string messageID)
             {
                 WebClient client = new WebClient();
                 client.Headers.Add("Content-Type", "application/json");
@@ -530,7 +532,7 @@ namespace DMWeb_REST
                 {
                     string response = client.DownloadString(_baseUrl + "/Message/" + messageID);
 
-                    MessagingModels.GetMessage messageResponse = JsonConvert.DeserializeObject<MessagingModels.GetMessage>(response);
+                    Message.GetMessage messageResponse = JsonConvert.DeserializeObject<Message.GetMessage>(response);
 
                     return messageResponse;
                 }
@@ -545,7 +547,7 @@ namespace DMWeb_REST
             /// </summary>
             /// <param name="messageId"></param>
             /// <returns>MimeMessageRequestandResponse object</returns>
-            public MessagingModels.MimeMessageRequestandResponse GetaMimeMessage(string messageId)
+            public Message.GetMimeMessageResponse GetaMimeMessage(string messageId)
             {
                 WebClient client = new WebClient();
                 client.Headers.Add("Content-Type", "application/json");
@@ -554,7 +556,7 @@ namespace DMWeb_REST
                 try
                 {
                     string response = client.DownloadString(_baseUrl + "/Message/" + messageId + "/Mime");
-                    MessagingModels.MimeMessageRequestandResponse mimeMessage = JsonConvert.DeserializeObject<MessagingModels.MimeMessageRequestandResponse>(response);
+                    Message.GetMimeMessageResponse mimeMessage = JsonConvert.DeserializeObject<Message.GetMimeMessageResponse>(response);
 
                     return mimeMessage;
                 }
@@ -570,52 +572,14 @@ namespace DMWeb_REST
             /// <param name="model"></param>
             /// <param name="location"></param>
             /// <returns>Mime MessageID as a string</returns>
-            public string SendMimeMessage(MessagingModels.SendMessage model, string location)
+            public string SendMimeMessage(string mimeString)
             {
                 WebClient client = new WebClient();
                 client.Headers.Add("Content-Type", "application/json");
                 client.Headers.Add("X-Session-Key", _sessionKey);
 
-                var message = new MimeMessage();
-
-                message.From.Add(new MailboxAddress(model.From));
-
-                foreach (string str in model.To)
-                {
-                    message.To.Add(new MailboxAddress(str));
-                }
-
-                foreach (string str in model.Cc)
-                {
-                    message.Cc.Add(new MailboxAddress(str));
-                }
-
-                foreach (string str in model.Bcc)
-                {
-                    message.Bcc.Add(new MailboxAddress(str));
-                }
-
-                message.Subject = model.Subject;
-                string messageString = model.TextBody;
-
-                var body = new TextPart("plain") { Text = @messageString };
-
-                var attachment = new MimePart("", "")
-                {
-                    ContentObject = new ContentObject(File.OpenRead(location), ContentEncoding.Default),
-                    ContentDisposition = new ContentDisposition(ContentDisposition.Attachment),
-                    ContentTransferEncoding = ContentEncoding.Base64,
-                    FileName = Path.GetFileName(location)
-                };
-
-                var multipart = new Multipart("mixed");
-                multipart.Add(body);
-                multipart.Add(attachment);
-
-                message.Body = multipart;
-
-                MessagingModels.MimeMessageRequestandResponse mimeMessageObject = new MessagingModels.MimeMessageRequestandResponse();
-                mimeMessageObject.MimeMessage = message.ToString();
+                Message.SendMimeMessageRequest mimeMessageObject = new Message.SendMimeMessageRequest();
+                mimeMessageObject.MimeMessage = mimeString;
 
                 string jsonString = JsonConvert.SerializeObject(mimeMessageObject);
                 byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
@@ -624,7 +588,7 @@ namespace DMWeb_REST
                 {
                     string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/Mime", "POST", jsonByteArray));
 
-                    MessagingModels.MimeMessageRequestandResponse mid = JsonConvert.DeserializeObject<MessagingModels.MimeMessageRequestandResponse>(response);
+                    Message.SendMimeMessageResponse mid = JsonConvert.DeserializeObject<Message.SendMimeMessageResponse>(response);
 
                     return mid.MessageId.ToString();
                 }
@@ -633,6 +597,132 @@ namespace DMWeb_REST
                     throw ex;
                 }
             }
+
+            // 5.42
+
+            ///// <summary>
+            ///// Gets a message without attachment data
+            ///// </summary>
+            ///// <param name="messageId"></param>
+            ///// <returns>MessagingModels.GetMessageWithoutAttachmentDataResponse object</returns>
+            //public Message.GetMessageWithoutAttachmentDataResponse GetMessageWithoutAttachmentData(int messageId)
+            //{
+            //    WebClient client = new WebClient();
+            //    client.Headers.Add("Content-Type", "application/json");
+            //    client.Headers.Add("X-Session-Key", _sessionKey);
+
+            //    try
+            //    {
+            //        string response = client.DownloadString(_baseUrl + "/Message/" + messageId + "/NoAttachmentData");
+            //        Message.GetMessageWithoutAttachmentDataResponse responseObject = JsonConvert.DeserializeObject<Message.GetMessageWithoutAttachmentDataResponse>(response);
+            //        return responseObject;
+            //    }
+            //    catch (WebException ex)
+            //    {
+            //        throw ex;
+            //    }
+            //}
+
+            ///// <summary>
+            ///// Gets only the attachment data from a message 
+            ///// </summary>
+            ///// <param name="attachmentId"></param>
+            ///// <returns>MessagingModels.GetAttachmentResponse object</returns>
+            //public Message.GetAttachmentResponse GetAttachment(int attachmentId)
+            //{
+            //    WebClient client = new WebClient();
+            //    client.Headers.Add("Content-Type", "application/json");
+            //    client.Headers.Add("X-Session-Key", _sessionKey);
+
+            //    try
+            //    {
+            //        string response = client.DownloadString(_baseUrl + "/Message/" + attachmentId + "/Attachment");
+            //        Message.GetAttachmentResponse responseObject = JsonConvert.DeserializeObject<Message.GetAttachmentResponse>(response);
+            //        return responseObject;
+            //    }
+            //    catch (WebException ex)
+            //    {
+            //        throw ex;
+            //    }
+            //}
+
+            ///// <summary>
+            ///// Gets the message summaries with metadata
+            ///// </summary>
+            ///// <param name="model"></param>
+            ///// <returns>MessagingModels.GetMessageSummariesWithMetadataResponse object</returns>
+            //public Message.GetMessageSummariesWithMetadataResponse GetMessageSummariesWithMetadata(Message.GetMessageSummariesWithMetadataRequest model)
+            //{
+            //    string jsonString = JsonConvert.SerializeObject(model);
+            //    byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
+
+            //    WebClient client = new WebClient();
+            //    client.Headers.Add("Content-Type", "application/json");
+            //    client.Headers.Add("X-Session-Key", _sessionKey);
+
+            //    try
+            //    {
+            //        string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/GetMessageSummariesWithMetadata", "POST", jsonByteArray));
+            //        Message.GetMessageSummariesWithMetadataResponse responseObject = JsonConvert.DeserializeObject<Message.GetMessageSummariesWithMetadataResponse>(response);
+            //        return responseObject;
+            //    }
+            //    catch (WebException ex)
+            //    {
+            //        throw ex;
+            //    }
+            //}
+
+            ///// <summary>
+            ///// Save a message as a draft
+            ///// </summary>
+            ///// <param name="model"></param>
+            ///// <returns>MessagingModels.SaveDraftResponse object</returns>
+            //public Message.SaveDraftResponse SaveDraft(Message.SaveDraftRequest model)
+            //{
+            //    string jsonString = JsonConvert.SerializeObject(model);
+            //    byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
+
+            //    WebClient client = new WebClient();
+            //    client.Headers.Add("Content-Type", "application/json");
+            //    client.Headers.Add("X-Session-Key", _sessionKey);
+
+            //    try
+            //    {
+            //        string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/SaveDraft", "POST", jsonByteArray));
+            //        Message.SaveDraftResponse responseObject = JsonConvert.DeserializeObject<Message.SaveDraftResponse>(response);
+            //        return responseObject;
+            //    }
+            //    catch (WebException ex)
+            //    {
+            //        throw ex;
+            //    }
+            //}
+
+            ///// <summary>
+            ///// Send a draft
+            ///// </summary>
+            ///// <param name="messageId"></param>
+            ///// <returns>MessagingModels.SendDraftResponse object</returns>
+            //public Message.SendDraftResponse SendDraft(int messageId)
+            //{
+            //    string jsonString = JsonConvert.SerializeObject("");
+            //    byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
+
+            //    WebClient client = new WebClient();
+            //    client.Headers.Add("Content-Type", "application/json");
+            //    client.Headers.Add("X-Session-Key", _sessionKey);
+
+            //    try
+            //    {
+            //        string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/" + messageId + "SendDraft", "POST", jsonByteArray));
+            //        Message.SendDraftResponse responseObject = JsonConvert.DeserializeObject<Message.SendDraftResponse>(response);
+            //        return responseObject;
+            //    }
+            //    catch (WebException ex)
+            //    {
+            //        throw ex;
+            //    }
+            //}
         }
     }
 }
