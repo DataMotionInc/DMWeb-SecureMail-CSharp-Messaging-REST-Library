@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net;
 using Newtonsoft.Json;
 using DMWeb_REST.Models;
+using System;
 
 namespace DMWeb_REST
 {
@@ -439,7 +440,7 @@ namespace DMWeb_REST
             public async Task<int> Send(Message.SendMessage model)
             {
                 HttpClient client = new HttpClient();
-                
+                client.Timeout = TimeSpan.FromMinutes(30);
                 client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
 
                 try
@@ -674,6 +675,7 @@ namespace DMWeb_REST
             public async Task<Message.SaveDraftResponse> SaveDraft(Message.SaveDraftRequest model)
             {
                 HttpClient client = new HttpClient();
+                client.Timeout = TimeSpan.FromMinutes(30);
                 client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
 
                 try
