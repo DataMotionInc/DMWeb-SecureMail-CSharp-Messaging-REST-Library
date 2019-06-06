@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net;
 using Newtonsoft.Json;
 using DMWeb_REST.Models;
+using System;
 
 namespace DMWeb_REST
 {
@@ -11,12 +12,13 @@ namespace DMWeb_REST
     /// Class functions
     /// </summary>
     public class DMWeb
-    { 
+    {
+        private static HttpClient client = new HttpClient();
         public static string _baseUrl = "";
         public static string _sessionKey = "";
 
         public Message.SendMessage sendMessagePayload = new Message.SendMessage();
-        //public Message.SaveDraftRequest saveDraftPayload = new Message.SaveDraftRequest();
+        public Message.SaveDraftRequest saveDraftPayload = new Message.SaveDraftRequest();
         public List<Message.AttachmentsBody> attachmentPayload = new List<Message.AttachmentsBody>();
         public List<string> _base64 = new List<string>();
 
@@ -31,6 +33,11 @@ namespace DMWeb_REST
         {
             _baseUrl = "https://ssl.datamotion.com/SecureMessagingApi";
             ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
+
+            if (client.Timeout == TimeSpan.FromMinutes(0))
+            {
+                client.Timeout = TimeSpan.FromMinutes(30);
+            }
         }
 
         /// <summary>
@@ -41,6 +48,11 @@ namespace DMWeb_REST
         {
             _baseUrl = url;
             ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
+
+            if (client.Timeout == TimeSpan.FromMinutes(0))
+            {
+                client.Timeout = TimeSpan.FromMinutes(30);
+            }
         }
         public class DMAccount
         {
@@ -51,8 +63,6 @@ namespace DMWeb_REST
             /// <returns>HttpResponseMessage deserialized into AccountSessionKey object</returns>
             public async Task<string> LogOn(Account.LogOn model)
             {
-                HttpClient client = new HttpClient();
-
                 try
                 {
                     HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Account/Logon", model);
@@ -61,7 +71,6 @@ namespace DMWeb_REST
 
                     Account.AccountSessionKey temp = JsonConvert.DeserializeObject<Account.AccountSessionKey>(_sessionKey);
                     _sessionKey = temp.SessionKey;
-
                     client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
 
                     return temp.SessionKey;
@@ -77,11 +86,7 @@ namespace DMWeb_REST
             /// </summary>
             /// <returns>HttpResponseMessage deserialized into AccountResponses object</returns>
             public async Task<Account.AccountDetails> Details()
-            {
-                HttpClient client = new HttpClient();
-                
-                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
-
+            {                
                 string details = "";
 
                 try
@@ -106,11 +111,7 @@ namespace DMWeb_REST
             /// <param name="model">Model of type AccountChangePassword contains string OldPassword and string NewPassword</param>
             /// <returns>HttpResponseMessage</returns>
             public async Task<string> ChangePassword(Account.ChangePassword model)
-            {
-                HttpClient client = new HttpClient();
-                
-                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
-
+            {                
                 try
                 {
                     HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Account/ChangePassword", model);
@@ -128,11 +129,7 @@ namespace DMWeb_REST
             /// </summary>
             /// <returns>HttpResponseMessage</returns>
             public async Task<string> LogOut()
-            {
-                HttpClient client = new HttpClient();
-                
-                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
-
+            {                
                 try
                 {
                     HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Account/Logout", "");
@@ -156,11 +153,7 @@ namespace DMWeb_REST
             /// </summary>
             /// <returns>HttpResponseMessage deserialized into FolderResponses object</returns>
             public async Task<Folder.ListFolders> List()
-            {
-                HttpClient client = new HttpClient();
-                
-                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
-
+            {                
                 try
                 {
                     HttpResponseMessage response = await client.GetAsync(_baseUrl + "/Folder/List");
@@ -183,11 +176,7 @@ namespace DMWeb_REST
             /// <param name="model">Model of type Folder contains string FolderName and int FolderType</param>
             /// <returns>FolderID as a string</returns>
             public async Task<string> Create(Folder.Create model)
-            {
-                HttpClient client = new HttpClient();
-                
-                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
-
+            {                
                 try
                 {
                     HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Folder", model);
@@ -212,11 +201,7 @@ namespace DMWeb_REST
             /// <param name="FolderID">string FolderId</param>
             /// <returns>HttpResponseMessage</returns>
             public async Task<string> Delete(string FolderID)
-            {
-                HttpClient client = new HttpClient();
-                
-                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
-
+            {                
                 try
                 {
                     HttpResponseMessage response = await client.DeleteAsync(_baseUrl + "/Folder/" + FolderID);
@@ -240,8 +225,6 @@ namespace DMWeb_REST
             /// <returns>GetInboxMIDResponse object</returns>
             public async Task<Message.GetInboxMIDResponse> GetInboxMessageIds(Message.GetInboxMIDRequest model)
             {
-                HttpClient client = new HttpClient();
-                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
                 try
                 {
                     HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Message/GetInboxMessageIds", model);
@@ -264,11 +247,7 @@ namespace DMWeb_REST
             /// <param name="model">Model of type GetMessageSummariesRequest contains int FolderId and int LastMessageIDReceived</param>
             /// <returns>HttpResponseMessage deserialized into SummariesResponseBody object</returns>
             public async Task<Message.GetMessageSummaries> GetMessageSummaries(Message.GetMessageSummariesRequest model)
-            {
-                HttpClient client = new HttpClient();
-                
-                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
-
+            {                
                 try
                 {
                     HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Message/GetMessageSummaries", model);
@@ -293,9 +272,6 @@ namespace DMWeb_REST
             /// <returns>GetMessageSummariesResponse object</returns>
             public async Task<Message.GetUnreadMessages> GetUnreadMessages(bool LastMIDReceived, string MID)
             {
-                HttpClient client = new HttpClient();
-                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
-
                 if (LastMIDReceived == false)
                 {
                     try
@@ -337,9 +313,6 @@ namespace DMWeb_REST
             /// <returns>searchInboxResponse object</returns>
             public async Task<Message.SearchInboxResponse> SearchInbox(Message.SearchInbox model)
             {
-                HttpClient client = new HttpClient();
-                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
-
                 try
                 {
                     HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Message/Inbox/Search", model);
@@ -363,9 +336,6 @@ namespace DMWeb_REST
             /// <returns>MetadataResponse object</returns>
             public async Task<Message.MetadataResponse> GetMessageMetadata(string MessageId)
             {
-                HttpClient client = new HttpClient();
-                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
-                
                 try
                 {
                     HttpResponseMessage response = await client.GetAsync(_baseUrl + "/Message/" + MessageId + "/Metadata");
@@ -388,11 +358,7 @@ namespace DMWeb_REST
             /// <param name="messageId">The messageId of the message being retracted</param>
             /// <returns>HttpResponseMessage(null if successful) </returns>
             public async Task<string> Retract(string messageId)
-            {
-                HttpClient client = new HttpClient();
-                    
-                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
-
+            {                    
                 try
                 {
                     HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Message/" + messageId + "/Retract", "");
@@ -413,11 +379,7 @@ namespace DMWeb_REST
             /// <param name="messageId">The messageId being moved</param>
             /// <returns>HttpResponseMessage(null if successful)</returns>
             public async Task<string> Move(Message.MoveMessageRequest model, string messageId)
-            {
-                HttpClient client = new HttpClient();
-                    
-                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
-
+            {                    
                 try
                 {
                     HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Message/" + messageId + "/Move/", model);
@@ -437,11 +399,7 @@ namespace DMWeb_REST
             /// <param name="model">Model contains multiple parameters</param>
             /// <returns>MessageID as an integer</returns>
             public async Task<int> Send(Message.SendMessage model)
-            {
-                HttpClient client = new HttpClient();
-                
-                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
-
+            { 
                 try
                 {
                     HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Message", model);
@@ -467,11 +425,6 @@ namespace DMWeb_REST
             /// <returns>HttpResponseMessage</returns>
             public async Task<Message.DeleteMessageResponse> Delete(string mid, bool permanentlyDeleteCheck)
             {
-                //MessagingModels.MessageOperations model
-                HttpClient client = new HttpClient();
-                
-                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
-
                 string messageId = mid;
                 if (permanentlyDeleteCheck == true)
                 {
@@ -514,10 +467,6 @@ namespace DMWeb_REST
             /// <returns>GetMessage object</returns>
             public async Task<Message.GetMessage> Get(string messageID)
             {
-                HttpClient client = new HttpClient();
-                
-                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
-
                 try
                 {
                     HttpResponseMessage response = await client.GetAsync(_baseUrl + "/Message/" + messageID);
@@ -541,8 +490,6 @@ namespace DMWeb_REST
             /// <returns>MimeMessageRequestandResponse object</returns>
             public async Task<Message.GetMimeMessageResponse> GetaMimeMessage(string messageId)
             {
-                HttpClient client = new HttpClient();
-                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
                 try
                 {
                     HttpResponseMessage response = await client.GetAsync(_baseUrl + "/Message/" + messageId + "/Mime");
@@ -567,9 +514,6 @@ namespace DMWeb_REST
             /// <returns>Mime MessageID as a string</returns>
             public async Task<string> SendMimeMessage(string mimeString)
             {
-                HttpClient client = new HttpClient();
-                client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
-
                 Message.SendMimeMessageRequest mimeMessageObject = new Message.SendMimeMessageRequest();
                 mimeMessageObject.MimeMessage = mimeString;
 
@@ -589,132 +533,117 @@ namespace DMWeb_REST
                 }
             }
 
-            // 5.42
+            // 5.43
 
-            ///// <summary>
-            ///// Gets a message without attachment data
-            ///// </summary>
-            ///// <param name="messageId"></param>
-            ///// <returns>MessagingModels.GetMessageWithoutAttachmentDataResponse object</returns>
-            //public async Task<Message.GetMessageWithoutAttachmentDataResponse> GetMessageWithoutAttachmentData(int messageId)
-            //{
-            //    HttpClient client = new HttpClient();
-            //    client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
+            /// <summary>
+            /// Gets a message without attachment data
+            /// </summary>
+            /// <param name="messageId"></param>
+            /// <returns>MessagingModels.GetMessageWithoutAttachmentDataResponse object</returns>
+            public async Task<Message.GetMessageWithoutAttachmentDataResponse> GetMessageWithoutAttachmentData(int messageId)
+            {
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync(_baseUrl + "/Message/" + messageId + "/NoAttachmentData");
+                    response.EnsureSuccessStatusCode();
+                    string responseString = await response.Content.ReadAsStringAsync();
 
-            //    try
-            //    {
-            //        HttpResponseMessage response = await client.GetAsync(_baseUrl + "/Message/" + messageId + "/NoAttachmentData");
-            //        response.EnsureSuccessStatusCode();
-            //        string responseString = await response.Content.ReadAsStringAsync();
+                    Message.GetMessageWithoutAttachmentDataResponse responseObject = JsonConvert.DeserializeObject<Message.GetMessageWithoutAttachmentDataResponse>(responseString);
+                    return responseObject;
+                }
+                catch (HttpRequestException ex)
+                {
+                    throw ex;
+                }
+            }
 
-            //        Message.GetMessageWithoutAttachmentDataResponse responseObject = JsonConvert.DeserializeObject<Message.GetMessageWithoutAttachmentDataResponse>(responseString);
-            //        return responseObject;
-            //    }
-            //    catch (HttpRequestException ex)
-            //    {
-            //        throw ex;
-            //    }
-            //}
+            /// <summary>
+            /// Gets only the attachment data from a message 
+            /// </summary>
+            /// <param name="attachmentId"></param>
+            /// <returns>MessagingModels.GetAttachmentResponse object</returns>
+            public async Task<Message.GetAttachmentResponse> GetAttachment(int attachmentId)
+            {
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync(_baseUrl + "/Message/" + attachmentId + "/Attachment");
+                    response.EnsureSuccessStatusCode();
+                    string responseString = await response.Content.ReadAsStringAsync();
 
-            ///// <summary>
-            ///// Gets only the attachment data from a message 
-            ///// </summary>
-            ///// <param name="attachmentId"></param>
-            ///// <returns>MessagingModels.GetAttachmentResponse object</returns>
-            //public async Task<Message.GetAttachmentResponse> GetAttachment(int attachmentId)
-            //{
-            //    HttpClient client = new HttpClient();
-            //    client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
+                    Message.GetAttachmentResponse responseObject = JsonConvert.DeserializeObject<Message.GetAttachmentResponse>(responseString);
+                    return responseObject;
+                }
+                catch (HttpRequestException ex)
+                {
+                    throw ex;
+                }
+            }
 
-            //    try
-            //    {
-            //        HttpResponseMessage response = await client.GetAsync(_baseUrl + "/Message/" + attachmentId + "/Attachment");
-            //        response.EnsureSuccessStatusCode();
-            //        string responseString = await response.Content.ReadAsStringAsync();
+            /// <summary>
+            /// Gets the message summaries with metadata
+            /// </summary>
+            /// <param name="model"></param>
+            /// <returns>MessagingModels.GetMessageSummariesWithMetadataResponse object</returns>
+            public async Task<Message.GetMessageSummariesWithMetadataResponse> GetMessageSummariesWithMetadata(Message.GetMessageSummariesWithMetadataRequest model)
+            {
+                try
+                {
+                    HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Message/GetMessageSummariesWithMetadata", model);
+                    response.EnsureSuccessStatusCode();
+                    string responseString = await response.Content.ReadAsStringAsync();
 
-            //        Message.GetAttachmentResponse responseObject = JsonConvert.DeserializeObject<Message.GetAttachmentResponse>(responseString);
-            //        return responseObject;
-            //    }
-            //    catch (HttpRequestException ex)
-            //    {
-            //        throw ex;
-            //    }
-            //}
+                    Message.GetMessageSummariesWithMetadataResponse responseObject = JsonConvert.DeserializeObject<Message.GetMessageSummariesWithMetadataResponse>(responseString);
+                    return responseObject;
+                }
+                catch (HttpRequestException ex)
+                {
+                    throw ex;
+                }
+            }
 
-            ///// <summary>
-            ///// Gets the message summaries with metadata
-            ///// </summary>
-            ///// <param name="model"></param>
-            ///// <returns>MessagingModels.GetMessageSummariesWithMetadataResponse object</returns>
-            //public async Task<Message.GetMessageSummariesWithMetadataResponse> GetMessageSummariesWithMetadata(Message.GetMessageSummariesWithMetadataRequest model)
-            //{
-            //    HttpClient client = new HttpClient();
-            //    client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
+            /// <summary>
+            /// Save a message as a draft
+            /// </summary>
+            /// <param name="model"></param>
+            /// <returns>MessagingModels.SaveDraftResponse object</returns>
+            public async Task<Message.SaveDraftResponse> SaveDraft(Message.SaveDraftRequest model)
+            {
+                try
+                {
+                    HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Message/SaveDraft", model);
+                    response.EnsureSuccessStatusCode();
+                    string responseString = await response.Content.ReadAsStringAsync();
 
-            //    try
-            //    {
-            //        HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Message/GetMessageSummariesWithMetadata", model);
-            //        response.EnsureSuccessStatusCode();
-            //        string responseString = await response.Content.ReadAsStringAsync();
+                    Message.SaveDraftResponse responseObject = JsonConvert.DeserializeObject<Message.SaveDraftResponse>(responseString);
+                    return responseObject;
+                }
+                catch (HttpRequestException ex)
+                {
+                    throw ex;
+                }
+            }
 
-            //        Message.GetMessageSummariesWithMetadataResponse responseObject = JsonConvert.DeserializeObject<Message.GetMessageSummariesWithMetadataResponse>(responseString);
-            //        return responseObject;
-            //    }
-            //    catch (HttpRequestException ex)
-            //    {
-            //        throw ex;
-            //    }
-            //}
+            /// <summary>
+            /// Send a draft
+            /// </summary>
+            /// <param name="messageId"></param>
+            /// <returns>MessagingModels.SendDraftResponse object</returns>
+            public async Task<Message.SendDraftResponse> SendDraft(int messageId)
+            {
+                try
+                {
+                    HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Message/" + messageId + "/SendDraft", "");
+                    response.EnsureSuccessStatusCode();
+                    string responseString = await response.Content.ReadAsStringAsync();
 
-            ///// <summary>
-            ///// Save a message as a draft
-            ///// </summary>
-            ///// <param name="model"></param>
-            ///// <returns>MessagingModels.SaveDraftResponse object</returns>
-            //public async Task<Message.SaveDraftResponse> SaveDraft(Message.SaveDraftRequest model)
-            //{
-            //    HttpClient client = new HttpClient();
-            //    client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
-
-            //    try
-            //    {
-            //        HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Message/SaveDraft", model);
-            //        response.EnsureSuccessStatusCode();
-            //        string responseString = await response.Content.ReadAsStringAsync();
-
-            //        Message.SaveDraftResponse responseObject = JsonConvert.DeserializeObject<Message.SaveDraftResponse>(responseString);
-            //        return responseObject;
-            //    }
-            //    catch (HttpRequestException ex)
-            //    {
-            //        throw ex;
-            //    }
-            //}
-
-            ///// <summary>
-            ///// Send a draft
-            ///// </summary>
-            ///// <param name="messageId"></param>
-            ///// <returns>MessagingModels.SendDraftResponse object</returns>
-            //public async Task<Message.SendDraftResponse> SendDraft(int messageId)
-            //{
-            //    HttpClient client = new HttpClient();
-            //    client.DefaultRequestHeaders.Add("X-Session-Key", _sessionKey);
-
-            //    try
-            //    {
-            //        HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Message/" + messageId + "/SendDraft", "");
-            //        response.EnsureSuccessStatusCode();
-            //        string responseString = await response.Content.ReadAsStringAsync();
-
-            //        Message.SendDraftResponse responseObject = JsonConvert.DeserializeObject<Message.SendDraftResponse>(responseString);
-            //        return responseObject;
-            //    }
-            //    catch (HttpRequestException ex)
-            //    {
-            //        throw ex;
-            //    }
-            //}
+                    Message.SendDraftResponse responseObject = JsonConvert.DeserializeObject<Message.SendDraftResponse>(responseString);
+                    return responseObject;
+                }
+                catch (HttpRequestException ex)
+                {
+                    throw ex;
+                }
+            }
         }
     }
 }

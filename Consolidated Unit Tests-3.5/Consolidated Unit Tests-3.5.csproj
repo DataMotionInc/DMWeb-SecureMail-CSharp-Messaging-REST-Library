@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="542 Methods Test Class.cs" />
+    <Compile Include="543 Methods Test Class.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTestClass.cs" />
   </ItemGroup>
