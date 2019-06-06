@@ -237,20 +237,15 @@ namespace Consolidated_Unit_Tests
             Thread.Sleep(5000);
         }
 
+        [Test, Order(13)]
         [Category("GetMessageSumariesWithoutAttachmentData")]
         public void GetMessageWithoutAttachmentDataWithSessionKeyTrueMID()
         {
-            try
-            {
-                Message.GetMessageWithoutAttachmentDataResponse response = Context.dmWeb.Message.GetMessageWithoutAttachmentData(Context.mid);
-                Context.attachmentId = response.Attachments[0].AttachmentId;
-            }
-            catch (WebException ex)
-            {
-                Assert.IsTrue(ex.Message.Contains("200"));
-            }
+            Message.GetMessageWithoutAttachmentDataResponse response = Context.dmWeb.Message.GetMessageWithoutAttachmentData(Context.mid);
+            Context.attachmentId = response.Attachments[0].AttachmentId;
         }
 
+        [Test]
         [Category("GetMessageSumariesWithoutAttachmentData")]
         public void GetMessageWithoutAttachmentDataWithSessionKeyFalseMID()
         {
@@ -260,23 +255,18 @@ namespace Consolidated_Unit_Tests
             }
             catch (WebException ex)
             {
-                Assert.IsTrue(ex.Message.Contains("400"));
+                Assert.IsTrue(ex.Message.Contains("401"));
             }
         }
 
+        [Test, Order(14)]
         [Category("GetAttachment")]
         public void GetAttachmentWithSessionKeyTrueAttachmentId()
         {
-            try
-            {
-                Context.dmWeb.Message.GetAttachment(int.Parse(Context.attachmentId));
-            }
-            catch (WebException ex)
-            {
-                Assert.IsTrue(ex.Message.Contains("200"));
-            }
+            Context.dmWeb.Message.GetAttachment(int.Parse(Context.attachmentId));
         }
 
+        [Test]
         [Category("GetAttachment")]
         public void GetAttachmentWithSessionKeyFalseAttachmentId()
         {
@@ -286,10 +276,11 @@ namespace Consolidated_Unit_Tests
             }
             catch (WebException ex)
             {
-                Assert.IsTrue(ex.Message.Contains("400"));
+                Assert.IsTrue(ex.Message.Contains("401"));
             }
         }
 
+        [Test]
         [Category("GetMessageSumariesWithMetadata")]
         public void GetMessageSummariesWithMetadataWithSessionKeyFalseFIDFalseLMID()
         {
@@ -303,10 +294,11 @@ namespace Consolidated_Unit_Tests
             }
             catch (WebException ex)
             {
-                Assert.IsTrue(ex.Message.Contains("400"));
+                Assert.IsTrue(ex.Message.Contains("401"));
             }
         }
 
+        [Test]
         [Category("GetMessageSumariesWithMetadata")]
         public void GetMessageSummariesWithMetadataWithSessionKeyFalseFIDTrueLMID()
         {
@@ -320,10 +312,11 @@ namespace Consolidated_Unit_Tests
             }
             catch (WebException ex)
             {
-                Assert.IsTrue(ex.Message.Contains("400"));
+                Assert.IsTrue(ex.Message.Contains("401"));
             }
         }
 
+        [Test]
         [Category("GetMessageSumariesWithMetadata")]
         public void GetMessageSummariesWithMetadataWithSessionKeyTrueFIDFalseLMID()
         {
@@ -337,10 +330,11 @@ namespace Consolidated_Unit_Tests
             }
             catch (WebException ex)
             {
-                Assert.IsTrue(ex.Message.Contains("400"));
+                Assert.IsTrue(ex.Message.Contains("401"));
             }
         }
 
+        [Test]
         [Category("GetMessageSumariesWithMetadata")]
         public void GetMessageSummariesWithMetadataWithSessionKeyTrueFIDTrueLMID()
         {
@@ -348,34 +342,22 @@ namespace Consolidated_Unit_Tests
             request.FolderId = 1;
             request.LastMessageIdReceived = Context.mid;
 
-            try
-            {
-                Context.dmWeb.Message.GetMessageSummariesWithMetadata(request);
-            }
-            catch (WebException ex)
-            {
-                Assert.IsTrue(ex.Message.Contains("200"));
-            }
+            Context.dmWeb.Message.GetMessageSummariesWithMetadata(request);
         }
 
+        [Test]
         [Category("SendDraft")]
         public void SendDraftWithSessionKeyTrueMID()
         {
-            try
-            {
-                Message.SaveDraftRequest request = new Message.SaveDraftRequest();
-                request.To.Add("user1@dmweb.citest.com");
-                request.Subject = "No Session Key True MID Test";
+            Message.SaveDraftRequest request = new Message.SaveDraftRequest();
+            request.To.Add("user1@dmweb.citest.com");
+            request.Subject = "No Session Key True MID Test";
 
-                Message.SaveDraftResponse response = Context.dmWeb.Message.SaveDraft(request);
-                Context.dmWeb.Message.SendDraft(response.MessageId);
-            }
-            catch (WebException ex)
-            {
-                Assert.IsTrue(ex.Message.Contains("200"));
-            }
+            Message.SaveDraftResponse response = Context.dmWeb.Message.SaveDraft(request);
+            Context.dmWeb.Message.SendDraft(response.MessageId);
         }
 
+        [Test]
         [Category("SendDraft")]
         public void SendDraftWithSessionKeyFalseMID()
         {
@@ -385,7 +367,7 @@ namespace Consolidated_Unit_Tests
             }
             catch (WebException ex)
             {
-                Assert.IsTrue(ex.Message.Contains("400"));
+                Assert.IsTrue(ex.Message.Contains("401"));
             }
         }
         #endregion

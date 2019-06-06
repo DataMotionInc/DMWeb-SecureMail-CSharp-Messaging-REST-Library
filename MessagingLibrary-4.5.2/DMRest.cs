@@ -33,7 +33,11 @@ namespace DMWeb_REST
         {
             _baseUrl = "https://ssl.datamotion.com/SecureMessagingApi";
             ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
-            client.Timeout = TimeSpan.FromMinutes(30);
+
+            if (client.Timeout == TimeSpan.FromMinutes(0))
+            {
+                client.Timeout = TimeSpan.FromMinutes(30);
+            }
         }
 
         /// <summary>
@@ -44,7 +48,11 @@ namespace DMWeb_REST
         {
             _baseUrl = url;
             ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
-            client.Timeout = TimeSpan.FromMinutes(30);
+
+            if (client.Timeout == TimeSpan.FromMinutes(0))
+            {
+                client.Timeout = TimeSpan.FromMinutes(30);
+            }
         }
         public class DMAccount
         {
@@ -600,8 +608,6 @@ namespace DMWeb_REST
             /// <returns>MessagingModels.SaveDraftResponse object</returns>
             public async Task<Message.SaveDraftResponse> SaveDraft(Message.SaveDraftRequest model)
             {
-                client.Timeout = TimeSpan.FromMinutes(30);
-
                 try
                 {
                     HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Message/SaveDraft", model);

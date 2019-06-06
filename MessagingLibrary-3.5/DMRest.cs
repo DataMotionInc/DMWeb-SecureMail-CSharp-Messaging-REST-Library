@@ -666,7 +666,7 @@ namespace DMWeb_REST
                 
                 try
                 {
-                    string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/" + messageId + "SendDraft", "POST", jsonByteArray));
+                    string response = Encoding.UTF8.GetString(client.UploadData(_baseUrl + "/Message/" + messageId + "/SendDraft", "POST", jsonByteArray));
                     Message.SendDraftResponse responseObject = JsonConvert.DeserializeObject<Message.SendDraftResponse>(response);
                     return responseObject;
                 }
