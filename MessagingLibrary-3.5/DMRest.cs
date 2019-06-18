@@ -12,7 +12,7 @@ namespace DMWeb_REST
     /// </summary>
     public class DMWeb
     {
-        private static WebClient client = new WebClient();
+        public static WebClient client = new WebClient();
         public static string _baseUrl = "";
         public static string _sessionKey = "";
 
@@ -59,6 +59,7 @@ namespace DMWeb_REST
                 byte[] jsonByteArray = Encoding.UTF8.GetBytes(jsonString);
 
                 client.Headers.Add("Content-Type", "application/json");
+                client.Headers.Remove("X-Session-Key");
 
                 try
                 {
