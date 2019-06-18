@@ -13,7 +13,7 @@ namespace DMWeb_REST
     /// </summary>
     public class DMWeb
     {
-        private static HttpClient client = new HttpClient();
+        public static HttpClient client = new HttpClient();
         public static string _baseUrl = "";
         public static string _sessionKey = "";
 
@@ -65,6 +65,8 @@ namespace DMWeb_REST
             {
                 try
                 {
+                    client.DefaultRequestHeaders.Remove("X-Session-Key");
+
                     HttpResponseMessage response = await client.PostAsJsonAsync(_baseUrl + "/Account/Logon", model);
                     response.EnsureSuccessStatusCode();
                     _sessionKey = await response.Content.ReadAsStringAsync();
