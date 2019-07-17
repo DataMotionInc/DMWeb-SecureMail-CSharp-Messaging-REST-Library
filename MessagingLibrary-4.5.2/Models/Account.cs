@@ -59,6 +59,8 @@
             public string FirstName { get; set; }
             public string LastName { get; set; }
             public Statistics Statistics { get; set; }
+            public int Uid { get; set; }
+            public string UserId { get; set; }
         }
     }
 }
