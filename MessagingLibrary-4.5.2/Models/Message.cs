@@ -214,12 +214,9 @@ namespace DMWeb_REST.Models
             public string AttachmentBase64 { get; set; }
             public string ContentType { get; set; }
             public string FileName { get; set; }
-        }
-
-        public class AttachmentsBodyResponse : AttachmentsBody
-        {
             public string ContentId { get; set; }
         }
+
         /// <summary>
         /// Structure to create a message payload to get a message
         /// </summary>
@@ -234,7 +231,7 @@ namespace DMWeb_REST.Models
             public string Subject { get; set; }
             public string CreateTime { get; set; }
 
-            public List<AttachmentsBodyResponse> Attachments = new List<AttachmentsBodyResponse>();
+            public List<AttachmentsBody> Attachments = new List<AttachmentsBody>();
 
             public string HtmlBody { get; set; }
             public string TextBody { get; set; }
