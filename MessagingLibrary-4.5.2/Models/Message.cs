@@ -214,6 +214,7 @@ namespace DMWeb_REST.Models
             public string AttachmentBase64 { get; set; }
             public string ContentType { get; set; }
             public string FileName { get; set; }
+            public string ContentId { get; set; }
         }
 
         /// <summary>
